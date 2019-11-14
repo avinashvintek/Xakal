@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import '../../src/minified-css/navbar.min.css'
 import classNotes from './students-portal/class-notes';
+import Dashboard from './students-portal/dashboard';
 import '../styles/navbar.css'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 class NavBar extends Component {
@@ -144,6 +145,7 @@ class NavBar extends Component {
                         <div id="content">
                             <Switch>
                                 <Route path="/students-portal/class-notes" component={classNotes} />
+                                <Route path="/students-portal/dashboard" component={Dashboard} />
                             </Switch>
                         </div>
                     </div>
