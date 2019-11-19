@@ -10,6 +10,9 @@ class ClassNotes extends Component {
             column2: '',
             column3: '',
             column4: '',
+            selectedSemester: 'Select Semester',
+            selectedCourse: 'Select Course',
+            searchAllowed: false
         }
         this.baseState = this.state;
     }
@@ -43,38 +46,69 @@ class ClassNotes extends Component {
     }
 
     hoverOff() {
-        this.setState(this.baseState)
+        this.setState({
+            column1: '',
+            column2: '',
+            column3: '',
+            column4: ''
+        })
+    }
+
+    onDropDownSelect(event) {
+        this.setState({ selectedSemester: event.target.id });
+        if (this.state.searchAllowed) {
+            this.setState({ searchAllowed: false })
+        }
+    }
+
+    onCourseChange(event) {
+        this.setState({ selectedCourse: event.target.id });
+        if (this.state.searchAllowed) {
+            this.setState({ searchAllowed: false })
+        }
+    }
+
+    getNotes(event) {
+        if (this.state.selectedSemester !== 'Select Semester' && this.state.selectedCourse !== 'Select Course') {
+            this.setState({ searchAllowed: true })
+        } else {
+            alert('Please select the values');
+            this.setState({ searchAllowed: false })
+        }
     }
 
     render() {
         return (
             <div>
                 <div>
-                <ul class='dropdown m-l-30 m-t-30'>
-                    <li id="top">Select Semester
-                        <span></span>
-                        <ul class="dropdown-box">
-                            <li><a href='#'>Semester 1</a></li>
-                            <li><a href='#'>Semester 2</a></li>
-                            <li><a href='#'>Semester 3</a></li>
-                            <li><a href='#'>Semester 4</a></li>
-                            <li><a href='#'>Semester 5</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class='course-dropdown m-l-30 m-t-30'>
-                    <li id="top">Select Couse
-                        <span></span>
-                        <ul class="course-dropdown-box">
-                            <li><a href='#'>OS</a></li>
-                            <li><a href='#'>TQM</a></li>
-                            <li><a href='#'>DSP</a></li>
-                            <li><a href='#'>SE</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                    <ul class='dropdown m-l-30 m-t-30'>
+                        <li id="top">{this.state.selectedSemester}
+                            <span></span>
+                            <ul class="dropdown-box">
+                                <li><a href='#' id="Semester 1" onClick={this.onDropDownSelect.bind(this)}>Semester 1</a></li>
+                                <li><a href='#' id="Semester 2" onClick={this.onDropDownSelect.bind(this)}>Semester 2</a></li>
+                                <li><a href='#' id="Semester 3" onClick={this.onDropDownSelect.bind(this)}>Semester 3</a></li>
+                                <li><a href='#' id="Semester 4" onClick={this.onDropDownSelect.bind(this)}>Semester 4</a></li>
+                                <li><a href='#' id="Semester 5" onClick={this.onDropDownSelect.bind(this)}>Semester 5</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class='course-dropdown m-l-30 m-t-30'>
+                        <li id="top">{this.state.selectedCourse}
+                            <span></span>
+                            <ul class="course-dropdown-box">
+                                <li><a href='#' id="OS" onClick={this.onCourseChange.bind(this)}>OS</a></li>
+                                <li><a href='#' id="TQM" onClick={this.onCourseChange.bind(this)}>TQM</a></li>
+                                <li><a href='#' id="DSP" onClick={this.onCourseChange.bind(this)}>DSP</a></li>
+                                <li><a href='#' id="SE" onClick={this.onCourseChange.bind(this)}>SE</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
-                <div className="limiter">
+                <div>
+                    <button type="button" onClick={this.getNotes.bind(this)} class="btn btn-info m-t-15 m-l-30">Get Notes!</button>
+                </div>
+                {this.state.searchAllowed ? <div className="limiter">
                     <div className="container-table100">
                         <div className="wrap-table100">
                             <div className="table100 ver5 m-b-110 table table-responsive">
@@ -129,7 +163,7 @@ class ClassNotes extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> : <span></span>}
             </div>
         )
     }
