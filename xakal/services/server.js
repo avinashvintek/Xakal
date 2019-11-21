@@ -3,10 +3,10 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const xakalRoutes = express.Router();
+var loginController = require('./controllers/loginController.js');
+
 const PORT = 4000;
 
-let xakal = require('./xakal.model');
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -16,17 +16,7 @@ connection.once('open', function () {
     console.log('MongoDB database connection established successfully')
 })
 
-xakalRoutes.route('/').get(function(req, res) {
-    xakal.find(function(err, values) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(values);
-        }
-    });
-});
-
-app.use('/students-portal', xakalRoutes)
+app.use('/xakal', loginController);
 
 app.listen(PORT, function () {
     console.log('Server is running on Port: ' + PORT)

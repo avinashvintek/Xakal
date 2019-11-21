@@ -77,34 +77,39 @@ class ClassNotes extends Component {
         }
     }
 
+    onSubmit() {
+    }
+
     render() {
         return (
             <div>
-                <div>
-                    <ul class='dropdown m-l-30 m-t-30'>
-                        <li id="top">{this.state.selectedSemester}
-                            <span></span>
-                            <ul class="dropdown-box">
-                                <li><a href='#' id="Semester 1" onClick={this.onDropDownSelect.bind(this)}>Semester 1</a></li>
-                                <li><a href='#' id="Semester 2" onClick={this.onDropDownSelect.bind(this)}>Semester 2</a></li>
-                                <li><a href='#' id="Semester 3" onClick={this.onDropDownSelect.bind(this)}>Semester 3</a></li>
-                                <li><a href='#' id="Semester 4" onClick={this.onDropDownSelect.bind(this)}>Semester 4</a></li>
-                                <li><a href='#' id="Semester 5" onClick={this.onDropDownSelect.bind(this)}>Semester 5</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class='course-dropdown m-l-30 m-t-30'>
-                        <li id="top">{this.state.selectedCourse}
-                            <span></span>
-                            <ul class="course-dropdown-box">
-                                <li><a href='#' id="OS" onClick={this.onCourseChange.bind(this)}>OS</a></li>
-                                <li><a href='#' id="TQM" onClick={this.onCourseChange.bind(this)}>TQM</a></li>
-                                <li><a href='#' id="DSP" onClick={this.onCourseChange.bind(this)}>DSP</a></li>
-                                <li><a href='#' id="SE" onClick={this.onCourseChange.bind(this)}>SE</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                <form onSubmit={this.onSubmit.bind(this)}>
+                    <div>
+                        <ul class='dropdown m-l-30 m-t-30'>
+                            <li id="top">{this.state.selectedSemester}
+                                <span></span>
+                                <ul class="dropdown-box">
+                                    <li><a href='#' id="Semester 1" onClick={this.onDropDownSelect.bind(this)}>Semester 1</a></li>
+                                    <li><a href='#' id="Semester 2" onClick={this.onDropDownSelect.bind(this)}>Semester 2</a></li>
+                                    <li><a href='#' id="Semester 3" onClick={this.onDropDownSelect.bind(this)}>Semester 3</a></li>
+                                    <li><a href='#' id="Semester 4" onClick={this.onDropDownSelect.bind(this)}>Semester 4</a></li>
+                                    <li><a href='#' id="Semester 5" onClick={this.onDropDownSelect.bind(this)}>Semester 5</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class='course-dropdown m-l-30 m-t-30'>
+                            <li id="top">{this.state.selectedCourse}
+                                <span></span>
+                                <ul class="course-dropdown-box">
+                                    <li><a href='#' id="OS" onClick={this.onCourseChange.bind(this)}>OS</a></li>
+                                    <li><a href='#' id="TQM" onClick={this.onCourseChange.bind(this)}>TQM</a></li>
+                                    <li><a href='#' id="DSP" onClick={this.onCourseChange.bind(this)}>DSP</a></li>
+                                    <li><a href='#' id="SE" onClick={this.onCourseChange.bind(this)}>SE</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
                 <div>
                     <button type="button" onClick={this.getNotes.bind(this)} class="btn btn-info m-t-15 m-l-30">Get Notes!</button>
                 </div>

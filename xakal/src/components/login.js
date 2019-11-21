@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from '../logo.svg';
 import '../styles/login.css';
 import '../styles/utils.css';
-
+import axios from 'axios';
 import { Redirect } from 'react-router-dom'
 class Login extends Component {
 
@@ -53,7 +53,17 @@ class Login extends Component {
      */
     formSubmit() {
         if (this.state.loginID && this.state.password) {
-            this.setState({ redirect: true })
+            axios.get(`http://localhost:4000/xakal/user/${this.state.loginID}`)
+                .then((response) => {
+                    if (response && response.data && response.data.userRole === 'student') {
+                        this.setState({ redirect: true });
+                    } else {
+                        alert('Invalid user')
+                    }
+                })
+                .catch((err) => {
+                    alert('Invalid user')
+                })
         } else {
             alert('Please fill in the fields')
         }
@@ -67,7 +77,7 @@ class Login extends Component {
 
                 <div className="container-login100">
                     <div className="wrap-login100 p-b-20">
-                        <form className="login100-form" onSubmit={this.formSubmit.bind(this)}>
+                        <form className="login100-form">
                             <span className="login100-form-title p-b-40">
                                 XAKAL
                         </span>
@@ -85,7 +95,7 @@ class Login extends Component {
                                 <span className="focus-input100" data-placeholder="Password"></span>
                             </div>
                             <div className="container-login100-form-btn">
-                                <button type="submit" className="login100-form-btn">
+                                <button onClick={this.formSubmit.bind(this)} type="button" className="login100-form-btn">
                                     Login
                                 </button>
                             </div>
