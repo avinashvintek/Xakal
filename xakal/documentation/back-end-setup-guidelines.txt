@@ -1,0 +1,46 @@
+STEP 1:
+Navigate to xakal/services folder and run the below commands
+
+1. npm install express body-parser cors mongoose
+
+2. npm install -g nodemon
+
+3. nodemon server.js (DONOT TERMINATE THE PROCESS)
+
+STEP 2:
+Install the mongodb compass community from the below link
+
+https://docs.mongodb.com/manual/administration/install-community/
+
+STEP 3:
+Set up environment variables by navigating to below path
+1. Control Panel\System and Security\System and select advanced system settings
+2. Click on environment variables and select PATH from system variables
+3. Click Edit and add C:\Program Files\MongoDB\Server\4.2\bin
+4. Click OK
+
+STEP 4:
+Create a folder E:\data\db to store your database values
+
+STEP 5:
+Now open new terminal and give "mongod"  (DONOT TERMINATE THE PROCESS)
+Now open another terminal and give "mongo" and enter the database name (xakal) (DONOT TERMINATE THE PROCESS)
+
+STEP 6: 
+Download postman to test backend data
+
+STEP 7:
+Navigate to xakal (FE path) and install axios.
+1. npm i axios
+
+
+NOTE - In order to execute the application, insert some values into your database so that only valid users will login
+
+Give database name as xakal and collection name as users
+
+Sample data :
+
+userID:"13IT205"
+password:"student"
+userRole:"student"
+
