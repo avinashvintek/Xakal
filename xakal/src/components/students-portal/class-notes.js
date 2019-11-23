@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import '../../styles/table.css';
 import '../../styles/dropdown.css';
-import '../../styles/course-dropdown.css'
+import '../../styles/course-dropdown.css';
+import axios from 'axios';
+
+const CourseRow = props => (
+    <li href='#' id={props.course.course} >{props.course.course}</li>
+)
 class ClassNotes extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +17,8 @@ class ClassNotes extends Component {
             column4: '',
             selectedSemester: 'Select Semester',
             selectedCourse: 'Select Course',
-            searchAllowed: false
+            searchAllowed: false,
+            courseList: []
         }
         this.baseState = this.state;
     }
@@ -56,6 +62,12 @@ class ClassNotes extends Component {
 
     onDropDownSelect(event) {
         this.setState({ selectedSemester: event.target.id });
+        var semester = event.target.id;
+        axios.get(`http://localhost:4000/xakal/class-notes/course/${semester}`)
+            .then((response) => {
+                this.setState({ courseList: response.data });
+                this.displayCourse();
+            });
         if (this.state.searchAllowed) {
             this.setState({ searchAllowed: false })
         }
@@ -77,13 +89,24 @@ class ClassNotes extends Component {
         }
     }
 
-    onSubmit() {
+    // displayTable() {
+    //     return this.state.courseList.map(function (currentSemester, index) {
+    //         return <CourseRow semester={currentSemester} key={index} />
+    //     })
+    // }
+
+    displayCourse() {
+        if (this.state && this.state.courseList && this.state.courseList.length) {
+            return this.state.courseList.map(function (singleCourse, index) {
+                return <CourseRow course={singleCourse} key={index} />
+            });
+        }
     }
 
     render() {
         return (
             <div>
-                <form onSubmit={this.onSubmit.bind(this)}>
+                <form>
                     <div>
                         <ul class='dropdown m-l-30 m-t-30'>
                             <li id="top">{this.state.selectedSemester}
@@ -101,10 +124,13 @@ class ClassNotes extends Component {
                             <li id="top">{this.state.selectedCourse}
                                 <span></span>
                                 <ul class="course-dropdown-box">
-                                    <li><a href='#' id="OS" onClick={this.onCourseChange.bind(this)}>OS</a></li>
+
+                                    {this.displayCourse()}
+
+                                    {/* <li><a href='#' id="OS" onClick={this.onCourseChange.bind(this)}>OS</a></li>
                                     <li><a href='#' id="TQM" onClick={this.onCourseChange.bind(this)}>TQM</a></li>
                                     <li><a href='#' id="DSP" onClick={this.onCourseChange.bind(this)}>DSP</a></li>
-                                    <li><a href='#' id="SE" onClick={this.onCourseChange.bind(this)}>SE</a></li>
+                                    <li><a href='#' id="SE" onClick={this.onCourseChange.bind(this)}>SE</a></li> */}
                                 </ul>
                             </li>
                         </ul>

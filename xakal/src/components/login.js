@@ -15,7 +15,9 @@ class Login extends Component {
             errorPassword: '',
             loginID: '',
             password: '',
-            redirect: false
+            studentRedirect: false,
+            staffRedirect: false,
+            managementRedirect: false
         }
     }
 
@@ -47,6 +49,10 @@ class Login extends Component {
         }
     }
 
+    resetLogin() {
+        this.setState({ studentRedirect: false, managementRedirect: false, staffRedirect: false })
+    }
+
     /**
      * Triggers when the form is submitted
      * Checks whether the values are entered properly
@@ -55,8 +61,17 @@ class Login extends Component {
         if (this.state.loginID && this.state.password) {
             axios.get(`http://localhost:4000/xakal/user/${this.state.loginID}`)
                 .then((response) => {
-                    if (response && response.data && response.data.userRole === 'student') {
-                        this.setState({ redirect: true });
+                    if (response && response.data) {
+                        this.resetLogin();
+                        if (response.data.userRole === 'student') {
+                            this.setState({ studentRedirect: true });
+                        } else if (response.data.userRole === 'staff') {
+                            this.setState({ staffRedirect: true })
+                        } else if (response.data.userRole === 'management') {
+                            this.setState({ managementRedirect: true })
+                        } else {
+                            alert('Invalid user')
+                        }
                     } else {
                         alert('Invalid user')
                     }
@@ -70,7 +85,7 @@ class Login extends Component {
     }
 
     render() {
-        if (this.state.redirect) {
+        if (this.state.studentRedirect) {
             return <Redirect to="students-portal" />
         } else {
             return (
