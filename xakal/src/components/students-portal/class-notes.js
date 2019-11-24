@@ -4,9 +4,6 @@ import '../../styles/dropdown.css';
 import '../../styles/course-dropdown.css';
 import axios from 'axios';
 
-const CourseRow = props => (
-    <li href='#' id={props.course.course} >{props.course.course}</li>
-)
 class ClassNotes extends Component {
     constructor(props) {
         super(props);
@@ -18,11 +15,16 @@ class ClassNotes extends Component {
             selectedSemester: 'Select Semester',
             selectedCourse: 'Select Course',
             searchAllowed: false,
-            courseList: []
-        }
+            courseList: [],
+            notesList: []
+        };
+        this.courseChange = this.onCourseChange.bind(this)
         this.baseState = this.state;
     }
 
+    /**
+     * Adds the hover class when description is hovered
+     */
     descriptionHover(event) {
         var element = event.target.className;
         if (element === 'column100 column2 ') {
@@ -30,6 +32,9 @@ class ClassNotes extends Component {
         }
     }
 
+    /**
+     * Adds the hover class when download is hovered
+     */
     downloadHover(event) {
         var element = event.target.className;
         if (element === 'column100 column3 ') {
@@ -37,6 +42,9 @@ class ClassNotes extends Component {
         }
     }
 
+    /**
+     * Adds the hover class when update date is hovered
+     */
     uploadDateHover(event) {
         var element = event.target.className;
         if (element === 'column100 column4 ') {
@@ -44,6 +52,9 @@ class ClassNotes extends Component {
         }
     }
 
+    /**
+     * Adds the hover class when upload by is hovered
+     */
     uploadByHover(event) {
         var element = event.target.className;
         if (element === 'column100 column5 ') {
@@ -51,6 +62,9 @@ class ClassNotes extends Component {
         }
     }
 
+    /**
+     * Resets the state variables when hover is removed
+     */
     hoverOff() {
         this.setState({
             column1: '',
@@ -60,19 +74,24 @@ class ClassNotes extends Component {
         })
     }
 
+    /**
+     * Triggers the API call for course, based on the semester selected
+     */
     onDropDownSelect(event) {
-        this.setState({ selectedSemester: event.target.id });
+        this.setState({ selectedSemester: event.target.id, selectedCourse: 'Select Course' });
         var semester = event.target.id;
         axios.get(`http://localhost:4000/xakal/class-notes/course/${semester}`)
             .then((response) => {
                 this.setState({ courseList: response.data });
-                this.displayCourse();
             });
         if (this.state.searchAllowed) {
             this.setState({ searchAllowed: false })
         }
     }
 
+    /**
+     * Updates the selected course name
+     */
     onCourseChange(event) {
         this.setState({ selectedCourse: event.target.id });
         if (this.state.searchAllowed) {
@@ -80,25 +99,48 @@ class ClassNotes extends Component {
         }
     }
 
-    getNotes(event) {
+    /**
+     * Allows the grid to display the values
+     */
+    getNotes() {
         if (this.state.selectedSemester !== 'Select Semester' && this.state.selectedCourse !== 'Select Course') {
-            this.setState({ searchAllowed: true })
+            this.setState({ searchAllowed: true });
+            var semester = this.state.selectedSemester;
+            var course = this.state.selectedCourse;
+            axios.get(`http://localhost:4000/xakal/class-notes/classnote/${semester}/${course}`)
+                .then((response) => {
+                    this.setState({ notesList: response.data });
+                });
         } else {
             alert('Please select the values');
             this.setState({ searchAllowed: false })
         }
     }
 
-    // displayTable() {
-    //     return this.state.courseList.map(function (currentSemester, index) {
-    //         return <CourseRow semester={currentSemester} key={index} />
-    //     })
-    // }
+    /**
+     * Displays the list of notes based on the API response
+     */
+    displayTable() {
+        return this.state.notesList.map((singleData, index) => {
+            return (
+                <tr className="row100">
+                    <td className="column100 column1" data-column="column1">{++index}</td>
+                    <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.description}</td>
+                    <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedFile}</td>
+                    <td className={"column100 column4 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
+                    <td className={"column100 column5 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
+                </tr>
+            )
+        })
+    }
 
+    /**
+     * Displays the list of courses based on the API response
+     */
     displayCourse() {
         if (this.state && this.state.courseList && this.state.courseList.length) {
-            return this.state.courseList.map(function (singleCourse, index) {
-                return <CourseRow course={singleCourse} key={index} />
+            return this.state.courseList.map((singleCourse, index) => {
+                return (<li key={index}><a href='#' id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</a></li>)
             });
         }
     }
@@ -108,7 +150,7 @@ class ClassNotes extends Component {
             <div>
                 <form>
                     <div>
-                        <ul class='dropdown m-l-30 m-t-30'>
+                        <ul className='dropdown m-l-30 m-t-30'>
                             <li id="top">{this.state.selectedSemester}
                                 <span></span>
                                 <ul class="dropdown-box">
@@ -120,17 +162,11 @@ class ClassNotes extends Component {
                                 </ul>
                             </li>
                         </ul>
-                        <ul class='course-dropdown m-l-30 m-t-30'>
+                        <ul className='course-dropdown m-l-30 m-t-30'>
                             <li id="top">{this.state.selectedCourse}
                                 <span></span>
                                 <ul class="course-dropdown-box">
-
                                     {this.displayCourse()}
-
-                                    {/* <li><a href='#' id="OS" onClick={this.onCourseChange.bind(this)}>OS</a></li>
-                                    <li><a href='#' id="TQM" onClick={this.onCourseChange.bind(this)}>TQM</a></li>
-                                    <li><a href='#' id="DSP" onClick={this.onCourseChange.bind(this)}>DSP</a></li>
-                                    <li><a href='#' id="SE" onClick={this.onCourseChange.bind(this)}>SE</a></li> */}
                                 </ul>
                             </li>
                         </ul>
@@ -154,41 +190,7 @@ class ClassNotes extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr className="row100">
-                                            <td className="column100 column1" data-column="column1">1</td>
-                                            <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Operating System Unit 5</td>
-                                            <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>--</td>
-                                            <td className={"column100 column4 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>18/11/2018</td>
-                                            <td className={"column100 column5 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Lilly</td>
-                                        </tr>
-                                        <tr className="row100">
-                                            <td className="column100 column1" data-column="column1">2</td>
-                                            <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Software Engineering Syllabus</td>
-                                            <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>--</td>
-                                            <td className={"column100 column4 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>11/11/2019</td>
-                                            <td className={"column100 column5 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Anitha</td>
-                                        </tr>
-                                        <tr className="row100">
-                                            <td className="column100 column1" data-column="column1">3</td>
-                                            <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>TQM Important questions</td>
-                                            <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>--</td>
-                                            <td className={"column100 column4 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>12/11/2019</td>
-                                            <td className={"column100 column5 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Gayathri</td>
-                                        </tr>
-                                        <tr className="row100">
-                                            <td className="column100 column1" data-column="column1">4</td>
-                                            <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>DSP problems</td>
-                                            <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>--</td>
-                                            <td className={"column100 column4 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>17/11/2019</td>
-                                            <td className={"column100 column5 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Reddy</td>
-                                        </tr>
-                                        <tr className="row100">
-                                            <td className="column100 column1" data-column="column1">5</td>
-                                            <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>8:00 AM</td>
-                                            <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>--</td>
-                                            <td className={"column100 column4 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>--</td>
-                                            <td className={"column100 column5 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>8:00 AM</td>
-                                        </tr>
+                                        {this.displayTable()}
                                     </tbody>
                                 </table>
                             </div>

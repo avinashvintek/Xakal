@@ -1,75 +1,21 @@
 const express = require('express');
 var router = express.Router();
 var { Course } = require('../models/student-portal/course-selection.model.js');
-
-//localhost:4000/users/
-// router.get('/user/:ID', (req, res2) => {
-//     User.find((err, docs) => {
-//         if (!err) { res2.send(docs); } else {
-//             console.log('error in controller')
-//         }
-//     });
-// });
+var { ClassNote } = require('../models/student-portal/class-notes.model.js');
 
 router.get('/course/:semester', (req, res) => {
     let semester = req.params.semester.toLowerCase();
-    Course.find({ semester: semester }, { _id: 0, course:1, semester: 1 }).then((eachOne) => {
+    Course.find({ semester: semester }, { _id: 0, course: 1, semester: 1 }).then((eachOne) => {
         res.json(eachOne)
     })
 });
 
-// router.post('/', (req, res) => {
-//     var prdt = new Product({
-//         availableNetwork: req.body.availableNetwork,
-//         productId: req.body.productId,
-//         vendorName: req.body.vendorName,
-//         connectsTo: req.body.connectsTo,
-//         parameter: req.body.parameter,
-//         name: req.body.name,
-//     });
-//     prdt.save((err, docs) => {
-//         if (!err) {
-//             res.send(docs);
-//         } else {
-//             console.log('error in controller')
-//         }
-//     });
-
-// });
-
-// router.put('/:id', (req, res) => {
-//     console.log(req.params)
-//     if (!ObjectId.isValid(req.params.id)) {
-//         return res.status(400).send('No record with id');
-//     }
-//     var prdt = {
-//         availableNetwork: req.body.availableNetwork,
-//         productId: req.body.productId,
-//         vendorName: req.body.vendorName,
-//         connectsTo: req.body.connectsTo,
-//         parameter: req.body.parameter,
-//         name: req.body.name,
-//     };
-//     var id = req.params.id;
-//     Product.findByIdAndUpdate(id, { $set: prdt }, { new: true }, (err, doc) => {
-//         if (!err) {
-//             res.send(doc);
-//         } else {
-//             console.log('Error in user', err)
-//         }
-//     })
-// });
-
-// router.delete('/:id', (req, res) => {
-//     if (!ObjectId.isValid(req.params.id)) {
-//         return res.status(400).send('No record with id');
-//     }
-//     Product.findByIdAndRemove(req.params.id, (err, doc) => {
-//         if (!err) {
-//             res.send(doc);
-//         } else {
-//             console.log('Error in employee')
-//         }
-//     })
-// });
+//localhost:4000/xakal/class-notes/classnote/semester 1/OS
+router.get('/classnote/:semester/:course', (req, res) => {
+    let semester = req.params.semester.toLowerCase();
+    let course = req.params.course.toLowerCase();
+    ClassNote.find({ semester: semester, course: course }).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
 module.exports = router;
