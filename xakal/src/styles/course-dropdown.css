@@ -81,3 +81,7 @@ ul li {
     position: absolute;
     margin-left: -20px;
 }
+
+.course-dropdown li:hover {
+    cursor: pointer;
+}

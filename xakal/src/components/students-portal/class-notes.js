@@ -20,6 +20,17 @@ class ClassNotes extends Component {
         };
         this.courseChange = this.onCourseChange.bind(this)
         this.baseState = this.state;
+
+    }
+
+    componentWillMount() {
+        this.unlisten = this.props.history.listen((location, action) => {
+            this.setState(this.baseState);
+        });
+    }
+
+    componentWillUnmount() {
+        this.unlisten();
     }
 
     /**
@@ -104,17 +115,55 @@ class ClassNotes extends Component {
      */
     getNotes() {
         if (this.state.selectedSemester !== 'Select Semester' && this.state.selectedCourse !== 'Select Course') {
-            this.setState({ searchAllowed: true });
-            var semester = this.state.selectedSemester;
-            var course = this.state.selectedCourse;
-            axios.get(`http://localhost:4000/xakal/class-notes/classnote/${semester}/${course}`)
-                .then((response) => {
-                    this.setState({ notesList: response.data });
-                });
+            if (this.props.location) {
+                switch (this.props.location.pathname) {
+                    case '/students-portal/question-papers':
+                        this.fetchQuestionPapers();
+                        break;
+                    case '/students-portal/class-notes':
+                        this.fetchClassNotes();
+                        break;
+                    case '/students-portal/xakal-notes':
+                        this.fetchXakalNotes();
+                        break;
+                    default: break
+                }
+            }
         } else {
             alert('Please select the values');
             this.setState({ searchAllowed: false })
         }
+
+    }
+
+    fetchClassNotes() {
+        this.setState({ searchAllowed: true });
+        var semester = this.state.selectedSemester;
+        var course = this.state.selectedCourse;
+        axios.get(`http://localhost:4000/xakal/class-notes/classnote/${semester}/${course}`)
+            .then((response) => {
+                this.setState({ notesList: response.data });
+            });
+    }
+
+    fetchQuestionPapers() {
+        this.setState({ searchAllowed: true });
+        var semester = this.state.selectedSemester;
+        var course = this.state.selectedCourse;
+        axios.get(`http://localhost:4000/xakal/class-notes/questionpaper/${semester}/${course}`)
+            .then((response) => {
+                this.setState({ notesList: response.data });
+            });
+    }
+
+    fetchXakalNotes() {
+        this.setState({ searchAllowed: true });
+        var semester = this.state.selectedSemester;
+        var course = this.state.selectedCourse;
+        axios.get(`http://localhost:4000/xakal/class-notes/xakalnote/${semester}/${course}`)
+            .then((response) => {
+                this.setState({ notesList: response.data });
+            });
     }
 
     /**
@@ -140,7 +189,7 @@ class ClassNotes extends Component {
     displayCourse() {
         if (this.state && this.state.courseList && this.state.courseList.length) {
             return this.state.courseList.map((singleCourse, index) => {
-                return (<li key={index}><a href='#' id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</a></li>)
+                return (<li key={index}><a id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</a></li>)
             });
         }
     }
@@ -154,11 +203,11 @@ class ClassNotes extends Component {
                             <li id="top">{this.state.selectedSemester}
                                 <span></span>
                                 <ul class="dropdown-box">
-                                    <li><a href='#' id="Semester 1" onClick={this.onDropDownSelect.bind(this)}>Semester 1</a></li>
-                                    <li><a href='#' id="Semester 2" onClick={this.onDropDownSelect.bind(this)}>Semester 2</a></li>
-                                    <li><a href='#' id="Semester 3" onClick={this.onDropDownSelect.bind(this)}>Semester 3</a></li>
-                                    <li><a href='#' id="Semester 4" onClick={this.onDropDownSelect.bind(this)}>Semester 4</a></li>
-                                    <li><a href='#' id="Semester 5" onClick={this.onDropDownSelect.bind(this)}>Semester 5</a></li>
+                                    <li><a id="Semester 1" onClick={this.onDropDownSelect.bind(this)}>Semester 1</a></li>
+                                    <li><a id="Semester 2" onClick={this.onDropDownSelect.bind(this)}>Semester 2</a></li>
+                                    <li><a id="Semester 3" onClick={this.onDropDownSelect.bind(this)}>Semester 3</a></li>
+                                    <li><a id="Semester 4" onClick={this.onDropDownSelect.bind(this)}>Semester 4</a></li>
+                                    <li><a id="Semester 5" onClick={this.onDropDownSelect.bind(this)}>Semester 5</a></li>
                                 </ul>
                             </li>
                         </ul>

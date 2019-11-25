@@ -81,4 +81,8 @@ body {
 	 position: absolute;
 	 margin-left: -46px;
 }
+
+.dropdown li:hover  {
+	cursor: pointer;
+}
  

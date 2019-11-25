@@ -70,12 +70,12 @@ class NavBar extends Component {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/students-portal/class-notes" className="nav-link collapsed">
+                                <Link to="/students-portal/xakal-notes" className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Xakal Notes</span>
                                 </Link>
                             </li> <li className="nav-item">
-                                <Link to="/students-portal/class-notes" className="nav-link collapsed">
+                                <Link to="/students-portal/question-papers" className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Question Papers</span>
                                 </Link>
@@ -126,6 +126,8 @@ class NavBar extends Component {
                         <div id="content">
                             <Switch>
                                 <Route path="/students-portal/class-notes" component={classNotes} />
+                                <Route path="/students-portal/xakal-notes" component={classNotes} />
+                                <Route path="/students-portal/question-papers" component={classNotes} />
                                 <Route path="/students-portal/dashboard" component={Dashboard} />
                             </Switch>
                         </div>
