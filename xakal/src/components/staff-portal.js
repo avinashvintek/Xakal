@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import NavBar from './navbar';
 
-class StudentsPortal extends Component {
+class StaffPortal extends Component {
     render() {
         return (
             <NavBar/>
@@ -9,4 +9,4 @@ class StudentsPortal extends Component {
     }
 }
 
-export default StudentsPortal;
+export default StaffPortal;

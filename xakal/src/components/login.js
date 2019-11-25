@@ -87,6 +87,8 @@ class Login extends Component {
     render() {
         if (this.state.studentRedirect) {
             return <Redirect to="students-portal" />
+        } else if (this.state.staffRedirect) {
+            return <Redirect to="staff-portal" />
         } else {
             return (
 

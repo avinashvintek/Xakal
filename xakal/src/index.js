@@ -5,11 +5,13 @@ import { Route, BrowserRouter as Router } from 'react-router-dom'
 import App from './App';
 import StudentsPortal from './components/students-portal';
 import * as serviceWorker from './serviceWorker';
+import StaffPortal from './components/staff-portal';
 const routing = (
     <Router>
         <div>
             <Route exact path="/" component={App} />
             <Route path="/students-portal" component={StudentsPortal} />
+            <Route path="/staff-portal" component={StaffPortal} />
             {/* <Route path="/students-portal/class-notes" component={ClassNotes} /> */}
         </div>
     </Router>
