@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 var loginController = require('./controllers/loginController.js');
 var classNotesController = require('./controllers/classNotesController.js');
+var assessmentController = require('./controllers/assessmentController.js');
 const PORT = 4000;
 
 app.use(cors());
@@ -18,6 +19,7 @@ connection.once('open', function () {
 
 app.use('/xakal', loginController);
 app.use('/xakal/class-notes', classNotesController);
+app.use('/xakal/assessment', assessmentController);
 
 app.listen(PORT, function () {
     console.log('Server is running on Port: ' + PORT)

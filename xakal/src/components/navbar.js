@@ -5,6 +5,8 @@ import classNotes from './students-portal/class-notes';
 import Dashboard from './students-portal/dashboard';
 import '../styles/navbar.css'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import SemesterDetails from './students-portal/assessments/semester-details';
+import InternalDetails from './students-portal/assessments/internal-details';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -90,13 +92,13 @@ class NavBar extends Component {
                         </li>
                         {this.state.assessments ? <div>
                             <li className="nav-item">
-                                <Link to="/students-portal/class-notes" className="nav-link collapsed">
+                                <Link to="/students-portal/internal-details" className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Internals</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/students-portal/class-notes" className="nav-link collapsed">
+                                <Link to="/students-portal/semester-details" className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Semester</span>
                                 </Link>
@@ -129,6 +131,8 @@ class NavBar extends Component {
                                 <Route path="/students-portal/xakal-notes" component={classNotes} />
                                 <Route path="/students-portal/question-papers" component={classNotes} />
                                 <Route path="/students-portal/dashboard" component={Dashboard} />
+                                <Route path="/students-portal/semester-details" component={SemesterDetails} />
+                                <Route path="/students-portal/internal-details" component={InternalDetails} />
                             </Switch>
                         </div>
                     </div>
