@@ -16,6 +16,9 @@ class NavBar extends Component {
         }
     }
 
+    /**
+     * Handles the sub menu of college notes
+     */
     onClassNotesClick() {
         if (this.state.showClassNotes) {
             this.setState({ showClassNotes: false })
@@ -24,6 +27,9 @@ class NavBar extends Component {
         }
     }
 
+    /**
+     * Handles the sub menu of assessments
+     */
     onAssessmentsClick() {
         if (this.state.assessments) {
             this.setState({ assessments: false })

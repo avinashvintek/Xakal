@@ -33,7 +33,7 @@ class InternalDetails extends Component {
     }
 
     /**
-     * Adds the hover class when description is hovered
+     * Adds the hover class when course is hovered
      */
     courseHover(event) {
         var element = event.target.className;
@@ -43,7 +43,7 @@ class InternalDetails extends Component {
     }
 
     /**
-     * Adds the hover class when download is hovered
+     * Adds the hover class when model 1 is hovered
      */
     modelHover1(event) {
         var element = event.target.className;
@@ -53,7 +53,7 @@ class InternalDetails extends Component {
     }
 
     /**
-     * Adds the hover class when update date is hovered
+     * Adds the hover class when model 2 is hovered
      */
     modelHover2(event) {
         var element = event.target.className;
@@ -62,6 +62,10 @@ class InternalDetails extends Component {
         }
     }
 
+
+    /**
+     * Adds the hover class when model 3 is hovered
+     */
     modelHover3(event) {
         var element = event.target.className;
         if (element === 'column100 column5 ') {
@@ -69,6 +73,10 @@ class InternalDetails extends Component {
         }
     }
 
+
+    /**
+     * Adds the hover class when internals is hovered
+     */
     internalsHover(event) {
         var element = event.target.className;
         if (element === 'column100 column6 ') {
@@ -90,7 +98,7 @@ class InternalDetails extends Component {
     }
 
     /**
-     * Triggers the API call for course, based on the semester selected
+     * Sets the semester selected
      */
     onDropDownSelect(event) {
         this.setState({ selectedSemester: event.target.id });
@@ -112,6 +120,10 @@ class InternalDetails extends Component {
 
     }
 
+
+    /**
+     * Fetches the internals mark based on semester selected
+     */
     fetchInternalDetails() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;

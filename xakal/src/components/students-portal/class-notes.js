@@ -111,7 +111,7 @@ class ClassNotes extends Component {
     }
 
     /**
-     * Allows the grid to display the values
+     * Allows the grid to display the values based on routing
      */
     getNotes() {
         if (this.state.selectedSemester !== 'Select Semester' && this.state.selectedCourse !== 'Select Course') {
@@ -136,6 +136,9 @@ class ClassNotes extends Component {
 
     }
 
+    /**
+     * Fetches the class notes based on semester and course selected
+     */
     fetchClassNotes() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
@@ -146,6 +149,9 @@ class ClassNotes extends Component {
             });
     }
 
+    /**
+     * Fetches the question papers based on semester and course selected
+     */
     fetchQuestionPapers() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
@@ -156,6 +162,9 @@ class ClassNotes extends Component {
             });
     }
 
+    /**
+     * Fetches the xakal notes based on semester and course selected
+     */
     fetchXakalNotes() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;

@@ -31,7 +31,6 @@ class Login extends Component {
             this.setState({ idClassName: 'has-val', loginID: event.target.value })
         } else {
             this.setState({ idClassName: '', errorID: 'has-error', loginID: event.target.value })
-
         }
     }
 
@@ -63,14 +62,18 @@ class Login extends Component {
                 .then((response) => {
                     if (response && response.data) {
                         this.resetLogin();
-                        if (response.data.userRole === 'student') {
-                            this.setState({ studentRedirect: true });
-                        } else if (response.data.userRole === 'staff') {
-                            this.setState({ staffRedirect: true })
-                        } else if (response.data.userRole === 'management') {
-                            this.setState({ managementRedirect: true })
+                        if (this.state.password === response.data.password) {
+                            if (response.data.userRole === 'student') {
+                                this.setState({ studentRedirect: true });
+                            } else if (response.data.userRole === 'staff') {
+                                this.setState({ staffRedirect: true })
+                            } else if (response.data.userRole === 'management') {
+                                this.setState({ managementRedirect: true })
+                            } else {
+                                alert('Invalid user')
+                            }
                         } else {
-                            alert('Invalid user')
+                            alert('Incorrect password')
                         }
                     } else {
                         alert('Invalid user')

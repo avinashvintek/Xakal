@@ -32,7 +32,7 @@ class SemesterDetails extends Component {
     }
 
     /**
-     * Adds the hover class when description is hovered
+     * Adds the hover class when course is hovered
      */
     courseHover(event) {
         var element = event.target.className;
@@ -42,7 +42,7 @@ class SemesterDetails extends Component {
     }
 
     /**
-     * Adds the hover class when download is hovered
+     * Adds the hover class when grade is hovered
      */
     gradeHover(event) {
         var element = event.target.className;
@@ -52,7 +52,7 @@ class SemesterDetails extends Component {
     }
 
     /**
-     * Adds the hover class when update date is hovered
+     * Adds the hover class when result is hovered
      */
     resultHover(event) {
         var element = event.target.className;
@@ -96,6 +96,9 @@ class SemesterDetails extends Component {
 
     }
 
+    /**
+     * Fetches the semester marks based on semester selected
+     */
     fetchSemesterDetails() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
