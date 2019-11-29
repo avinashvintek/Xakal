@@ -7,6 +7,7 @@ import '../styles/navbar.css'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import SemesterDetails from './students-portal/assessments/semester-details';
 import InternalDetails from './students-portal/assessments/internal-details';
+import Attendance from './students-portal/attendance';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -112,7 +113,7 @@ class NavBar extends Component {
                         </div> : <div></div>}
                         <hr className="sidebar-divider d-none d-md-block" />
                         <li className="nav-item">
-                            <Link to="/students-portal/dashboard" className="nav-link">
+                            <Link to="/students-portal/attendance" className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Attendance</span>
                             </Link>
@@ -139,6 +140,7 @@ class NavBar extends Component {
                                 <Route path="/students-portal/dashboard" component={Dashboard} />
                                 <Route path="/students-portal/semester-details" component={SemesterDetails} />
                                 <Route path="/students-portal/internal-details" component={InternalDetails} />
+                                <Route path="/students-portal/attendance" component={Attendance} />
                             </Switch>
                         </div>
                     </div>
