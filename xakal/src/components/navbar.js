@@ -8,6 +8,7 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import SemesterDetails from './students-portal/assessments/semester-details';
 import InternalDetails from './students-portal/assessments/internal-details';
 import Attendance from './students-portal/attendance';
+import Payment from './students-portal/payment';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -119,7 +120,7 @@ class NavBar extends Component {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/students-portal/dashboard" className="nav-link">
+                            <Link to="/students-portal/payment" className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Payment</span>
                             </Link>
@@ -141,6 +142,7 @@ class NavBar extends Component {
                                 <Route path="/students-portal/semester-details" component={SemesterDetails} />
                                 <Route path="/students-portal/internal-details" component={InternalDetails} />
                                 <Route path="/students-portal/attendance" component={Attendance} />
+                                <Route path="/students-portal/payment" component={Payment} />
                             </Switch>
                         </div>
                     </div>
