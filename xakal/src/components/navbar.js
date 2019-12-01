@@ -53,7 +53,7 @@ class NavBar extends Component {
                         </a>
                         <hr className="sidebar-divider my-0" />
                         <li className="nav-item">
-                            <Link to="/students-portal/dashboard" className="nav-link">
+                            <Link to={{ pathname: "/students-portal/dashboard", userID: this.props.userID }} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Dashboard</span>
                             </Link>

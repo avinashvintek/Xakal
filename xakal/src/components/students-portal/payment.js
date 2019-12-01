@@ -19,7 +19,7 @@ class Payment extends Component {
 
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
         });
@@ -100,7 +100,6 @@ class Payment extends Component {
     fetchPaymentDetails() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
-        var course = this.state.selectedCourse;
         axios.get(`http://localhost:4000/xakal/payment/${semester}`)
             .then((response) => {
                 this.setState({ paymentList: response.data });

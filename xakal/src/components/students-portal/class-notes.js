@@ -23,7 +23,7 @@ class ClassNotes extends Component {
 
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
         });

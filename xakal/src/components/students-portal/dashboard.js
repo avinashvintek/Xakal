@@ -1,15 +1,37 @@
 import React, { Component } from 'react';
 import '../../styles/dashboard.css';
+import axios from 'axios';
 import profileImage from '../../images/userProfile.jpg';
+
 class Dashboard extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            studentDetails: []
+        };
+        this.baseState = this.state;
+    }
+
+    componentDidMount() {
+        this.fetchStudentDetails();
+    }
+
+    fetchStudentDetails() {
+        const userID = this.props.location.userID;
+        if (userID) {
+            axios.get(`http://localhost:4000/xakal/studentdetail/${userID.userID}`)
+                .then((response) => {
+                    this.setState({ studentDetails: response.data });
+                });
+        }
+    }
 
     render() {
-
         return (
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800 m-t-20">Dashboard</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Change password</a> */}
                 </div>
                 <div class="row">
                     <div class="col-xl-4 col-md-6 mb-4">
@@ -18,7 +40,7 @@ class Dashboard extends Component {
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Login ID</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">13IT205</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{this.state.studentDetails.userID}</div>
                                     </div>
                                 </div>
                             </div>
@@ -54,47 +76,6 @@ class Dashboard extends Component {
                             </div>
                         </div>
                     </div>
-                    {/* 
-                    <div class="col-xl-4 col-md-6 mb-4">
-                        <div class="card border-left-info shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="progress progress-sm mr-2">
-                                                    <div class="progress-bar bg-info" role="progressbar" style={{ width: 50 + '%' }} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
-
-                    {/* <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
                 <div class="row">
                     <div class="col-xl-8 col-lg-7">
@@ -116,11 +97,14 @@ class Dashboard extends Component {
                                             <li><i class="fa fa-bookmark m-r-10"></i>Parents name:</li>
                                         </ul>
                                         <ul class="list-unstyled">
-                                            <li>PHD in Mathmatics</li>
-                                            <li>20 Years in university Math</li>
-                                            <li>Music, Dancing and Family</li>
-                                            <li>Higher Math, Math Puzzle</li>
-                                            <li>Map Creation</li>
+                                            <li>{this.state.studentDetails.name}</li>
+                                            <li>{this.state.studentDetails.course}</li>
+                                            <li>{this.state.studentDetails.branch}</li>
+                                            <li>{this.state.studentDetails.bloodGroup}</li>
+                                            <li>{this.state.studentDetails.contact}</li>
+                                            <li>{this.state.studentDetails.emergencyContact}</li>
+                                            <li>{this.state.studentDetails.email}</li>
+                                            <li>{this.state.studentDetails.parentName}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -151,35 +135,35 @@ class Dashboard extends Component {
                             <div class="card-body">
                                 <h4 class="small font-weight-bold">Semester 1<span class="float-right">20%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar bg-danger" role="progressbar" style={{ width: 20 + '%' }} aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-danger" role="progressbar" style={{ width: 20 + '%' }} ></div>
                                 </div>
                                 <h4 class="small font-weight-bold">Semester 2 <span class="float-right">40%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar bg-warning" role="progressbar" style={{ width: 40 + '%' }} aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-warning" role="progressbar" style={{ width: 40 + '%' }}></div>
                                 </div>
                                 <h4 class="small font-weight-bold">Semester 3 <span class="float-right">60%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar" role="progressbar" style={{ width: 60 + '%' }} aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" role="progressbar" style={{ width: 60 + '%' }}></div>
                                 </div>
                                 <h4 class="small font-weight-bold">Semester 4<span class="float-right">80%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar bg-info" role="progressbar" style={{ width: 80 + '%' }} aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style={{ width: 80 + '%' }}></div>
                                 </div>
                                 <h4 class="small font-weight-bold">Semester 5<span class="float-right">Complete!</span></h4>
                                 <div class="progress  mb-4">
-                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }} aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }}></div>
                                 </div>
                                 <h4 class="small font-weight-bold">Semester 6<span class="float-right">Complete!</span></h4>
                                 <div class="progress  mb-4">
-                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }} aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }}></div>
                                 </div>
                                 <h4 class="small font-weight-bold">Semester 7<span class="float-right">Complete!</span></h4>
                                 <div class="progress  mb-4">
-                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }} aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }}></div>
                                 </div>
                                 <h4 class="small font-weight-bold">Semester 8<span class="float-right">Complete!</span></h4>
                                 <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }} aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }}></div>
                                 </div>
                             </div>
                         </div>
@@ -193,8 +177,6 @@ class Dashboard extends Component {
                                 <div class="text-center">
                                     <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style={{ width: 25 + 'rem' }} src="img/undraw_posting_photo.svg" alt="" />
                                 </div>
-                                <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="../../undraw.co/index.html">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
-                                <a target="_blank" rel="nofollow" href="../../undraw.co/index.html">Browse Illustrations on unDraw &rarr;</a>
                             </div>
                         </div>
                         <div class="card shadow mb-4">
@@ -202,8 +184,9 @@ class Dashboard extends Component {
                                 <h6 class="m-0 font-weight-bold text-primary">Awards</h6>
                             </div>
                             <div class="card-body">
-                                <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce CSS bloat and poor page performance. Custom CSS classes are used to create custom components and custom utility classes.</p>
-                                <p class="mb-0">Before working with this theme, you should become familiar with the Bootstrap framework, especially the utility classes.</p>
+                                <div class="text-center">
+                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style={{ width: 25 + 'rem' }} src="img/undraw_posting_photo.svg" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
