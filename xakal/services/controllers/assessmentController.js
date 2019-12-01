@@ -10,6 +10,13 @@ router.get('/semesterdetail/:semester', (req, res) => {
     })
 });
 
+
+router.get('/semesterdetail', (req, res) => {
+    SemesterDetails.find({ }, { _id: 0 }).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
+
 router.get('/internaldetail/:semester', (req, res) => {
     let semester = req.params.semester.toLowerCase();
     InternalDetails.find({ semester: semester }, { _id: 0, course: 1, internals: 1, model1: 1, model2: 1, model3: 1 }).then((eachOne) => {

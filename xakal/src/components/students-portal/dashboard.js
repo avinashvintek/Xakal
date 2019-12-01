@@ -7,7 +7,18 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            studentDetails: []
+            studentDetails: [],
+            semester1: 0,
+            semester2: 0,
+            semester3: 0,
+            semester4: 0,
+            semester5: 0,
+            semester6: 0,
+            semester7: 0,
+            semester8: 0,
+            lastSemester: 0,
+            counter: 0,
+            cgpa: 0
         };
         this.baseState = this.state;
     }
@@ -21,9 +32,63 @@ class Dashboard extends Component {
         if (userID) {
             axios.get(`http://localhost:4000/xakal/studentdetail/${userID.userID}`)
                 .then((response) => {
+                    this.fetchGPA();
                     this.setState({ studentDetails: response.data });
                 });
         }
+    }
+
+    fetchGPA() {
+        axios.get(`http://localhost:4000/xakal/assessment/semesterdetail`)
+            .then((response) => {
+                console.log(response);
+                this.calculateGPA(response.data);
+                // this.setState({ notesList: response.data });
+            });
+    }
+
+    //gpa = (grades*credits) / credits
+    calculateGPA(response) {
+        let responseArray = [];
+        responseArray = response.filter((data) => data.semester === 'semester 1');
+        this.calculateSemesterWise(responseArray, 'semester1');
+        responseArray = response.filter((data) => data.semester === 'semester 2');
+        this.calculateSemesterWise(responseArray, 'semester2');
+        responseArray = response.filter((data) => data.semester === 'semester 3');
+        this.calculateSemesterWise(responseArray, 'semester3');
+        responseArray = response.filter((data) => data.semester === 'semester 4');
+        this.calculateSemesterWise(responseArray, 'semester4');
+        responseArray = response.filter((data) => data.semester === 'semester 5');
+        this.calculateSemesterWise(responseArray, 'semester5');
+        responseArray = response.filter((data) => data.semester === 'semester 6');
+        this.calculateSemesterWise(responseArray, 'semester6');
+        responseArray = response.filter((data) => data.semester === 'semester 7');
+        this.calculateSemesterWise(responseArray, 'semester7');
+        responseArray = response.filter((data) => data.semester === 'semester 8');
+        this.calculateSemesterWise(responseArray, 'semester8');
+        this.calculateCGPA();
+    }
+
+    calculateSemesterWise(responseArray, stateValue) {
+        let obj = {};
+        let totalCredit = 0, gradeCredit = 0;
+        if (responseArray && responseArray.length) {
+            responseArray.forEach((singleResponse) => {
+                gradeCredit = gradeCredit + (singleResponse.gradeValue * singleResponse.credit);
+                totalCredit = totalCredit + singleResponse.credit;
+            });
+            const gpa = gradeCredit / totalCredit;
+            const percentage = gpa * 10;
+            obj[stateValue] = percentage;
+            const counter = this.state.counter + 1;
+            this.setState({ lastSemester: gpa, counter: counter })
+            this.setState(obj);
+        }
+    }
+
+    calculateCGPA() {
+        const cgpa = (this.state.semester1 + this.state.semester2 + this.state.semester3 + this.state.semester4 + this.state.semester5 + this.state.semester6 + this.state.semester7 + this.state.semester8) / (this.state.counter * 10);
+        this.setState({ cgpa: cgpa })
     }
 
     render() {
@@ -52,7 +117,7 @@ class Dashboard extends Component {
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Last semester GPA</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">8.5 (out of 10)</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{this.state.lastSemester} (out of 10)</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -66,8 +131,8 @@ class Dashboard extends Component {
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">cGPA</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">8.2 (out of 10)</div>
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">CGPA</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{this.state.cgpa} (out of 10)</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -133,37 +198,37 @@ class Dashboard extends Component {
                                 <h6 class="m-0 font-weight-bold text-primary">Academic Performance</h6>
                             </div>
                             <div class="card-body">
-                                <h4 class="small font-weight-bold">Semester 1<span class="float-right">20%</span></h4>
+                                <h4 class="small font-weight-bold">Semester 1<span class="float-right">{this.state.semester1}%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar bg-danger" role="progressbar" style={{ width: 20 + '%' }} ></div>
+                                    <div class="progress-bar bg-danger" role="progressbar" style={{ width: this.state.semester1 + '%' }} ></div>
                                 </div>
-                                <h4 class="small font-weight-bold">Semester 2 <span class="float-right">40%</span></h4>
+                                <h4 class="small font-weight-bold">Semester 2 <span class="float-right">{this.state.semester2}%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar bg-warning" role="progressbar" style={{ width: 40 + '%' }}></div>
+                                    <div class="progress-bar bg-warning" role="progressbar" style={{ width: this.state.semester2 + '%' }}></div>
                                 </div>
-                                <h4 class="small font-weight-bold">Semester 3 <span class="float-right">60%</span></h4>
+                                <h4 class="small font-weight-bold">Semester 3 <span class="float-right">{this.state.semester3}%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar" role="progressbar" style={{ width: 60 + '%' }}></div>
+                                    <div class="progress-bar" role="progressbar" style={{ width: this.state.semester3 + '%' }}></div>
                                 </div>
-                                <h4 class="small font-weight-bold">Semester 4<span class="float-right">80%</span></h4>
+                                <h4 class="small font-weight-bold">Semester 4<span class="float-right">{this.state.semester4}%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar bg-info" role="progressbar" style={{ width: 80 + '%' }}></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style={{ width: this.state.semester4 + '%' }}></div>
                                 </div>
-                                <h4 class="small font-weight-bold">Semester 5<span class="float-right">Complete!</span></h4>
+                                <h4 class="small font-weight-bold">Semester 5<span class="float-right">{this.state.semester5}%</span></h4>
                                 <div class="progress  mb-4">
-                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }}></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: this.state.semester5 + '%' }}></div>
                                 </div>
-                                <h4 class="small font-weight-bold">Semester 6<span class="float-right">Complete!</span></h4>
+                                <h4 class="small font-weight-bold">Semester 6<span class="float-right">{this.state.semester6}%</span></h4>
                                 <div class="progress  mb-4">
-                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }}></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: this.state.semester6 + '%' }}></div>
                                 </div>
-                                <h4 class="small font-weight-bold">Semester 7<span class="float-right">Complete!</span></h4>
+                                <h4 class="small font-weight-bold">Semester 7<span class="float-right">{this.state.semester7}%</span></h4>
                                 <div class="progress  mb-4">
-                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }}></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: this.state.semester7 + '%' }}></div>
                                 </div>
-                                <h4 class="small font-weight-bold">Semester 8<span class="float-right">Complete!</span></h4>
+                                <h4 class="small font-weight-bold">Semester 8<span class="float-right">{this.state.semester8}%</span></h4>
                                 <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: 100 + '%' }}></div>
+                                    <div class="progress-bar bg-success" role="progressbar" style={{ width: this.state.semester8 + '%' }}></div>
                                 </div>
                             </div>
                         </div>

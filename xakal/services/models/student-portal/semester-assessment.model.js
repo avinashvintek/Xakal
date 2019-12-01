@@ -13,6 +13,12 @@ var SemesterDetails = mongoose.model('SemesterDetails', {
     result: {
         type: String
     },
+    gradeValue: {
+        type: Number
+    },
+    credit: {
+        type: Number
+    }
 });
 
 module.exports = {
