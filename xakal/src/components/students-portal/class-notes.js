@@ -12,15 +12,20 @@ class ClassNotes extends Component {
             column2: '',
             column3: '',
             column4: '',
-            selectedSemester: 'Select Semester',
-            selectedCourse: 'Select Course',
+            selectedSemester: '',
+            selectedCourse: '',
             searchAllowed: false,
             courseList: [],
-            notesList: []
+            notesList: [],
+            background: '',
+            backgroundCourse: '',
+            isFocussed: '',
+            isCourseFocussed: '',
+            onFocus: false,
+            onCourseFocus: false
         };
         this.courseChange = this.onCourseChange.bind(this)
         this.baseState = this.state;
-
     }
 
     componentDidMount() {
@@ -89,7 +94,7 @@ class ClassNotes extends Component {
      * Triggers the API call for course, based on the semester selected
      */
     onDropDownSelect(event) {
-        this.setState({ selectedSemester: event.target.id, selectedCourse: 'Select Course' });
+        this.setState({ selectedSemester: event.target.id, selectedCourse: '', onFocus: false, background: 'is-hidden' });
         var semester = event.target.id;
         axios.get(`http://localhost:4000/xakal/class-notes/course/${semester}`)
             .then((response) => {
@@ -100,11 +105,23 @@ class ClassNotes extends Component {
         }
     }
 
+    onDropDownFocus() {
+        debugger;
+        this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown', backgroundCourse: 'is-hidden' });
+        if (this.state.selectedCourse === '') {
+            this.setState({ isCourseFocussed: '' })
+        }
+    }
+
+    onCourseDropDownFocus() {
+        this.setState({ isCourseFocussed: 'is-focused', isFocussed: 'is-focused', onCourseFocus: true, background: 'is-hidden', backgroundCourse: 'is-shown' });
+    }
+
     /**
      * Updates the selected course name
      */
     onCourseChange(event) {
-        this.setState({ selectedCourse: event.target.id });
+        this.setState({ selectedCourse: event.target.id, onCourseFocus: false, backgroundCourse: 'is-hidden', background: 'is-hidden', });
         if (this.state.searchAllowed) {
             this.setState({ searchAllowed: false })
         }
@@ -114,7 +131,7 @@ class ClassNotes extends Component {
      * Allows the grid to display the values based on routing
      */
     getNotes() {
-        if (this.state.selectedSemester !== 'Select Semester' && this.state.selectedCourse !== 'Select Course') {
+        if (this.state.selectedSemester !== '' && this.state.selectedCourse !== '') {
             if (this.props.location) {
                 switch (this.props.location.pathname) {
                     case '/students-portal/question-papers':
@@ -198,7 +215,7 @@ class ClassNotes extends Component {
     displayCourse() {
         if (this.state && this.state.courseList && this.state.courseList.length) {
             return this.state.courseList.map((singleCourse, index) => {
-                return (<li key={index}><a id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><a id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</a></li>)
             });
         }
     }
@@ -206,32 +223,53 @@ class ClassNotes extends Component {
     render() {
         return (
             <div>
-                <form>
-                    <div>
-                        <ul className='dropdown m-l-30 m-t-30'>
-                            <li id="top">{this.state.selectedSemester}
-                                <span></span>
-                                <ul class="dropdown-box">
-                                    <li><a id="Semester 1" onClick={this.onDropDownSelect.bind(this)}>Semester 1</a></li>
-                                    <li><a id="Semester 2" onClick={this.onDropDownSelect.bind(this)}>Semester 2</a></li>
-                                    <li><a id="Semester 3" onClick={this.onDropDownSelect.bind(this)}>Semester 3</a></li>
-                                    <li><a id="Semester 4" onClick={this.onDropDownSelect.bind(this)}>Semester 4</a></li>
-                                    <li><a id="Semester 5" onClick={this.onDropDownSelect.bind(this)}>Semester 5</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <ul className='course-dropdown m-l-30 m-t-30'>
-                            <li id="top">{this.state.selectedCourse}
-                                <span></span>
-                                <ul class="course-dropdown-box">
-                                    {this.displayCourse()}
-                                </ul>
-                            </li>
-                        </ul>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div className="card-box">
+                            <div className="card-body row">
+                                <div className="col-lg-4 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
+                                        <input onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                            value={this.state.selectedSemester} />
+                                        <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
+                                        {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    <li className="mdl-menu__item animation" id="Semester 1" onClick={this.onDropDownSelect.bind(this)} >Semester 1</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 2" onClick={this.onDropDownSelect.bind(this)} >Semester 2</li>
+                                                    <li className="mdl-menu__item animation2" id="Semester 3" onClick={this.onDropDownSelect.bind(this)} >Semester 3</li>
+                                                    <li className="mdl-menu__item animation" id="Semester 4" onClick={this.onDropDownSelect.bind(this)} >Semester 4</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 5" onClick={this.onDropDownSelect.bind(this)} >Semester 5</li>
+                                                    <li className="mdl-menu__item animation2" id="Semester 6" onClick={this.onDropDownSelect.bind(this)} >Semester 6</li>
+                                                    <li className="mdl-menu__item animation" id="Semester 7" onClick={this.onDropDownSelect.bind(this)} >Semester 7</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 8" onClick={this.onDropDownSelect.bind(this)} >Semester 8</li>
+                                                </ul>
+                                            </div>
+                                        </div> : <p></p>}
+                                    </div>
+                                </div>
+                                <div className="col-lg-4 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isCourseFocussed}>
+                                        <input onFocus={this.onCourseDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                            value={this.state.selectedCourse} />
+                                        <label className={"mdl-textfield__label " + this.state.backgroundCourse}>Course</label>
+                                        {this.state.onCourseFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                <ul class="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    {this.displayCourse()}
+                                                </ul>
+                                            </div>
+                                        </div> : <p></p>}
+                                    </div>
+                                </div>
+                                <div className="col-sm-4 p-t-20">
+                                    <button type="button" onClick={this.getNotes.bind(this)} className="btn btn-primary m-t-15 m-l-30">Get Results!</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </form>
-                <div>
-                    <button type="button" onClick={this.getNotes.bind(this)} class="btn btn-info m-t-15 m-l-30">Get Notes!</button>
                 </div>
                 {this.state.searchAllowed ? <div className="limiter">
                     <div className="container-table100">
