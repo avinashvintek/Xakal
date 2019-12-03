@@ -107,14 +107,14 @@ class ClassNotes extends Component {
 
     onDropDownFocus() {
         debugger;
-        this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown', backgroundCourse: 'is-hidden' });
+        this.setState({ isFocussed: 'is-focused', onFocus: true, onCourseFocus: false, background: 'is-shown', backgroundCourse: 'is-hidden' });
         if (this.state.selectedCourse === '') {
             this.setState({ isCourseFocussed: '' })
         }
     }
 
     onCourseDropDownFocus() {
-        this.setState({ isCourseFocussed: 'is-focused', isFocussed: 'is-focused', onCourseFocus: true, background: 'is-hidden', backgroundCourse: 'is-shown' });
+        this.setState({ isCourseFocussed: 'is-focused', isFocussed: 'is-focused', onCourseFocus: true, onFocus: false, background: 'is-hidden', backgroundCourse: 'is-shown' });
     }
 
     /**
