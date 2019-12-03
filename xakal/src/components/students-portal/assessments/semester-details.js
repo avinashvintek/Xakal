@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import '../../../styles/table.css';
-import '../../../styles/dropdown.css';
-import '../../../styles/course-dropdown.css';
+import '../../../minified-css/material-min.css';
+import '../../../styles/dropdowns.css';
+import '../../../styles/theme-style.css';
 import axios from 'axios';
 
 class SemesterDetails extends Component {
@@ -12,10 +13,12 @@ class SemesterDetails extends Component {
             column2: '',
             column3: '',
             column4: '',
-            selectedSemester: 'Select Semester',
+            selectedSemester: '',
             searchAllowed: false,
-            courseList: [],
-            notesList: []
+            notesList: [],
+            background: '',
+            isFocussed: '',
+            onFocus: false,
         };
         this.baseState = this.state;
 
@@ -74,20 +77,24 @@ class SemesterDetails extends Component {
     }
 
     /**
-     * Triggers the API call for course, based on the semester selected
+     * Sets the semester selected
      */
     onDropDownSelect(event) {
-        this.setState({ selectedSemester: event.target.id });
+        this.setState({ selectedSemester: event.target.id, onFocus: false, background: 'is-hidden' });
         if (this.state.searchAllowed) {
             this.setState({ searchAllowed: false })
         }
+    }
+
+    onDropDownFocus() {
+        this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown' });
     }
 
     /**
      * Allows the grid to display the values
      */
     getResult() {
-        if (this.state.selectedSemester !== 'Select Semester') {
+        if (this.state.selectedSemester !== '') {
             this.fetchSemesterDetails();
         } else {
             alert('Please select the values');
@@ -127,24 +134,38 @@ class SemesterDetails extends Component {
     render() {
         return (
             <div>
-                <form>
-                    <div>
-                        <ul className='dropdown m-l-30 m-t-30'>
-                            <li id="top">{this.state.selectedSemester}
-                                <span></span>
-                                <ul class="dropdown-box">
-                                    <li><a id="Semester 1" onClick={this.onDropDownSelect.bind(this)}>Semester 1</a></li>
-                                    <li><a id="Semester 2" onClick={this.onDropDownSelect.bind(this)}>Semester 2</a></li>
-                                    <li><a id="Semester 3" onClick={this.onDropDownSelect.bind(this)}>Semester 3</a></li>
-                                    <li><a id="Semester 4" onClick={this.onDropDownSelect.bind(this)}>Semester 4</a></li>
-                                    <li><a id="Semester 5" onClick={this.onDropDownSelect.bind(this)}>Semester 5</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div className="card-box">
+                            <div className="card-body row">
+                                <div className="col-lg-4 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
+                                        <input onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                            value={this.state.selectedSemester} />
+                                        <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
+                                        {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">sdfsdf
+                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    <li className="mdl-menu__item animation" id="Semester 1" onClick={this.onDropDownSelect.bind(this)} >Semester 1</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 2" onClick={this.onDropDownSelect.bind(this)} >Semester 2</li>
+                                                    <li className="mdl-menu__item animation2" id="Semester 3" onClick={this.onDropDownSelect.bind(this)} >Semester 3</li>
+                                                    <li className="mdl-menu__item animation" id="Semester 4" onClick={this.onDropDownSelect.bind(this)} >Semester 4</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 5" onClick={this.onDropDownSelect.bind(this)} >Semester 5</li>
+                                                    <li className="mdl-menu__item animation2" id="Semester 6" onClick={this.onDropDownSelect.bind(this)} >Semester 6</li>
+                                                    <li className="mdl-menu__item animation" id="Semester 7" onClick={this.onDropDownSelect.bind(this)} >Semester 7</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 8" onClick={this.onDropDownSelect.bind(this)} >Semester 8</li>
+                                                </ul>
+                                            </div>
+                                        </div> : <p></p>}
+                                    </div>
+                                </div>
+                                <div className="col-sm-8 p-t-20">
+                                    <button type="button" onClick={this.getResult.bind(this)} className="btn btn-primary m-t-15 m-l-30">Get Results!</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </form>
-                <div>
-                    <button type="button" onClick={this.getResult.bind(this)} class="btn btn-info m-t-15 m-l-30">Get Results!</button>
                 </div>
                 {this.state.searchAllowed ? <div className="limiter">
                     <div className="container-table100">

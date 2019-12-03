@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../../styles/table.css';
 import '../../minified-css/material-min.css';
 import '../../styles/dropdowns.css';
 import '../../styles/theme-style.css';
@@ -10,12 +11,12 @@ class Attendance extends Component {
         this.state = {
             column1: '',
             column2: '',
-            isFocussed: '',
-            onFocus: false,
             selectedSemester: '',
             searchAllowed: false,
             absenceList: [],
-            background: ''
+            background: '',
+            isFocussed: '',
+            onFocus: false,
         };
         this.baseState = this.state;
 
@@ -65,14 +66,13 @@ class Attendance extends Component {
      * Sets the semester selected
      */
     onDropDownSelect(event) {
-        debugger;
         this.setState({ selectedSemester: event.target.id, onFocus: false, background: 'is-hidden' });
         if (this.state.searchAllowed) {
             this.setState({ searchAllowed: false })
         }
     }
 
-    onDropDownFocus(event) {
+    onDropDownFocus() {
         this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown' });
     }
 
@@ -96,7 +96,6 @@ class Attendance extends Component {
     fetchAbsenceDetails() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
-        var course = this.state.selectedCourse;
         axios.get(`http://localhost:4000/xakal/attendance/studentleave/${semester}`)
             .then((response) => {
                 this.setState({ absenceList: response.data });

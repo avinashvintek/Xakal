@@ -67,6 +67,7 @@ class NavBar extends Component {
                         <hr className="sidebar-divider" />
                         <li className="nav-item">
                             <a className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
+                            <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>College Notes</span>
                                 {this.state.showClassNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg notes-margin " aria-hidden="true"></i>}
@@ -93,6 +94,7 @@ class NavBar extends Component {
                         </div> : <div></div>}
                         <li className="nav-item">
                             <a className="nav-link collapsed" onClick={this.onAssessmentsClick.bind(this)}>
+                            <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Assessments</span>
                                 {this.state.assessments ? <i class="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
