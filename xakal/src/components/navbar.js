@@ -14,8 +14,19 @@ class NavBar extends Component {
         super(props);
         this.state = {
             showClassNotes: false,
-            assessments: false
+            assessments: false,
+            routerLink: ''
         }
+    }
+
+    componentDidMount() {
+        if (this.props && this.props.state && this.props.state.location) {
+            this.setState({ routerLink: this.props.state.location.pathname })
+        }
+    }
+
+    componentWillUnmount() {
+        this.unlisten();
     }
 
     /**
@@ -45,7 +56,7 @@ class NavBar extends Component {
             <Router>
                 <div id="wrapper">
                     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-                        <a className="sidebar-brand d-flex align-items-center justify-content-center" href="index-2.html">
+                        <a className="sidebar-brand d-flex align-items-center justify-content-center">
                             <div className="sidebar-brand-icon rotate-n-15">
                                 <i className="fas fa-laugh-wink"></i>
                             </div>
@@ -53,13 +64,13 @@ class NavBar extends Component {
                         </a>
                         <hr className="sidebar-divider my-0" />
                         <li className="nav-item">
-                            <Link to={{ pathname: "/students-portal/dashboard", userID: this.props.userID }} className="nav-link">
+                            <Link to={{ pathname: `${this.state.routerLink}/dashboard`, userID: this.props.userID }} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Dashboard</span>
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/students-portal/dashboard" className="nav-link">
+                            <Link to={`${this.state.routerLink}/dashboard`} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Forum</span>
                             </Link>
@@ -67,7 +78,7 @@ class NavBar extends Component {
                         <hr className="sidebar-divider" />
                         <li className="nav-item">
                             <a className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
-                            <i className="fas fa-fw fa-tachometer-alt"></i>
+                                <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>College Notes</span>
                                 {this.state.showClassNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg notes-margin " aria-hidden="true"></i>}
@@ -75,18 +86,18 @@ class NavBar extends Component {
                         </li>
                         {this.state.showClassNotes ? <div>
                             <li className="nav-item">
-                                <Link to="/students-portal/class-notes" className="nav-link collapsed">
+                                <Link to={`${this.state.routerLink}/class-notes`} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Class Notes</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/students-portal/xakal-notes" className="nav-link collapsed">
+                                <Link to={`${this.state.routerLink}/xakal-notes`} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Xakal Notes</span>
                                 </Link>
                             </li> <li className="nav-item">
-                                <Link to="/students-portal/question-papers" className="nav-link collapsed">
+                                <Link to={`${this.state.routerLink}/question-papers`} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Question Papers</span>
                                 </Link>
@@ -94,21 +105,21 @@ class NavBar extends Component {
                         </div> : <div></div>}
                         <li className="nav-item">
                             <a className="nav-link collapsed" onClick={this.onAssessmentsClick.bind(this)}>
-                            <i className="fas fa-fw fa-tachometer-alt"></i>
+                                <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Assessments</span>
-                                {this.state.assessments ? <i class="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                {this.state.assessments ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
                             </a>
                         </li>
                         {this.state.assessments ? <div>
                             <li className="nav-item">
-                                <Link to="/students-portal/internal-details" className="nav-link collapsed">
+                                <Link to={`${this.state.routerLink}/internal-details`} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Internals</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/students-portal/semester-details" className="nav-link collapsed">
+                                <Link to={`${this.state.routerLink}/semester-details`} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Semester</span>
                                 </Link>
@@ -116,19 +127,19 @@ class NavBar extends Component {
                         </div> : <div></div>}
                         <hr className="sidebar-divider d-none d-md-block" />
                         <li className="nav-item">
-                            <Link to="/students-portal/attendance" className="nav-link">
+                            <Link to={`${this.state.routerLink}/attendance`} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Attendance</span>
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/students-portal/payment" className="nav-link">
+                            <Link to={`${this.state.routerLink}/payment`} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Payment</span>
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/students-portal/dashboard" className="nav-link">
+                            <Link to={`${this.state.routerLink}/dashboard`} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Placement</span>
                             </Link>
@@ -137,6 +148,7 @@ class NavBar extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Switch>
+                                {/* student portal links */}
                                 <Route path="/students-portal/class-notes" component={classNotes} />
                                 <Route path="/students-portal/xakal-notes" component={classNotes} />
                                 <Route path="/students-portal/question-papers" component={classNotes} />
@@ -145,6 +157,16 @@ class NavBar extends Component {
                                 <Route path="/students-portal/internal-details" component={InternalDetails} />
                                 <Route path="/students-portal/attendance" component={Attendance} />
                                 <Route path="/students-portal/payment" component={Payment} />
+
+                                {/* staff portal links */}
+                                <Route path="/staff-portal/class-notes" component={classNotes} />
+                                <Route path="/staff-portal/xakal-notes" component={classNotes} />
+                                <Route path="/staff-portal/question-papers" component={classNotes} />
+                                <Route path="/staff-portal/dashboard" component={Dashboard} />
+                                <Route path="/staff-portal/semester-details" component={SemesterDetails} />
+                                <Route path="/staff-portal/internal-details" component={InternalDetails} />
+                                <Route path="/staff-portal/attendance" component={Attendance} />
+                                <Route path="/staff-portal/payment" component={Payment} />
                             </Switch>
                         </div>
                     </div>

@@ -106,7 +106,6 @@ class ClassNotes extends Component {
     }
 
     onDropDownFocus() {
-        debugger;
         this.setState({ isFocussed: 'is-focused', onFocus: true, onCourseFocus: false, background: 'is-shown', backgroundCourse: 'is-hidden' });
         if (this.state.selectedCourse === '') {
             this.setState({ isCourseFocussed: '' })
@@ -257,7 +256,7 @@ class ClassNotes extends Component {
                                         <label className={"mdl-textfield__label " + this.state.backgroundCourse}>Course</label>
                                         {this.state.onCourseFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
                                             <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
-                                                <ul class="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
                                                     {this.displayCourse()}
                                                 </ul>
                                             </div>
