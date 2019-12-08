@@ -15,6 +15,7 @@ class ClassNotes extends Component {
             selectedSemester: '',
             selectedCourse: '',
             searchAllowed: false,
+            uploadAllowed: false,
             courseList: [],
             notesList: [],
             background: '',
@@ -22,16 +23,33 @@ class ClassNotes extends Component {
             isFocussed: '',
             isCourseFocussed: '',
             onFocus: false,
-            onCourseFocus: false
+            onCourseFocus: false,
+            file: null,
+            isStudentPortal: false,
+            isStaffPortal: false
         };
-        this.courseChange = this.onCourseChange.bind(this)
+        this.courseChange = this.onCourseChange.bind(this);
+        this.onFileUpload = this.onFileUpload.bind(this)
+        this.onChange = this.onChange.bind(this)
+        this.fileUpload = this.fileUpload.bind(this)
         this.baseState = this.state;
     }
 
     componentDidMount() {
+        this.getPortal();
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
+            this.getPortal();
         });
+    }
+
+    getPortal() {
+        const pathArray = this.props.location.pathname.split('/');
+        if (pathArray.includes('students-portal')) {
+            this.setState({ isStudentPortal: true, isStaffPortal: false })
+        } else {
+            this.setState({ isStaffPortal: true, isStudentPortal: false })
+        }
     }
 
     componentWillUnmount() {
@@ -102,6 +120,8 @@ class ClassNotes extends Component {
             });
         if (this.state.searchAllowed) {
             this.setState({ searchAllowed: false })
+        } else if (this.state.uploadAllowed) {
+            this.setState({ uploadAllowed: false })
         }
     }
 
@@ -123,6 +143,8 @@ class ClassNotes extends Component {
         this.setState({ selectedCourse: event.target.id, onCourseFocus: false, backgroundCourse: 'is-hidden', background: 'is-hidden', });
         if (this.state.searchAllowed) {
             this.setState({ searchAllowed: false })
+        } else if (this.state.uploadAllowed) {
+            this.setState({ uploadAllowed: false })
         }
     }
 
@@ -147,7 +169,7 @@ class ClassNotes extends Component {
             }
         } else {
             alert('Please select the values');
-            this.setState({ searchAllowed: false })
+            this.setState({ searchAllowed: false, uploadAllowed: false })
         }
 
     }
@@ -191,6 +213,52 @@ class ClassNotes extends Component {
             });
     }
 
+    onFileUpload(e) {
+        e.preventDefault() // Stop form submit
+        this.fileUpload(this.state.file);
+    }
+
+    /**
+     * Triggers when file is selected
+     */
+    onChange(e) {
+        this.setState({ file: e.target.files[0], fileUpload: true })
+    }
+
+    /**
+     * Uploads the file to online URL
+     */
+    fileUpload(files) {
+        const formData = new FormData();
+        formData.append('file', files);
+        axios.post('https://file.io', formData, { reportProgress: true, observe: 'events' })
+            .then(event => {
+                if (event.data && event.data.link) {
+                    this.setState({ file: event.data.link });
+                    this.uploadQuestionPapers();
+                }
+            });
+    }
+
+    /**
+     * Uploads the file URL to DB
+     */
+    uploadQuestionPapers() {
+        const reqBody = {
+            semester: this.state.selectedSemester,
+            course: this.state.selectedCourse,
+            description: 'sample',
+            uploadedBy: 'user',
+            uploadedFile: this.state.file,
+            uploadedDate: new Date(),
+        }
+        axios.post('http://localhost:4000/xakal/class-notes/questionpaper', reqBody)
+            .then(() => {
+                alert('File uploaded successfully');
+                this.setState(this.baseState);
+            });
+    }
+
     /**
      * Displays the list of notes based on the API response
      */
@@ -200,7 +268,7 @@ class ClassNotes extends Component {
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>
                     <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.description}</td>
-                    <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedFile}</td>
+                    <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" href={singleData.uploadedFile}>Download File</a></td>
                     <td className={"column100 column4 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
                     <td className={"column100 column5 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
                 </tr>
@@ -226,7 +294,7 @@ class ClassNotes extends Component {
                     <div className="col-sm-12">
                         <div className="card-box">
                             <div className="card-body row">
-                                <div className="col-lg-4 p-t-20">
+                                <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
                                         <input onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
@@ -248,7 +316,7 @@ class ClassNotes extends Component {
                                         </div> : <p></p>}
                                     </div>
                                 </div>
-                                <div className="col-lg-4 p-t-20">
+                                <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isCourseFocussed}>
                                         <input onFocus={this.onCourseDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
@@ -263,9 +331,16 @@ class ClassNotes extends Component {
                                         </div> : <p></p>}
                                     </div>
                                 </div>
-                                <div className="col-sm-4 p-t-20">
+                                {this.state.isStudentPortal ? <div className="col-sm-4 p-t-20">
                                     <button type="button" onClick={this.getNotes.bind(this)} className="btn btn-primary m-t-15 m-l-30">Get Results!</button>
-                                </div>
+                                </div> :
+                                    <div className="col-sm-8 p-t-20">
+                                        <div className="row">
+                                            <input type="file" className="col-sm-4 m-t-15 m-l-30" onChange={this.onChange} />
+                                            <button type="button" onClick={this.onFileUpload} className=" col-sm-2 btn btn-primary m-t-15 m-l-30">Upload</button>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

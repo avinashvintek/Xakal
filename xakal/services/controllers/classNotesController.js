@@ -38,4 +38,23 @@ router.get('/questionpaper/:semester/:course', (req, res) => {
         res.json(eachOne)
     })
 });
+
+router.post('/questionpaper', function (req, res) {
+    var questionPaper = new QuestionPaper({
+        semester: req.body.semester.toLowerCase(),
+        course: req.body.course.toLowerCase(),
+        description: req.body.description,
+        uploadedBy: req.body.uploadedBy,
+        uploadedFile: req.body.uploadedFile,
+        uploadedDate: req.body.uploadedDate,
+    });
+    questionPaper.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller', err)
+        }
+    });
+
+});
 module.exports = router;
