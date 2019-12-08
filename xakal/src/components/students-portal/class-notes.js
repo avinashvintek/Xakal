@@ -40,8 +40,10 @@ class ClassNotes extends Component {
 
     componentDidMount() {
         this.getPortal();
-        const userID = this.props.location.userID;
-        this.setState({userID: userID.userID});
+        if (this.props && this.props.location && this.props.location.userID) {
+            const userID = this.props.location.userID;
+            this.setState({userID: userID.userID});
+        }
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
             this.getPortal();
