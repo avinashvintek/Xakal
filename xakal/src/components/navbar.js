@@ -86,18 +86,18 @@ class NavBar extends Component {
                         </li>
                         {this.state.showClassNotes ? <div>
                             <li className="nav-item">
-                                <Link to={`${this.state.routerLink}/class-notes`} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/class-notes`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Class Notes</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to={`${this.state.routerLink}/xakal-notes`} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/xakal-notes`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Xakal Notes</span>
                                 </Link>
                             </li> <li className="nav-item">
-                                <Link to={`${this.state.routerLink}/question-papers`} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/question-papers`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Question Papers</span>
                                 </Link>

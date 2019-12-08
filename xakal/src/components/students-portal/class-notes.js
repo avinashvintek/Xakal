@@ -14,19 +14,22 @@ class ClassNotes extends Component {
             column4: '',
             selectedSemester: '',
             selectedCourse: '',
+            description: '',
             searchAllowed: false,
             uploadAllowed: false,
             courseList: [],
             notesList: [],
             background: '',
             backgroundCourse: '',
+            backgroundDesc: '',
             isFocussed: '',
             isCourseFocussed: '',
             onFocus: false,
             onCourseFocus: false,
             file: null,
             isStudentPortal: false,
-            isStaffPortal: false
+            isStaffPortal: false,
+            userID: ''
         };
         this.courseChange = this.onCourseChange.bind(this);
         this.onFileUpload = this.onFileUpload.bind(this)
@@ -37,6 +40,8 @@ class ClassNotes extends Component {
 
     componentDidMount() {
         this.getPortal();
+        const userID = this.props.location.userID;
+        this.setState({userID: userID.userID});
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
             this.getPortal();
@@ -126,14 +131,18 @@ class ClassNotes extends Component {
     }
 
     onDropDownFocus() {
-        this.setState({ isFocussed: 'is-focused', onFocus: true, onCourseFocus: false, background: 'is-shown', backgroundCourse: 'is-hidden' });
+        this.setState({ isFocussed: 'is-focused', onFocus: true, onCourseFocus: false, background: 'is-shown', backgroundCourse: 'is-hidden', backgroundDesc: 'is-hidden' });
         if (this.state.selectedCourse === '') {
             this.setState({ isCourseFocussed: '' })
         }
     }
 
     onCourseDropDownFocus() {
-        this.setState({ isCourseFocussed: 'is-focused', isFocussed: 'is-focused', onCourseFocus: true, onFocus: false, background: 'is-hidden', backgroundCourse: 'is-shown' });
+        this.setState({ isCourseFocussed: 'is-focused', isFocussed: 'is-focused', onCourseFocus: true, onFocus: false, background: 'is-hidden', backgroundCourse: 'is-shown', backgroundDesc: 'is-hidden' });
+    }
+
+    onDescriptionFocus() {
+        this.setState({ isCourseFocussed: 'is-focused', isFocussed: 'is-focused', isDescriptionFocussed: 'is-focused', onCourseFocus: false, onFocus: false, background: 'is-hidden', backgroundCourse: 'is-hidden', backgroundDesc: 'is-shown' });
     }
 
     /**
@@ -141,6 +150,15 @@ class ClassNotes extends Component {
      */
     onCourseChange(event) {
         this.setState({ selectedCourse: event.target.id, onCourseFocus: false, backgroundCourse: 'is-hidden', background: 'is-hidden', });
+        if (this.state.searchAllowed) {
+            this.setState({ searchAllowed: false })
+        } else if (this.state.uploadAllowed) {
+            this.setState({ uploadAllowed: false })
+        }
+    }
+
+    onDescriptionChanged(event) {
+        this.setState({ description: event.target.value, backgroundCourse: 'is-hidden', background: 'is-hidden' });
         if (this.state.searchAllowed) {
             this.setState({ searchAllowed: false })
         } else if (this.state.uploadAllowed) {
@@ -222,7 +240,7 @@ class ClassNotes extends Component {
      * Triggers when file is selected
      */
     onChange(e) {
-        this.setState({ file: e.target.files[0], fileUpload: true })
+        this.setState({ file: e.target.files[0], background: 'is-hidden', backgroundCourse: 'is-hidden', backgroundDesc: 'is-hidden' })
     }
 
     /**
@@ -247,8 +265,8 @@ class ClassNotes extends Component {
         const reqBody = {
             semester: this.state.selectedSemester,
             course: this.state.selectedCourse,
-            description: 'sample',
-            uploadedBy: 'user',
+            description: this.state.description,
+            uploadedBy: this.state.userID.toUpperCase(),
             uploadedFile: this.state.file,
             uploadedDate: new Date(),
         }
@@ -336,6 +354,12 @@ class ClassNotes extends Component {
                                 </div> :
                                     <div className="col-sm-8 p-t-20">
                                         <div className="row">
+                                            <div
+                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label " + this.state.isDescriptionFocussed}>
+                                                <input onFocus={this.onDescriptionFocus.bind(this)} value={this.state.description} className="mdl-textfield__input display-border" type="text" id="description" onChange={this.onDescriptionChanged.bind(this)}
+                                                />
+                                                <label className={"mdl-textfield__label " + this.state.backgroundDesc}>Description</label>
+                                            </div>
                                             <input type="file" className="col-sm-4 m-t-15 m-l-30" onChange={this.onChange} />
                                             <button type="button" onClick={this.onFileUpload} className=" col-sm-2 btn btn-primary m-t-15 m-l-30">Upload</button>
                                         </div>
