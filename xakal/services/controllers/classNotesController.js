@@ -57,4 +57,23 @@ router.post('/questionpaper', function (req, res) {
     });
 
 });
+
+router.post('/classnote', function (req, res) {
+    var classNote = new ClassNote({
+        semester: req.body.semester.toLowerCase(),
+        course: req.body.course.toLowerCase(),
+        description: req.body.description,
+        uploadedBy: req.body.uploadedBy,
+        uploadedFile: req.body.uploadedFile,
+        uploadedDate: req.body.uploadedDate,
+    });
+    classNote.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller', err)
+        }
+    });
+
+});
 module.exports = router;

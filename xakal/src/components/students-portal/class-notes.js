@@ -42,7 +42,7 @@ class ClassNotes extends Component {
         this.getPortal();
         if (this.props && this.props.location && this.props.location.userID) {
             const userID = this.props.location.userID;
-            this.setState({userID: userID.userID});
+            this.setState({ userID: userID.userID });
         }
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
@@ -255,9 +255,26 @@ class ClassNotes extends Component {
             .then(event => {
                 if (event.data && event.data.link) {
                     this.setState({ file: event.data.link });
-                    this.uploadQuestionPapers();
+                    this.currentSite();
                 }
             });
+    }
+
+    /**
+     * Uploads document based on the router location
+     */
+    currentSite() {
+        if (this.props.location) {
+            switch (this.props.location.pathname) {
+                case '/staff-portal/question-papers':
+                    this.uploadQuestionPapers();
+                    break;
+                case '/staff-portal/class-notes':
+                    this.uploadClassNotes();
+                    break;
+                default: break
+            }
+        }
     }
 
     /**
@@ -273,6 +290,25 @@ class ClassNotes extends Component {
             uploadedDate: new Date(),
         }
         axios.post('http://localhost:4000/xakal/class-notes/questionpaper', reqBody)
+            .then(() => {
+                alert('File uploaded successfully');
+                this.setState(this.baseState);
+            });
+    }
+
+    /**
+     * Uploads the class file URL to DB
+     */
+    uploadClassNotes() {
+        const reqBody = {
+            semester: this.state.selectedSemester,
+            course: this.state.selectedCourse,
+            description: this.state.description,
+            uploadedBy: this.state.userID.toUpperCase(),
+            uploadedFile: this.state.file,
+            uploadedDate: new Date(),
+        }
+        axios.post('http://localhost:4000/xakal/class-notes/classnote', reqBody)
             .then(() => {
                 alert('File uploaded successfully');
                 this.setState(this.baseState);
