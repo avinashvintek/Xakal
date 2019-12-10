@@ -18,6 +18,9 @@ var SemesterDetails = mongoose.model('SemesterDetails', {
     },
     credit: {
         type: Number
+    },
+    userID: {
+        type: String
     }
 });
 

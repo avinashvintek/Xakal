@@ -114,13 +114,13 @@ class NavBar extends Component {
                         </li>
                         {this.state.assessments ? <div>
                             <li className="nav-item">
-                                <Link to={`${this.state.routerLink}/internal-details`} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Internals</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to={`${this.state.routerLink}/semester-details`} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Semester</span>
                                 </Link>
@@ -161,7 +161,6 @@ class NavBar extends Component {
 
                                 {/* staff portal links */}
                                 <Route path="/staff-portal/class-notes" component={classNotes} />
-                                <Route path="/staff-portal/xakal-notes" component={classNotes} />
                                 <Route path="/staff-portal/question-papers" component={classNotes} />
                                 <Route path="/staff-portal/dashboard" component={Dashboard} />
                                 <Route path="/staff-portal/semester-details" component={SemesterDetails} />

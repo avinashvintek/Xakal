@@ -20,12 +20,17 @@ class InternalDetails extends Component {
             background: '',
             isFocussed: '',
             onFocus: false,
+            userID: ''
         };
         this.baseState = this.state;
 
     }
 
     componentDidMount() {
+        if (this.props && this.props.location && this.props.location.userID) {
+            const userID = this.props.location.userID;
+            this.setState({ userID: userID.userID });
+        }
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
         });
@@ -134,8 +139,8 @@ class InternalDetails extends Component {
     fetchInternalDetails() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
-        var course = this.state.selectedCourse;
-        axios.get(`http://localhost:4000/xakal/assessment/internaldetail/${semester}`)
+        var userID = { userID: this.state.userID };
+        axios.get(`http://localhost:4000/xakal/assessment/internaldetail/${semester}`, { params: userID })
             .then((response) => {
                 this.setState({ notesList: response.data });
             });
