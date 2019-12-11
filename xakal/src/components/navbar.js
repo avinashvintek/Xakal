@@ -128,13 +128,13 @@ class NavBar extends Component {
                         </div> : <div></div>}
                         <hr className="sidebar-divider d-none d-md-block" />
                         <li className="nav-item">
-                            <Link to={`${this.state.routerLink}/attendance`} className="nav-link">
+                            <Link to={{ pathname: `${this.state.routerLink}/attendance`, userID: this.props.userID }} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Attendance</span>
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link to={`${this.state.routerLink}/payment`} className="nav-link">
+                            <Link to={{ pathname: `${this.state.routerLink}/payment`, userID: this.props.userID }} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Payment</span>
                             </Link>

@@ -4,7 +4,9 @@ var { StudentLeave } = require('../models/student-portal/attendance.model.js');
 
 router.get('/studentleave/:semester', (req, res) => {
     let semester = req.params.semester.toLowerCase();
-    StudentLeave.find({ semester: semester }, { _id: 0, leaveDate: 1, reason: 1 }).then((eachOne) => {
+    let userID = req.query.userID ? req.query.userID.toUpperCase() : null;
+    let filter = userID ? { semester: semester, userID: userID } : { semester: semester }
+    StudentLeave.find(filter, { _id: 0 }).then((eachOne) => {
         res.json(eachOne)
     })
 });

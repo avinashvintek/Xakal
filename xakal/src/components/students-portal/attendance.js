@@ -17,12 +17,17 @@ class Attendance extends Component {
             background: '',
             isFocussed: '',
             onFocus: false,
+            userID: ''
         };
         this.baseState = this.state;
 
     }
 
     componentDidMount() {
+        if (this.props && this.props.location && this.props.location.userID) {
+            const userID = this.props.location.userID;
+            this.setState({ userID: userID.userID });
+        }
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
         });
@@ -96,7 +101,8 @@ class Attendance extends Component {
     fetchAbsenceDetails() {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
-        axios.get(`http://localhost:4000/xakal/attendance/studentleave/${semester}`)
+        var userID = { userID: this.state.userID };
+        axios.get(`http://localhost:4000/xakal/attendance/studentleave/${semester}`, { params: userID })
             .then((response) => {
                 this.setState({ absenceList: response.data });
             });

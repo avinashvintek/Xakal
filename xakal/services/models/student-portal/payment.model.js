@@ -13,6 +13,9 @@ var Payment = mongoose.model('Payment', {
     paymentDate: {
         type: String
     },
+    userID: {
+        type: String
+    }
 });
 module.exports = {
     Payment: Payment

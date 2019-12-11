@@ -10,6 +10,9 @@ var StudentLeave = mongoose.model('StudentLeave', {
     reason: {
         type: String
     },
+    userID: {
+        type: String
+    }
 });
 module.exports = {
     StudentLeave: StudentLeave
