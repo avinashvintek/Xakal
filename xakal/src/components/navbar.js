@@ -9,6 +9,7 @@ import SemesterDetails from './students-portal/assessments/semester-details';
 import InternalDetails from './students-portal/assessments/internal-details';
 import Attendance from './students-portal/attendance';
 import Payment from './students-portal/payment';
+import ViewSemesterDetails from './staff-portal/assessments/view-semester-details';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -119,12 +120,18 @@ class NavBar extends Component {
                                     <span>Internals</span>
                                 </Link>
                             </li>
-                            <li className="nav-item">
+                            {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Semester</span>
                                 </Link>
-                            </li>
+                            </li> :
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <span>Semester</span>
+                                    </Link>
+                                </li>}
                         </div> : <div></div>}
                         <hr className="sidebar-divider d-none d-md-block" />
                         <li className="nav-item">
@@ -163,7 +170,7 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/class-notes" component={classNotes} />
                                 <Route path="/staff-portal/question-papers" component={classNotes} />
                                 <Route path="/staff-portal/dashboard" component={Dashboard} />
-                                <Route path="/staff-portal/semester-details" component={SemesterDetails} />
+                                <Route path="/staff-portal/semester-details" component={ViewSemesterDetails} />
                                 <Route path="/staff-portal/internal-details" component={InternalDetails} />
                                 <Route path="/staff-portal/attendance" component={Attendance} />
                                 <Route path="/staff-portal/payment" component={Payment} />
