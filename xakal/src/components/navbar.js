@@ -10,6 +10,7 @@ import InternalDetails from './students-portal/assessments/internal-details';
 import Attendance from './students-portal/attendance';
 import Payment from './students-portal/payment';
 import ViewSemesterDetails from './staff-portal/assessments/view-semester-details';
+import SalaryDetails from './staff-portal/salary-details';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -140,18 +141,23 @@ class NavBar extends Component {
                                 <span>Attendance</span>
                             </Link>
                         </li>
-                        <li className="nav-item">
+                        {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/payment`, userID: this.props.userID }} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Payment</span>
                             </Link>
-                        </li>
-                        <li className="nav-item">
+                        </li> : <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/salary`, userID: this.props.userID }} className="nav-link">
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Salary</span>
+                                </Link>
+                            </li>}
+                        {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                             <Link to={`${this.state.routerLink}/dashboard`} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Placement</span>
                             </Link>
-                        </li>
+                        </li> : <p></p>}
                     </ul>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
@@ -173,7 +179,7 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/semester-details" component={ViewSemesterDetails} />
                                 <Route path="/staff-portal/internal-details" component={InternalDetails} />
                                 <Route path="/staff-portal/attendance" component={Attendance} />
-                                <Route path="/staff-portal/payment" component={Payment} />
+                                <Route path="/staff-portal/salary" component={SalaryDetails} />
                             </Switch>
                         </div>
                     </div>
