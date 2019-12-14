@@ -10,6 +10,8 @@ var attendanceController = require('./controllers/attendanceController.js');
 var paymentController = require('./controllers/paymentController.js');
 var studentController = require('./controllers/studentController.js');
 var salaryController = require('./controllers/salaryController.js');
+var staffAttendance = require('./controllers/staffAttendanceController.js');
+
 const PORT = 4000;
 
 app.use(cors());
@@ -28,6 +30,8 @@ app.use('/xakal/attendance', attendanceController);
 app.use('/xakal/payment', paymentController);
 app.use('/xakal/studentdetail', studentController);
 app.use('/xakal/salary', salaryController);
+app.use('/xakal/staffattendance', staffAttendance);
+
 app.listen(PORT, function () {
     console.log('Server is running on Port: ' + PORT)
 })

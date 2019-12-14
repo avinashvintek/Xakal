@@ -199,7 +199,6 @@ class SalaryDetails extends Component {
                                             </div>
                                         </div> : <p></p>}
                                     </div>
-
                                 </div>
                                 <div className="col-lg-4 p-t-20">
                                     <div
