@@ -12,6 +12,9 @@ var StaffLeave = mongoose.model('StaffLeave', {
     },
     userID: {
         type: String
+    },
+    year: {
+        type: Number
     }
 });
 module.exports = {

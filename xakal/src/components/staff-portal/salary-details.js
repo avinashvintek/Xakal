@@ -95,7 +95,7 @@ class SalaryDetails extends Component {
     }
 
     onMonthFocus() {
-        this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown' });
+        this.setState({ isFocussed: 'is-focused', onFocus: true, onYearFocus: false, background: 'is-shown' });
     }
 
     /**
@@ -109,7 +109,7 @@ class SalaryDetails extends Component {
     }
 
     onYearFocus() {
-        this.setState({ isYearFocussed: 'is-focused', onYearFocus: true, yearBackground: 'is-shown' });
+        this.setState({ isYearFocussed: 'is-focused', onFocus: false, onYearFocus: true, yearBackground: 'is-shown' });
     }
 
     /**

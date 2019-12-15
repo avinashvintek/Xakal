@@ -18,6 +18,10 @@ class StaffAttendance extends Component {
             onFocus: false,
             selectedMonth: '',
             userID: '',
+            onYearFocus: false,
+            isYearFocussed: '',
+            selectedYear: '',
+            yearBackground: '',
         };
         this.baseState = this.state;
 
@@ -48,7 +52,7 @@ class StaffAttendance extends Component {
     }
 
     onMonthFocus() {
-        this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown' });
+        this.setState({ isFocussed: 'is-focused', onFocus: true, onYearFocus: false, yearBackground: 'is-hidden', background: 'is-shown' });
     }
 
 
@@ -92,10 +96,6 @@ class StaffAttendance extends Component {
         }
     }
 
-    onDropDownFocus() {
-        this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown' });
-    }
-
     /**
      * Fetches all the month name
      */
@@ -108,16 +108,45 @@ class StaffAttendance extends Component {
     }
 
     /**
+     * Sets the year selected
+     */
+    onYearSelect(event) {
+        this.setState({ selectedYear: event.target.id, onYearFocus: false, yearBackground: 'is-hidden' });
+        if (this.state.searchAllowed) {
+            this.setState({ searchAllowed: false })
+        }
+    }
+
+    onYearFocus() {
+        this.setState({ isYearFocussed: 'is-focused', onFocus: false, onYearFocus: true, yearBackground: 'is-shown', background: 'is-hidden' });
+    }
+
+
+    /**
      * Allows the grid to display the values
      */
     getResult() {
-        if (this.state.selectedMonth !== '') {
+        if (this.state.selectedMonth !== '' && this.state.selectedYear !== '') {
             this.fetchAbsenceDetails();
         } else {
             alert('Please select the values');
             this.setState({ searchAllowed: false })
         }
 
+    }
+
+    
+    /**
+     * Gets the previous 5 years
+     */
+    getYear() {
+        const year = (new Date()).getFullYear();
+        const years = Array.from(new Array(5), (val, index) => -(index - year));
+        return years.map((year, index) => {
+            return (
+                <li id={year} key={index++} className="mdl-menu__item animation" onClick={this.onYearSelect.bind(this)} >{year}</li>
+            )
+        })
     }
 
 
@@ -127,7 +156,7 @@ class StaffAttendance extends Component {
     fetchAbsenceDetails() {
         this.setState({ searchAllowed: true });
         var month = this.state.selectedMonth;
-        var userID = { userID: this.state.userID, month: month };
+        var userID = { userID: this.state.userID, month: month, year: this.state.selectedYear };
         axios.get(`http://localhost:4000/xakal/staffattendance/staffleave`, { params: userID })
             .then((response) => {
                 this.setState({ absenceList: response.data });
@@ -171,7 +200,23 @@ class StaffAttendance extends Component {
                                         </div> : <p></p>}
                                     </div>
                                 </div>
-                                <div className="col-sm-8 p-t-20">
+                                <div className="col-lg-4 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isYearFocussed}>
+                                        <input onFocus={this.onYearFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                            value={this.state.selectedYear} />
+                                        <label className={"mdl-textfield__label " + this.state.yearBackground}>Year</label>
+                                        {this.state.onYearFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    {this.getYear()}
+                                                </ul>
+                                            </div>
+                                        </div> : <p></p>}
+                                    </div>
+
+                                </div>
+                                <div className="col-sm-4 p-t-20">
                                     <button type="button" onClick={this.getResult.bind(this)} className="btn btn-primary m-t-15 m-l-30">Get Results!</button>
                                 </div>
                             </div>
