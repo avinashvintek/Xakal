@@ -19,7 +19,15 @@ var InternalDetails = mongoose.model('InternalDetails', {
     model3: {
         type: Number
     },
-    userID: { type: String }
+    userID: {
+        type: String
+    },
+    uploadedBy: {
+        type: String
+    },
+    uploadedDate: {
+        type: String
+    },
 });
 
 module.exports = {

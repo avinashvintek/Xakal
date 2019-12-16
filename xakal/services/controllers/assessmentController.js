@@ -27,4 +27,10 @@ router.get('/internaldetail/:semester', (req, res) => {
         res.json(eachOne)
     })
 });
+
+router.get('/internaldetail', (req, res) => {
+    InternalDetails.find(req.query, { _id: 0 }).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
 module.exports = router;
