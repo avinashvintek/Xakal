@@ -195,5 +195,10 @@
     pointer-events: none;
     border: 1px solid #4e73df;
   }
+
+  .add-border {
+    border: 1px solid #000 !important;
+    padding: 5px;
+  }
   
   

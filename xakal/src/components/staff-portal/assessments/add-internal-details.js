@@ -3,7 +3,7 @@ import '../../../styles/table.css';
 import '../../../styles/dropdown.css';
 import '../../../styles/course-dropdown.css';
 import axios from 'axios';
-
+import { Link } from 'react-router-dom'
 class AddInternalDetails extends Component {
     constructor(props) {
         super(props);
@@ -12,6 +12,7 @@ class AddInternalDetails extends Component {
             column2: '',
             column3: '',
             column4: '',
+            column5: '',
             selectedSemester: '',
             selectedCourse: '',
             searchAllowed: false,
@@ -27,7 +28,8 @@ class AddInternalDetails extends Component {
             onCourseFocus: false,
             file: null,
             selectedModel: '',
-            userID: ''
+            userID: '',
+            isEdit: false
         };
         this.courseChange = this.onCourseChange.bind(this);
         this.baseState = this.state;
@@ -50,7 +52,7 @@ class AddInternalDetails extends Component {
     /**
      * Adds the hover class when description is hovered
      */
-    descriptionHover(event) {
+    userIDHover(event) {
         var element = event.target.className;
         if (element === 'column100 column2 ') {
             this.setState({ column1: 'hov-column-head-ver5' })
@@ -60,7 +62,7 @@ class AddInternalDetails extends Component {
     /**
      * Adds the hover class when download is hovered
      */
-    downloadHover(event) {
+    marksHover(event) {
         var element = event.target.className;
         if (element === 'column100 column3 ') {
             this.setState({ column2: 'hov-column-head-ver5' })
@@ -88,6 +90,16 @@ class AddInternalDetails extends Component {
     }
 
     /**
+     * Adds the hover class when upload by is hovered
+     */
+    actionHover(event) {
+        var element = event.target.className;
+        if (element === 'column100 column6 ') {
+            this.setState({ column5: 'hov-column-head-ver5' })
+        }
+    }
+
+    /**
      * Resets the state variables when hover is removed
      */
     hoverOff() {
@@ -95,7 +107,8 @@ class AddInternalDetails extends Component {
             column1: '',
             column2: '',
             column3: '',
-            column4: ''
+            column4: '',
+            column5: '',
         })
     }
 
@@ -169,6 +182,10 @@ class AddInternalDetails extends Component {
 
     }
 
+    redirect() {
+        this.setState({ isEdit: true });
+    }
+
     /**
      * Displays the list of notes based on the API response
      */
@@ -178,10 +195,32 @@ class AddInternalDetails extends Component {
         return this.state.notesList.map((singleData, index) => {
             return (
                 <tr className="row100" key={index++}>
-                    <td className="column100 column1" data-column="column1">{++index}</td>
-                    <td className={"column100 column2 "} key={index++} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
-                    <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData[modelName]}</td>
+                    <td className="column100 column1" data-column="column1">{index}</td>
+                    <td className={"column100 column2 "} key={index++} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
+                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData[modelName]}</td>
+                    <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
                     <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
+                    <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Add / Edit</a></td>
+                </tr>
+            )
+        })
+    }
+
+    /**
+     * Inline table edit
+     */
+    editTable() {
+        const selectedModel = this.state.selectedModel;
+        const modelName = selectedModel.toLowerCase().replace(/ /g, ''); //remove white spaces
+        return this.state.notesList.map((singleData, index) => {
+            return (
+                <tr className="row100" key={index++}>
+                    <td className="column100 column1" data-column="column1">{index}</td>
+                    <td className={"column100 column2 "} key={index++} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
+                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" defaultValue={singleData[modelName]}></input></td>
+                    <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
+                    <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
+                    <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Add / Edit</a></td>
                 </tr>
             )
         })
@@ -275,15 +314,20 @@ class AddInternalDetails extends Component {
                                     <thead>
                                         <tr className="row100 head">
                                             <th className="column100 column1" data-column="column1"></th>
-                                            <th className={"column100 column2 " + this.state.column1} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Student ID</th>
-                                            <th className={"column100 column3 " + this.state.column2} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Marks Obtained</th>
+                                            <th className={"column100 column2 " + this.state.column1} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Student ID</th>
+                                            <th className={"column100 column3 " + this.state.column2} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Marks Obtained</th>
                                             <th className={"column100 column4 " + this.state.column3} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Uploaded Date</th>
                                             <th className={"column100 column5 " + this.state.column4} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Uploaded By</th>
+                                            <th className={"column100 column6 " + this.state.column5} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {this.displayTable()}
-                                    </tbody>
+                                    {this.state.isEdit ?
+                                        <tbody>
+                                            {this.editTable()}
+                                        </tbody> :
+                                        <tbody>
+                                            {this.displayTable()}
+                                        </tbody>}
                                 </table>
                             </div>
                         </div>
