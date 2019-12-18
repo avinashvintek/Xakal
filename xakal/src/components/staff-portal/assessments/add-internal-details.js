@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom'
 class AddInternalDetails extends Component {
     constructor(props) {
         super(props);
+        this.marksArray = [];
+        this.studentID = [];
         this.state = {
             column1: '',
             column2: '',
@@ -29,7 +31,7 @@ class AddInternalDetails extends Component {
             file: null,
             selectedModel: '',
             userID: '',
-            isEdit: false
+            isEdit: false,
         };
         this.courseChange = this.onCourseChange.bind(this);
         this.baseState = this.state;
@@ -207,6 +209,54 @@ class AddInternalDetails extends Component {
     }
 
     /**
+     * Reverts back to the original state
+     */
+    discardChanges() {
+        this.studentID = [];
+        this.marksArray = [];
+        this.setState({ isEdit: false });
+        this.displayTable();
+    }
+
+    updatedMarks(userID, context) {
+        if (this.marksArray.length) {
+            this.marksArray.forEach(element => {
+                if (element.studentID === userID) {
+                    element.marksObtained = context.target.value
+                } else {
+                    if (!this.studentID.includes(userID)) {
+                        this.insertUpdatedMarks(userID, context);
+                    }
+                }
+            });
+        } else {
+            if (!this.studentID.includes(userID)) {
+                this.insertUpdatedMarks(userID, context);
+            }
+        }
+    }
+
+    insertUpdatedMarks(userID, context) {
+        this.studentID.push(userID);
+        this.marksArray.push({
+            studentID: userID,
+            marksObtained: context.target.value
+        });
+    }
+
+    updateMarks() {
+        const params = {
+            studentID: '',
+            marksObtained: 0,
+            semester: this.state.selectedSemester,
+            course: this.state.selectedCourse,
+            model: this.state.selectedModel,
+            uploadedBy: this.state.userID,
+            uploadedDate: new Date()
+        }
+    }
+
+    /**
      * Inline table edit
      */
     editTable() {
@@ -217,7 +267,7 @@ class AddInternalDetails extends Component {
                 <tr className="row100" key={index++}>
                     <td className="column100 column1" data-column="column1">{index}</td>
                     <td className={"column100 column2 "} key={index++} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
-                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" defaultValue={singleData[modelName]}></input></td>
+                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" onChange={this.updatedMarks.bind(this, singleData.userID)} defaultValue={singleData[modelName]}></input></td>
                     <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
                     <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
                     <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Add / Edit</a></td>
@@ -247,7 +297,7 @@ class AddInternalDetails extends Component {
                                 <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                        <input onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onFocus={this.onDropDownFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedSemester} />
                                         <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
                                         {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
@@ -269,7 +319,7 @@ class AddInternalDetails extends Component {
                                 <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isCourseFocussed}>
-                                        <input onFocus={this.onCourseDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onFocus={this.onCourseDropDownFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedCourse} />
                                         <label className={"mdl-textfield__label " + this.state.backgroundCourse}>Course</label>
                                         {this.state.onCourseFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
@@ -284,7 +334,7 @@ class AddInternalDetails extends Component {
                                 <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isModelFocussed}>
-                                        <input onFocus={this.onModelFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onFocus={this.onModelFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedModel} />
                                         <label className={"mdl-textfield__label " + this.state.backgroundModel}>Model</label>
                                         {this.state.onModelFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
@@ -333,6 +383,10 @@ class AddInternalDetails extends Component {
                         </div>
                     </div>
                 </div> : <span></span>}
+                {this.state.isEdit ? <div className="right p-t-20 m-r-100">
+                    <button type="button" onClick={this.getDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save Details</button>
+                    <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button>
+                </div> : <p></p>}
             </div>
         )
     }
