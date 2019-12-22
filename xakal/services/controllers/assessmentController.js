@@ -62,6 +62,7 @@ router.put('/internaldetail/update/:id', (req, res) => {
             uploadedBy: req.body.uploadedBy,
             uploadedDate: req.body.uploadedDate,
             model3: req.body.marksObtained,
+            internals: req.body.internals
         };
     }
     var id = req.params.id;

@@ -32,6 +32,7 @@ class AddInternalDetails extends Component {
             selectedModel: '',
             userID: '',
             isEdit: false,
+            internals: 0
         };
         this.courseChange = this.onCourseChange.bind(this);
         this.baseState = this.state;
@@ -218,7 +219,8 @@ class AddInternalDetails extends Component {
         this.displayTable();
     }
 
-    updatedMarks(userID, context) {
+    updatedMarks(singleElement, context) {
+        const userID = singleElement._id;
         if (this.marksArray.length) {
             this.marksArray.forEach(element => {
                 if (element.id === userID) {
@@ -234,15 +236,29 @@ class AddInternalDetails extends Component {
                 this.insertUpdatedMarks(userID, context);
             }
         }
+        if (this.state.selectedModel === 'Model 3') {
+            this.calculateInternalMarks(singleElement);
+        }
     }
 
     insertUpdatedMarks(userID, context) {
-        debugger;
         this.studentID.push(userID);
         this.marksArray.push({
             id: userID,
             marksObtained: context.target.value
         });
+    }
+
+    /**
+     * Calculates the internal marks
+     * Attendance marks - To be defined
+     */
+    calculateInternalMarks(singleElement) {
+        const assessment1 = (singleElement.model1 / 100) * 5;
+        const assessment2 = (singleElement.model2 / 100) * 5;
+        const assessment3 = (singleElement.model3 / 100) * 5;
+        const totalInternals = assessment1 + assessment2 + assessment3 + 5;
+        this.setState({ internals: totalInternals });
     }
 
     updateMarks() {
@@ -255,18 +271,18 @@ class AddInternalDetails extends Component {
                     course: this.state.selectedCourse,
                     model: this.state.selectedModel.toLowerCase(),
                     uploadedBy: this.state.userID.toUpperCase(),
-                    uploadedDate: "22/12/2019"
+                    uploadedDate: "22/12/2019",
+                    internals: this.state.internals
                 }
                 axios.put(`http://localhost:4000/xakal/assessment/internaldetail/update/${element.id}`, params)
                     .then(() => {
-                        if(!isUpdated) {
+                        if (!isUpdated) {
                             alert('Updated Successfully');
                         }
                         isUpdated = true;
                         this.setState({ searchAllowed: false, isEdit: false })
                     })
-                    .catch((err) => console.log(err))
-                    ;
+                    .catch((err) => console.log(err));
             });
         }
     }
@@ -282,7 +298,7 @@ class AddInternalDetails extends Component {
                 <tr className="row100" key={index++}>
                     <td className="column100 column1" data-column="column1">{index}</td>
                     <td className={"column100 column2 "} key={index++} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
-                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" onChange={this.updatedMarks.bind(this, singleData._id)} defaultValue={singleData[modelName]}></input></td>
+                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" onChange={this.updatedMarks.bind(this, singleData)} defaultValue={singleData[modelName]}></input></td>
                     <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
                     <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
                     <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Add / Edit</a></td>
