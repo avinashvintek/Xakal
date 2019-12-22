@@ -20,7 +20,7 @@ class AddInternalDetails extends Component {
             searchAllowed: false,
             uploadAllowed: false,
             courseList: [],
-            notesList: [],
+            marksList: [],
             background: '',
             backgroundCourse: '',
             backgroundModel: '',
@@ -175,7 +175,7 @@ class AddInternalDetails extends Component {
             var params = { semester: this.state.selectedSemester.toLowerCase(), course: this.state.selectedCourse };
             axios.get(`http://localhost:4000/xakal/assessment/internaldetail`, { params: params })
                 .then((response) => {
-                    this.setState({ notesList: response.data, searchAllowed: true });
+                    this.setState({ marksList: response.data, searchAllowed: true });
                 });
         } else {
             alert('Please select the values');
@@ -194,7 +194,7 @@ class AddInternalDetails extends Component {
     displayTable() {
         const selectedModel = this.state.selectedModel;
         const modelName = selectedModel.toLowerCase().replace(/ /g, ''); //remove white spaces
-        return this.state.notesList.map((singleData, index) => {
+        return this.state.marksList.map((singleData, index) => {
             return (
                 <tr className="row100" key={index++}>
                     <td className="column100 column1" data-column="column1">{index}</td>
@@ -221,7 +221,7 @@ class AddInternalDetails extends Component {
     updatedMarks(userID, context) {
         if (this.marksArray.length) {
             this.marksArray.forEach(element => {
-                if (element.studentID === userID) {
+                if (element.id === userID) {
                     element.marksObtained = context.target.value
                 } else {
                     if (!this.studentID.includes(userID)) {
@@ -237,22 +237,37 @@ class AddInternalDetails extends Component {
     }
 
     insertUpdatedMarks(userID, context) {
+        debugger;
         this.studentID.push(userID);
         this.marksArray.push({
-            studentID: userID,
+            id: userID,
             marksObtained: context.target.value
         });
     }
 
     updateMarks() {
-        const params = {
-            studentID: '',
-            marksObtained: 0,
-            semester: this.state.selectedSemester,
-            course: this.state.selectedCourse,
-            model: this.state.selectedModel,
-            uploadedBy: this.state.userID,
-            uploadedDate: new Date()
+        let isUpdated = false;
+        if (this.marksArray && this.marksArray.length) {
+            this.marksArray.forEach(element => {
+                const params = {
+                    marksObtained: element.marksObtained,
+                    semester: this.state.selectedSemester.toLowerCase(),
+                    course: this.state.selectedCourse,
+                    model: this.state.selectedModel.toLowerCase(),
+                    uploadedBy: this.state.userID.toUpperCase(),
+                    uploadedDate: "22/12/2019"
+                }
+                axios.put(`http://localhost:4000/xakal/assessment/internaldetail/update/${element.id}`, params)
+                    .then(() => {
+                        if(!isUpdated) {
+                            alert('Updated Successfully');
+                        }
+                        isUpdated = true;
+                        this.setState({ searchAllowed: false, isEdit: false })
+                    })
+                    .catch((err) => console.log(err))
+                    ;
+            });
         }
     }
 
@@ -262,12 +277,12 @@ class AddInternalDetails extends Component {
     editTable() {
         const selectedModel = this.state.selectedModel;
         const modelName = selectedModel.toLowerCase().replace(/ /g, ''); //remove white spaces
-        return this.state.notesList.map((singleData, index) => {
+        return this.state.marksList.map((singleData, index) => {
             return (
                 <tr className="row100" key={index++}>
                     <td className="column100 column1" data-column="column1">{index}</td>
                     <td className={"column100 column2 "} key={index++} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
-                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" onChange={this.updatedMarks.bind(this, singleData.userID)} defaultValue={singleData[modelName]}></input></td>
+                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" onChange={this.updatedMarks.bind(this, singleData._id)} defaultValue={singleData[modelName]}></input></td>
                     <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
                     <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
                     <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Add / Edit</a></td>
@@ -383,8 +398,8 @@ class AddInternalDetails extends Component {
                         </div>
                     </div>
                 </div> : <span></span>}
-                {this.state.isEdit ? <div className="right p-t-20 m-r-100">
-                    <button type="button" onClick={this.getDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save Details</button>
+                {this.state.isEdit && this.state.searchAllowed ? <div className="right p-t-20 m-r-100">
+                    <button type="button" onClick={this.updateMarks.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save Details</button>
                     <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button>
                 </div> : <p></p>}
             </div>
