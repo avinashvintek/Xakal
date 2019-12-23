@@ -175,7 +175,7 @@ class ViewSemesterDetails extends Component {
                                 <div className="col-lg-4 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                        <input onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onFocus={this.onDropDownFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedSemester} />
                                         <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
                                         {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">sdfsdf
@@ -198,7 +198,7 @@ class ViewSemesterDetails extends Component {
                                     <div className="row">
                                         <div
                                             className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label " + this.state.isStudentFocussed}>
-                                            <input onFocus={this.onStudentFocus.bind(this)} value={this.state.student} className="mdl-textfield__input display-border" type="text" id="student" onChange={this.onStudentChanged.bind(this)}
+                                            <input onFocus={this.onStudentFocus.bind(this)} autoComplete="off" value={this.state.student} className="mdl-textfield__input display-border" type="text" id="student" onChange={this.onStudentChanged.bind(this)}
                                             />
                                             <label className={"mdl-textfield__label " + this.state.backgroundStudent}>Student ID</label>
                                         </div>
