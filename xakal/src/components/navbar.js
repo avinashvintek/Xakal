@@ -13,6 +13,7 @@ import ViewSemesterDetails from './staff-portal/assessments/view-semester-detail
 import SalaryDetails from './staff-portal/salary-details';
 import StaffAttendance from './staff-portal/attendance';
 import AddInternalDetails from './staff-portal/assessments/add-internal-details';
+import StaffDashboard from './staff-portal/dashboard';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -177,7 +178,7 @@ class NavBar extends Component {
                                 {/* staff portal links */}
                                 <Route path="/staff-portal/class-notes" component={classNotes} />
                                 <Route path="/staff-portal/question-papers" component={classNotes} />
-                                <Route path="/staff-portal/dashboard" component={Dashboard} />
+                                <Route path="/staff-portal/dashboard" component={StaffDashboard} />
                                 <Route path="/staff-portal/semester-details" component={ViewSemesterDetails} />
                                 <Route path="/staff-portal/internal-details" component={AddInternalDetails} />
                                 <Route path="/staff-portal/attendance" component={StaffAttendance} />
