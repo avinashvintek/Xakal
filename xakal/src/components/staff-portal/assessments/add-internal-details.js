@@ -271,7 +271,7 @@ class AddInternalDetails extends Component {
                     course: this.state.selectedCourse,
                     model: this.state.selectedModel.toLowerCase(),
                     uploadedBy: this.state.userID.toUpperCase(),
-                    uploadedDate: "22/12/2019",
+                    uploadedDate: new Date(Date.now()).toLocaleString(),
                     internals: this.state.internals
                 }
                 axios.put(`http://localhost:4000/xakal/assessment/internaldetail/update/${element.id}`, params)
@@ -397,7 +397,7 @@ class AddInternalDetails extends Component {
                                             <th className="column100 column1" data-column="column1"></th>
                                             <th className={"column100 column2 " + this.state.column1} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Student ID</th>
                                             <th className={"column100 column3 " + this.state.column2} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Marks Obtained</th>
-                                            <th className={"column100 column4 " + this.state.column3} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Uploaded Date</th>
+                                            <th className={"column100 column4 " + this.state.column3} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Uploaded DateTime</th>
                                             <th className={"column100 column5 " + this.state.column4} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Uploaded By</th>
                                             <th className={"column100 column6 " + this.state.column5} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Action</th>
                                         </tr>
