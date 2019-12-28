@@ -14,6 +14,7 @@ import SalaryDetails from './staff-portal/salary-details';
 import StaffAttendance from './staff-portal/attendance';
 import AddInternalDetails from './staff-portal/assessments/add-internal-details';
 import StaffDashboard from './staff-portal/dashboard';
+import ViewStudentDetails from './staff-portal/view-student-details';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -79,7 +80,12 @@ class NavBar extends Component {
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Forum</span>
                             </Link>
-                        </li> : <p></p>}
+                        </li> : <li className="nav-item">
+                                <Link to={`${this.state.routerLink}/view-student-details`} className="nav-link">
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Student Details</span>
+                                </Link>
+                            </li>}
                         <hr className="sidebar-divider" />
                         <li className="nav-item">
                             <a className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
@@ -183,6 +189,7 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/internal-details" component={AddInternalDetails} />
                                 <Route path="/staff-portal/attendance" component={StaffAttendance} />
                                 <Route path="/staff-portal/salary" component={SalaryDetails} />
+                                <Route path="/staff-portal/view-student-details" component={ViewStudentDetails} />
                             </Switch>
                         </div>
                     </div>

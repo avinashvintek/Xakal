@@ -9,4 +9,10 @@ router.get('/:userID', (req, res) => {
     })
 });
 
+router.get('/', (req, res) => {
+    StudentDetails.find({}, { _id: 0, }).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
+
 module.exports = router;

@@ -3,7 +3,6 @@ import '../../../styles/table.css';
 import '../../../styles/dropdown.css';
 import '../../../styles/course-dropdown.css';
 import axios from 'axios';
-import { Link } from 'react-router-dom'
 class AddInternalDetails extends Component {
     constructor(props) {
         super(props);
@@ -415,6 +414,16 @@ class AddInternalDetails extends Component {
                     </div>
                 </div> : <span></span>}
                 {this.state.isEdit && this.state.searchAllowed ? <div className="right p-t-20 m-r-100">
+                    {/* <td>
+                        <a href="edit_professor.html"
+                            class="btn btn-primary btn-xs">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <a href="javasctipt().html"
+                            class="btn btn-danger btn-xs">
+                            <i class="fa fa-trash-o "></i>
+                        </a>
+                    </td> */}
                     <button type="button" onClick={this.updateMarks.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save Details</button>
                     <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button>
                 </div> : <p></p>}
