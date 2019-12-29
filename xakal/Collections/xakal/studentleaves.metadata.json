@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"xakal.studentleaves"}],"uuid":"024341b4576b4a969b33010d7c9fda7a"}

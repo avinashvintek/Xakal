@@ -1,0 +1,9 @@
+To export:
+
+navigate to xakal folder and open cmd prompt
+
+mongodump -d xakal -o ./Collections
+
+To import:
+
+mongorestore -d xakal ./Collections

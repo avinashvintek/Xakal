@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"xakal.internaldetails"}],"uuid":"d2b38dd60b104620b39703d52a28a2b3"}
