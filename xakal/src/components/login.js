@@ -91,7 +91,9 @@ class Login extends Component {
         if (this.state.studentRedirect) {
             return <Redirect to={{ pathname: "students-portal", state: { userID: this.state.loginID } }} />
         } else if (this.state.staffRedirect) {
-            return <Redirect  to={{ pathname: "staff-portal", state: { userID: this.state.loginID } }} />
+            return <Redirect to={{ pathname: "staff-portal", state: { userID: this.state.loginID } }} />
+        } else if (this.state.managementRedirect) {
+            return <Redirect to={{ pathname: "management-portal", state: { userID: this.state.loginID } }} />
         } else {
             return (
 
