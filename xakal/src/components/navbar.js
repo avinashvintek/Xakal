@@ -66,7 +66,7 @@ class NavBar extends Component {
                             <div className="sidebar-brand-icon rotate-n-15">
                                 <i className="fas fa-laugh-wink"></i>
                             </div>
-                            <div className="sidebar-brand-text mx-3">Xakal</div>
+                            <div className="sidebar-brand-text mx-3 logo-color">Xakal</div>
                         </a>
                         <hr className="sidebar-divider my-0" />
                         <li className="nav-item">
