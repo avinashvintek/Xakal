@@ -14,7 +14,7 @@ import SalaryDetails from './staff-portal/salary-details';
 import StaffAttendance from './staff-portal/attendance';
 import AddInternalDetails from './staff-portal/assessments/add-internal-details';
 import StaffDashboard from './staff-portal/dashboard';
-import ViewStudentDetails from './staff-portal/view-student-details';
+import StudentDetailsMaintain from './staff-portal/student-details-maintain';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -189,7 +189,7 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/internal-details" component={AddInternalDetails} />
                                 <Route path="/staff-portal/attendance" component={StaffAttendance} />
                                 <Route path="/staff-portal/salary" component={SalaryDetails} />
-                                <Route path="/staff-portal/view-student-details" component={ViewStudentDetails} />
+                                <Route path="/staff-portal/view-student-details" component={StudentDetailsMaintain} />
                             </Switch>
                         </div>
                     </div>

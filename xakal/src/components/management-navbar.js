@@ -4,6 +4,7 @@ import '../../src/minified-css/navbar.min.css'
 import classNotes from './students-portal/class-notes';
 import '../styles/navbar.css'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import StudentDetailsMaintain from './staff-portal/student-details-maintain';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -99,7 +100,7 @@ class ManagementNavBar extends Component {
                         </li>
                         {this.state.showClassNotes ? <div>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/xakal-notes`, userID: this.props.userID }} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/view-student-details`, userID: this.props.userID }} className="nav-link">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>All Students</span>
                                 </Link>
@@ -107,7 +108,7 @@ class ManagementNavBar extends Component {
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/question-papers`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
-                                    <span>Edit Students</span>
+                                    <span>Add Students</span>
                                 </Link>
                             </li>
                         </div> : <div></div>}
@@ -196,6 +197,7 @@ class ManagementNavBar extends Component {
                         <div id="content">
                             <Switch>
                                 {/* student portal links */}
+                                <Route path="/management-portal/view-student-details" component={StudentDetailsMaintain} />
                                 <Route path="/students-portal/class-notes" component={classNotes} />
                             </Switch>
                         </div>
