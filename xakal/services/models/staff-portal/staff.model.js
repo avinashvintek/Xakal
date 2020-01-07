@@ -28,6 +28,12 @@ var StaffDetails = mongoose.model('StaffDetails', {
     parentSpouse: {
         type: String
     },
+    uploadedBy: {
+        type: String
+    },
+    uploadedDate: {
+        type: String
+    }
 });
 
 module.exports = {
