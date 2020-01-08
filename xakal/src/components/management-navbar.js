@@ -6,6 +6,7 @@ import '../styles/navbar.css'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import StudentDetailsMaintain from './staff-portal/student-details-maintain';
 import StaffDetailsMaintain from './management-portal/staff-details-maintain';
+import DepartmentDetailsMaintain from './management-portal/department-details.maintain';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -146,7 +147,7 @@ class ManagementNavBar extends Component {
                         </li>
                         {this.state.departments ? <div>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/department-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>All Departments</span>
                                 </Link>
@@ -200,6 +201,7 @@ class ManagementNavBar extends Component {
                                 {/* student portal links */}
                                 <Route path="/management-portal/view-student-details" component={StudentDetailsMaintain} />
                                 <Route path="/management-portal/staff-details" component={StaffDetailsMaintain} />
+                                <Route path="/management-portal/department-details" component={DepartmentDetailsMaintain} />
                                 
                             </Switch>
                         </div>
