@@ -28,6 +28,9 @@ var StudentDetails = mongoose.model('StudentDetails', {
     parentName: {
         type: String
     },
+    admissionDate: {
+        type: String
+    }
 });
 
 module.exports = {

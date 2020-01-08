@@ -33,6 +33,9 @@ var StaffDetails = mongoose.model('StaffDetails', {
     },
     uploadedDate: {
         type: String
+    },
+    joiningDate: {
+        type: String
     }
 });
 

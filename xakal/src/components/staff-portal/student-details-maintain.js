@@ -38,6 +38,7 @@ class StudentDetailsMaintain extends Component {
                     <td className={"left"} key={index++}>{singleData.contact}</td>
                     <td className={"left"} key={index++}>{singleData.emergencyContact}</td>
                     <td className={"left"} key={index++}>{singleData.parentName}</td>
+                    <td className={"left"} key={index++}>{singleData.admissionDate}</td>
                     <td className={"left"} key={index++}>{singleData.bloodGroup}</td>
                 </tr>
             )
@@ -121,7 +122,8 @@ class StudentDetailsMaintain extends Component {
                     bloodGroup: element.bloodGroup,
                     contact: element.contact,
                     emergencyContact: element.emergencyContact,
-                    parentName: element.parentName
+                    parentName: element.parentName,
+                    admissionDate: element.admissionDate
                 }
                 axios.put(`http://localhost:4000/xakal/studentdetail/update/${element._id}`, params)
                     .then(() => {
@@ -150,6 +152,7 @@ class StudentDetailsMaintain extends Component {
                     <td className={"left"} key={index++}><input type="number" className="add-border" onChange={this.onEdit.bind(this, singleData, 'contact')} defaultValue={singleData.contact}></input></td>
                     <td className={"left"} key={index++}><input type="number" className="add-border" onChange={this.onEdit.bind(this, singleData, 'emergencyContact')} defaultValue={singleData.emergencyContact}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'parentName')} defaultValue={singleData.parentName}></input></td>
+                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'admissionDate')} defaultValue={singleData.admissionDate}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'bloodGroup')} defaultValue={singleData.bloodGroup}></input></td>
                 </tr>
             )
@@ -175,6 +178,7 @@ class StudentDetailsMaintain extends Component {
                                 <th> Mobile </th>
                                 <th> Emergency Contact </th>
                                 <th> Parents/Guardian </th>
+                                <th> Admission Date </th>
                                 <th> BG </th>
                             </tr>
                         </thead>

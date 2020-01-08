@@ -32,6 +32,7 @@ router.put('/update/:id', (req, res) => {
         contact: req.body.contact,
         emergencyContact: req.body.emergencyContact,
         parentName: req.body.parentName,
+        admissionDate: req.body.admissionDate
     };
     var id = req.params.id;
     StudentDetails.findByIdAndUpdate(id, { $set: details }, { new: true }, (err, doc) => {

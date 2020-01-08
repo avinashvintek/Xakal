@@ -39,6 +39,7 @@ class StaffDetailsMaintain extends Component {
                     <td className={"left"} key={index++}>{singleData.contact}</td>
                     <td className={"left"} key={index++}>{singleData.emergencyContact}</td>
                     <td className={"left"} key={index++}>{singleData.parentSpouse}</td>
+                    <td className={"left"} key={index++}>{singleData.joiningDate}</td>
                     <td className={"left"} key={index++}>{singleData.bloodGroup}</td>
                 </tr>
             )
@@ -105,6 +106,7 @@ class StaffDetailsMaintain extends Component {
                     bloodGroup: element.bloodGroup,
                     contact: element.contact,
                     emergencyContact: element.emergencyContact,
+                    joiningDate: element.joiningDate,
                     parentSpouse: element.parentSpouse
                 }
                 axios.put(`http://localhost:4000/xakal/staffdetail/update/${element._id}`, params)
@@ -134,6 +136,7 @@ class StaffDetailsMaintain extends Component {
                     <td className={"left"} key={index++}><input type="number" className="add-border" onChange={this.onEdit.bind(this, singleData, 'contact')} defaultValue={singleData.contact}></input></td>
                     <td className={"left"} key={index++}><input type="number" className="add-border" onChange={this.onEdit.bind(this, singleData, 'emergencyContact')} defaultValue={singleData.emergencyContact}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'parentSpouse')} defaultValue={singleData.parentSpouse}></input></td>
+                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'joiningDate')} defaultValue={singleData.joiningDate}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'bloodGroup')} defaultValue={singleData.bloodGroup}></input></td>
                 </tr>
             )
@@ -160,6 +163,7 @@ class StaffDetailsMaintain extends Component {
                                 <th> Mobile </th>
                                 <th> Emergency Contact </th>
                                 <th> Parents / Spouse </th>
+                                <th> Joining Date </th>
                                 <th> BG </th>
                             </tr>
                         </thead>
