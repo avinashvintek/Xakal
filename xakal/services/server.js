@@ -14,6 +14,7 @@ var staffAttendance = require('./controllers/staffAttendanceController.js');
 var staffController = require('./controllers/staffController.js');
 var departmentController = require('./controllers/departmentController.js');
 var degreeCourseController = require('./controllers/degreeCourseController.js');
+var courseController = require('./controllers/courseController.js');
 
 const PORT = 4000;
 
@@ -37,6 +38,7 @@ app.use('/xakal/staffattendance', staffAttendance);
 app.use('/xakal/staffdetail', staffController);
 app.use('/xakal/departmentdetail', departmentController);
 app.use('/xakal/degreecoursedetail', degreeCourseController);
+app.use('/xakal/coursedetail', courseController);
 
 app.listen(PORT, function () {
     console.log('Server is running on Port: ' + PORT)

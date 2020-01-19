@@ -7,6 +7,19 @@ var Course = mongoose.model('Course', {
     course: {
         type: String
     },
+    department: {
+        type: String
+    },
+    degree: {
+        type: String
+    },
+    updatedBy: {
+        type: String
+    },
+    updatedDate: {
+        type: String
+    },
+
 });
 module.exports = {
     Course: Course
