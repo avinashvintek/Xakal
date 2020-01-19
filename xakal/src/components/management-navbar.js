@@ -7,6 +7,7 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import StudentDetailsMaintain from './staff-portal/student-details-maintain';
 import StaffDetailsMaintain from './management-portal/staff-details-maintain';
 import DepartmentDetailsMaintain from './management-portal/department-details.maintain';
+import CourseDetailsMaintain from './management-portal/course-details-maintain';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -15,6 +16,9 @@ class ManagementNavBar extends Component {
             professors: false,
             departments: false,
             course: false,
+            paper: false,
+            accounts:false,
+            view: false,
             routerLink: ''
         }
     }
@@ -70,6 +74,40 @@ class ManagementNavBar extends Component {
             this.setState({ course: false })
         } else {
             this.setState({ course: true })
+        }
+    }
+
+    /**
+     * Handles the sub menu of view
+     */
+    onViewClick() {
+        if (this.state.view) {
+            this.setState({ view: false })
+        } else {
+            this.setState({ view: true })
+        }
+    }
+
+    /**
+     * Handles the sub menu of accounts
+     */
+    onAccountsClick() {
+        if (this.state.accounts) {
+            this.setState({ accounts: false })
+        } else {
+            this.setState({ accounts: true })
+        }
+    }
+
+
+    /**
+     * Handles the sub menu of paper
+     */
+    onPaperClick() {
+        if (this.state.paper) {
+            this.setState({ paper: false })
+        } else {
+            this.setState({ paper: true })
         }
     }
 
@@ -136,7 +174,6 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                         </div> : <div></div>}
-                        <hr className="sidebar-divider d-none d-md-block" />
                         <li className="nav-item">
                             <a className="nav-link collapsed" onClick={this.onDepartmentsClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -169,7 +206,7 @@ class ManagementNavBar extends Component {
                         </li>
                         {this.state.course ? <div>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/course-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>All Courses</span>
                                 </Link>
@@ -181,19 +218,73 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                         </div> : <div></div>}
+                        <li className="nav-item">
+                            <a className="nav-link collapsed" onClick={this.onPaperClick.bind(this)}>
+                                <i className="fas fa-fw fa-tachometer-alt"></i>
+                                <span>Papers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                {this.state.paper ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                            </a>
+                        </li>
+                        {this.state.paper ? <div>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>All Papers</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Add Paper</span>
+                                </Link>
+                            </li>
+                        </div> : <div></div>}
                         <hr className="sidebar-divider d-none d-md-block" />
                         <li className="nav-item">
-                            <Link to={`${this.state.routerLink}/dashboard`} className="nav-link">
+                            <a className="nav-link collapsed" onClick={this.onAccountsClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>Salary</span>
-                            </Link>
+                                <span>Accounts&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                {this.state.accounts ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                            </a>
                         </li>
+                        {this.state.accounts ? <div>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Salary</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Fees</span>
+                                </Link>
+                            </li>
+                        </div> : <div></div>}
                         <li className="nav-item">
-                            <Link to={`${this.state.routerLink}/dashboard`} className="nav-link">
+                            <a className="nav-link collapsed" onClick={this.onViewClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>Fees</span>
-                            </Link>
+                                <span>View&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                {this.state.view ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                            </a>
                         </li>
+                        {this.state.view ? <div>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Assessments</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Attendance</span>
+                                </Link>
+                            </li>
+                        </div> : <div></div>}
                     </ul>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
@@ -202,7 +293,7 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/view-student-details" component={StudentDetailsMaintain} />
                                 <Route path="/management-portal/staff-details" component={StaffDetailsMaintain} />
                                 <Route path="/management-portal/department-details" component={DepartmentDetailsMaintain} />
-                                
+                                <Route path="/management-portal/course-details" component={CourseDetailsMaintain} />
                             </Switch>
                         </div>
                     </div>
