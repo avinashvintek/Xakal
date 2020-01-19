@@ -15,6 +15,7 @@ import StaffAttendance from './staff-portal/attendance';
 import AddInternalDetails from './staff-portal/assessments/add-internal-details';
 import StaffDashboard from './staff-portal/dashboard';
 import StudentDetailsMaintain from './staff-portal/student-details-maintain';
+import Login from './login';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -23,6 +24,12 @@ class NavBar extends Component {
             assessments: false,
             routerLink: ''
         }
+        this.baseState = this.state;
+    }
+
+    logout() {
+        localStorage.clear();
+        window.location.href = '/';
     }
 
     componentDidMount() {
@@ -170,6 +177,8 @@ class NavBar extends Component {
                     </ul>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
+                            <a href="#" class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</a>
+                            
                             <Switch>
                                 {/* student portal links */}
                                 <Route path="/students-portal/class-notes" component={classNotes} />
@@ -190,6 +199,8 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/attendance" component={StaffAttendance} />
                                 <Route path="/staff-portal/salary" component={SalaryDetails} />
                                 <Route path="/staff-portal/view-student-details" component={StudentDetailsMaintain} />
+
+                                <Route exact path="/"  component={Login} />
                             </Switch>
                         </div>
                     </div>

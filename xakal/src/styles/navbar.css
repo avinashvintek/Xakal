@@ -13,3 +13,7 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(32,32,147,1) 1%, rgba
 .logo-color {
   color: white;
 }
+
+.logout {
+  float: right;
+}

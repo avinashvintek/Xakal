@@ -34,6 +34,11 @@ class ManagementNavBar extends Component {
         this.unlisten();
     }
 
+    logout() {
+        localStorage.clear();
+        window.location.href = '/';
+    }
+
     /**
      * Handles the sub menu of college notes
      */
@@ -289,6 +294,7 @@ class ManagementNavBar extends Component {
                     </ul>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
+                        <a href="#" class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</a>
                             <Switch>
                                 {/* student portal links */}
                                 <Route path="/management-portal/view-student-details" component={StudentDetailsMaintain} />
