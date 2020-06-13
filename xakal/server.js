@@ -17,7 +17,6 @@ var departmentController = require('./controllers/departmentController.js');
 var degreeCourseController = require('./controllers/degreeCourseController.js');
 var courseController = require('./controllers/courseController.js');
 
-const PORT = 4000;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -40,13 +39,14 @@ app.use('/xakal/departmentdetail', departmentController);
 app.use('/xakal/degreecoursedetail', degreeCourseController);
 app.use('/xakal/coursedetail', courseController);
 
-if (process.env.NODE_ENV === 'Production') {
-    app.use(express.static(path.join(__dirname, "client", "build")));
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static("client/build"));
     app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+        res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
     });
 }
 
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, function () {
     console.log('Server is running on Port: ' + PORT)

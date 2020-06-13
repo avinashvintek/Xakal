@@ -58,7 +58,7 @@ class Login extends Component {
      */
     formSubmit() {
         if (this.state.loginID && this.state.password) {
-            axios.get(`http://localhost:4000/xakal/user/${this.state.loginID}`)
+            axios.get(`/xakal/user/${this.state.loginID}`)
                 .then((response) => {
                     if (response && response.data) {
                         this.resetLogin();
