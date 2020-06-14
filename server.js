@@ -20,8 +20,8 @@ var courseController = require('./controllers/courseController.js');
 
 app.use(cors());
 app.use(bodyParser.json());
-
-mongoose.connect('mongodb://127.0.0.1:27017/xakal', { useNewUrlParser: true })
+const url = process.env.MONGOLAB_URI || 'mongodb+srv://xakal:xakal@xakal1-bosb0.azure.mongodb.net/xakal?retryWrites=true&w=majority';
+mongoose.connect(url, { useNewUrlParser: true })
 const connection = mongoose.connection;
 connection.once('open', function () {
     console.log('MongoDB database connection established successfully')
