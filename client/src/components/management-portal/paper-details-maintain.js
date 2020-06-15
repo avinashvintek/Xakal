@@ -21,7 +21,7 @@ class PaperDetailsMaintain extends Component {
     }
 
     fetchPaperDetails() {
-        axios.get(`http://localhost:4000/xakal/coursedetail`)
+        axios.get(`/xakal/coursedetail`)
             .then((response) => {
                 this.setState({ paperDetails: response.data });
             });
@@ -98,7 +98,7 @@ class PaperDetailsMaintain extends Component {
                     department: element.department,
                     degree: element.degree,
                 }
-                axios.put(`http://localhost:4000/xakal/coursedetail/update/${element._id}`, params)
+                axios.put(`/xakal/coursedetail/update/${element._id}`, params)
                     .then(() => {
                         if (!isUpdated) {
                             alert('Updated Successfully');

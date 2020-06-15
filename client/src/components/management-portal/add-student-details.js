@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-
+import axios from 'axios';
 class AddStudentDetails extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            userID: ''
+            userID: '',
+            studentName: '',
+            departmentName: ''
         };
         this.baseState = this.state;
 
@@ -27,6 +29,48 @@ class AddStudentDetails extends Component {
         }
     }
 
+    /**
+     * Triggers when the form is changed and stores the values in state
+     * @param event form values 
+     */
+    handleFormChange(event) {
+        if (event.target.value) {
+            this.setState({ [event.target.name]: event.target.value })
+        }
+    }
+
+    /**
+     * Triggers when the form is submitted
+     * Checks whether the values are entered properly
+     */
+    formSubmit() {
+        let isUpdated = false;
+        if (this.state.studentName && this.state.degreeName && this.state.departmentName && this.state.email && this.state.bloodGroup && this.state.contact &&
+            this.state.emergencyContact && this.state.parentName && this.state.admissionDate) {
+            const params = {
+                name: this.state.studentName,
+                course: this.state.degreeName,
+                branch: this.state.departmentName,
+                email: this.state.email,
+                bloodGroup: this.state.bloodGroup,
+                contact: this.state.contact,
+                emergencyContact: this.state.emergencyContact,
+                parentName: this.state.parentName,
+                admissionDate: this.state.admissionDate,
+            }
+            axios.post(`/xakal/studentdetail`, params)
+                .then(() => {
+                    if (!isUpdated) {
+                        alert('Updated Successfully');
+                    }
+                    isUpdated = true;
+                })
+                .catch((err) => console.log(err));
+        } else {
+            alert('Please give all the details')
+        }
+    }
+
     render() {
         return (
             <div>
@@ -41,7 +85,7 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                        />
+                                            onChange={this.handleFormChange.bind(this)} name="studentName" />
                                         <label className={"mdl-textfield__label "}>Name</label>
                                     </div>
                                 </div>
@@ -49,6 +93,7 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                            onChange={this.handleFormChange.bind(this)} name="departmentName"
                                         />
                                         <label className={"mdl-textfield__label "}>Department</label>
                                     </div>
@@ -57,7 +102,7 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                        />
+                                            onChange={this.handleFormChange.bind(this)} name="degreeName" />
                                         <label className={"mdl-textfield__label "}>Degree</label>
                                     </div>
                                 </div>
@@ -65,7 +110,7 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                        />
+                                            onChange={this.handleFormChange.bind(this)} name="email" />
                                         <label className={"mdl-textfield__label "}>Email</label>
                                     </div>
                                 </div>
@@ -73,7 +118,7 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                        />
+                                            onChange={this.handleFormChange.bind(this)} name="contact" />
                                         <label className={"mdl-textfield__label "}>Mobile</label>
                                     </div>
                                 </div>
@@ -81,7 +126,7 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                        />
+                                            onChange={this.handleFormChange.bind(this)} name="emergencyContact" />
                                         <label className={"mdl-textfield__label "}>Emergency Contact</label>
                                     </div>
                                 </div>
@@ -90,7 +135,7 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                        />
+                                            onChange={this.handleFormChange.bind(this)} name="parentName" />
                                         <label className={"mdl-textfield__label "}>Parents / Guardian Name</label>
                                     </div>
                                 </div>
@@ -99,7 +144,7 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                        />
+                                            onChange={this.handleFormChange.bind(this)} name="admissionDate" />
                                         <label className={"mdl-textfield__label "}>Admission Date</label>
                                     </div>
                                 </div>
@@ -108,14 +153,14 @@ class AddStudentDetails extends Component {
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                        />
+                                            onChange={this.handleFormChange.bind(this)} name="bloodGroup" />
                                         <label className={"mdl-textfield__label "}>Blood Group</label>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-sm-8 p-t-20">
-                                <button type="button"  className="btn btn-primary m-t-15 m-l-30">Save</button>
-                                <button type="button"  className="btn btn-primary m-t-15 m-l-30">Cancel</button>
+                                <button type="button" onClick={this.formSubmit.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button>
+                                <button type="button" className="btn btn-primary m-t-15 m-l-30">Cancel</button>
                             </div>
                         </div>
                     </div>

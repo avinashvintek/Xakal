@@ -19,7 +19,7 @@ class StaffDashboard extends Component {
     fetchStaffDetails() {
         const userID = this.props.location.userID;
         if (userID) {
-            axios.get(`http://localhost:4000/xakal/staffdetail/${userID.userID}`)
+            axios.get(`/xakal/staffdetail/${userID.userID}`)
                 .then((response) => {
                     this.setState({ staffDetails: response.data });
                 });

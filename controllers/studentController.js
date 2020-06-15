@@ -43,4 +43,29 @@ router.put('/update/:id', (req, res) => {
         }
     })
 });
+
+router.post('/', (req, res) => {
+    var prdt = new StudentDetails({
+        name: req.body.name,
+        course: req.body.course,
+        uploadedBy: req.body.uploadedBy,
+        uploadedDate: req.body.uploadedDate,
+        branch: req.body.branch,
+        email: req.body.email,
+        bloodGroup: req.body.bloodGroup,
+        contact: req.body.contact,
+        emergencyContact: req.body.emergencyContact,
+        parentName: req.body.parentName,
+        admissionDate: req.body.admissionDate,
+        userID: '13IT001'
+    });
+    prdt.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller')
+        }
+    });
+
+});
 module.exports = router;

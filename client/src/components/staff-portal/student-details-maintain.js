@@ -21,7 +21,7 @@ class StudentDetailsMaintain extends Component {
     }
 
     fetchStudentDetails() {
-        axios.get(`http://localhost:4000/xakal/studentdetail`)
+        axios.get(`/xakal/studentdetail`)
             .then((response) => {
                 this.setState({ studentDetails: response.data });
             });
@@ -125,7 +125,7 @@ class StudentDetailsMaintain extends Component {
                     parentName: element.parentName,
                     admissionDate: element.admissionDate
                 }
-                axios.put(`http://localhost:4000/xakal/studentdetail/update/${element._id}`, params)
+                axios.put(`/xakal/studentdetail/update/${element._id}`, params)
                     .then(() => {
                         if (!isUpdated) {
                             alert('Updated Successfully');

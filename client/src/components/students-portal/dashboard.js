@@ -30,7 +30,7 @@ class Dashboard extends Component {
     fetchStudentDetails() {
         const userID = this.props.location.userID;
         if (userID) {
-            axios.get(`http://localhost:4000/xakal/studentdetail/${userID.userID}`)
+            axios.get(`/xakal/studentdetail/${userID.userID}`)
                 .then((response) => {
                     this.fetchGPA();
                     this.setState({ studentDetails: response.data });
@@ -39,7 +39,7 @@ class Dashboard extends Component {
     }
 
     fetchGPA() {
-        axios.get(`http://localhost:4000/xakal/assessment/semesterdetail`)
+        axios.get(`/xakal/assessment/semesterdetail`)
             .then((response) => {
                 this.calculateGPA(response.data);
             });

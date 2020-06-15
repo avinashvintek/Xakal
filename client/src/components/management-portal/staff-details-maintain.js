@@ -21,7 +21,7 @@ class StaffDetailsMaintain extends Component {
     }
 
     fetchStaffDetails() {
-        axios.get(`http://localhost:4000/xakal/staffdetail`)
+        axios.get(`/xakal/staffdetail`)
             .then((response) => {
                 this.setState({ staffDetails: response.data });
             });
@@ -109,7 +109,7 @@ class StaffDetailsMaintain extends Component {
                     joiningDate: element.joiningDate,
                     parentSpouse: element.parentSpouse
                 }
-                axios.put(`http://localhost:4000/xakal/staffdetail/update/${element._id}`, params)
+                axios.put(`/xakal/staffdetail/update/${element._id}`, params)
                     .then(() => {
                         if (!isUpdated) {
                             alert('Updated Successfully');

@@ -157,7 +157,7 @@ class StaffAttendance extends Component {
         this.setState({ searchAllowed: true });
         var month = this.state.selectedMonth;
         var userID = { userID: this.state.userID, month: month, year: this.state.selectedYear };
-        axios.get(`http://localhost:4000/xakal/staffattendance/staffleave`, { params: userID })
+        axios.get(`/xakal/staffattendance/staffleave`, { params: userID })
             .then((response) => {
                 this.setState({ absenceList: response.data });
             });

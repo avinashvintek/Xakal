@@ -120,7 +120,7 @@ class AddInternalDetails extends Component {
     onDropDownSelect(event) {
         this.setState({ selectedSemester: event.target.id, selectedCourse: '', onFocus: false, background: 'is-hidden' });
         var semester = event.target.id;
-        axios.get(`http://localhost:4000/xakal/class-notes/course/${semester}`)
+        axios.get(`/xakal/class-notes/course/${semester}`)
             .then((response) => {
                 this.setState({ courseList: response.data });
             });
@@ -173,7 +173,7 @@ class AddInternalDetails extends Component {
     getDetails() {
         if (this.state.selectedSemester !== '' && this.state.selectedCourse !== '' && this.state.selectedModel !== '') {
             var params = { semester: this.state.selectedSemester.toLowerCase(), course: this.state.selectedCourse };
-            axios.get(`http://localhost:4000/xakal/assessment/internaldetail`, { params: params })
+            axios.get(`/xakal/assessment/internaldetail`, { params: params })
                 .then((response) => {
                     this.setState({ marksList: response.data, searchAllowed: true });
                 });
@@ -273,7 +273,7 @@ class AddInternalDetails extends Component {
                     uploadedDate: new Date(Date.now()).toLocaleString(),
                     internals: this.state.internals
                 }
-                axios.put(`http://localhost:4000/xakal/assessment/internaldetail/update/${element.id}`, params)
+                axios.put(`/xakal/assessment/internaldetail/update/${element.id}`, params)
                     .then(() => {
                         if (!isUpdated) {
                             alert('Updated Successfully');

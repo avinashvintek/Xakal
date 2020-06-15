@@ -132,7 +132,7 @@ class SalaryDetails extends Component {
     fetchSalaryDetails() {
         this.setState({ searchAllowed: true });
         var params = { salaryMonth: this.state.selectedMonth, salaryYear: this.state.selectedYear, userID: this.state.userID.toUpperCase() };
-        axios.get(`http://localhost:4000/xakal/salary/salarydetail`, { params: params })
+        axios.get(`/xakal/salary/salarydetail`, { params: params })
             .then((response) => {
                 this.setState({ salaryDetails: response.data });
             });

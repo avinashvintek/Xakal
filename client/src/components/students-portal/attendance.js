@@ -102,7 +102,7 @@ class Attendance extends Component {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
         var userID = { userID: this.state.userID };
-        axios.get(`http://localhost:4000/xakal/attendance/studentleave/${semester}`, { params: userID })
+        axios.get(`/xakal/attendance/studentleave/${semester}`, { params: userID })
             .then((response) => {
                 this.setState({ absenceList: response.data });
             });

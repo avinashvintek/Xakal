@@ -115,7 +115,7 @@ class SemesterDetails extends Component {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
         var userID = { userID: this.state.userID };
-        axios.get(`http://localhost:4000/xakal/assessment/semesterdetail/${semester}`, { params: userID })
+        axios.get(`/xakal/assessment/semesterdetail/${semester}`, { params: userID })
             .then((response) => {
                 this.setState({ notesList: response.data });
             });

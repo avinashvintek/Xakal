@@ -121,7 +121,7 @@ class ClassNotes extends Component {
     onDropDownSelect(event) {
         this.setState({ selectedSemester: event.target.id, selectedCourse: '', onFocus: false, background: 'is-hidden' });
         var semester = event.target.id;
-        axios.get(`http://localhost:4000/xakal/class-notes/course/${semester}`)
+        axios.get(`/xakal/class-notes/course/${semester}`)
             .then((response) => {
                 this.setState({ courseList: response.data });
             });
@@ -201,7 +201,7 @@ class ClassNotes extends Component {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
         var course = this.state.selectedCourse;
-        axios.get(`http://localhost:4000/xakal/class-notes/classnote/${semester}/${course}`)
+        axios.get(`/xakal/class-notes/classnote/${semester}/${course}`)
             .then((response) => {
                 this.setState({ notesList: response.data });
             });
@@ -214,7 +214,7 @@ class ClassNotes extends Component {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
         var course = this.state.selectedCourse;
-        axios.get(`http://localhost:4000/xakal/class-notes/questionpaper/${semester}/${course}`)
+        axios.get(`/xakal/class-notes/questionpaper/${semester}/${course}`)
             .then((response) => {
                 this.setState({ notesList: response.data });
             });
@@ -227,7 +227,7 @@ class ClassNotes extends Component {
         this.setState({ searchAllowed: true });
         var semester = this.state.selectedSemester;
         var course = this.state.selectedCourse;
-        axios.get(`http://localhost:4000/xakal/class-notes/xakalnote/${semester}/${course}`)
+        axios.get(`/xakal/class-notes/xakalnote/${semester}/${course}`)
             .then((response) => {
                 this.setState({ notesList: response.data });
             });
@@ -289,7 +289,7 @@ class ClassNotes extends Component {
             uploadedFile: this.state.file,
             uploadedDate: new Date(),
         }
-        axios.post('http://localhost:4000/xakal/class-notes/questionpaper', reqBody)
+        axios.post('/xakal/class-notes/questionpaper', reqBody)
             .then(() => {
                 alert('File uploaded successfully');
                 this.setState(this.baseState);
@@ -308,7 +308,7 @@ class ClassNotes extends Component {
             uploadedFile: this.state.file,
             uploadedDate: new Date(),
         }
-        axios.post('http://localhost:4000/xakal/class-notes/classnote', reqBody)
+        axios.post('/xakal/class-notes/classnote', reqBody)
             .then(() => {
                 alert('File uploaded successfully');
                 this.setState(this.baseState);
