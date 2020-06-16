@@ -33,4 +33,23 @@ router.put('/update/:id', (req, res) => {
     })
 });
 
+router.post('/', (req, res) => {
+    var prdt = new DegreeCourseDetails({
+        name: req.body.name,
+        duration: req.body.duration,
+        updatedBy: req.body.updatedBy,
+        updatedDate: req.body.updatedDate,
+        startingYear: req.body.startingYear,
+        studentCapacity: req.body.studentCapacity,
+    });
+    prdt.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller')
+        }
+    });
+
+});
+
 module.exports = router;
