@@ -11,6 +11,7 @@ import CourseDetailsMaintain from './management-portal/course-details-maintain';
 import PaperDetailsMaintain from './management-portal/paper-details-maintain';
 import AddStudentDetails from './management-portal/add-student-details';
 import AddCourseDetails from './management-portal/add-course-details';
+import AddPaperDetails from './management-portal/add-paper-details';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -242,7 +243,7 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/add-paper-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Add Paper</span>
                                 </Link>
@@ -307,6 +308,7 @@ class ManagementNavBar extends Component {
 
                                 <Route path="/management-portal/add-student-details" component={AddStudentDetails} />
                                 <Route path="/management-portal/add-course-details" component={AddCourseDetails} />
+                                <Route path="/management-portal/add-paper-details" component={AddPaperDetails} />
                             </Switch>
                         </div>
                     </div>

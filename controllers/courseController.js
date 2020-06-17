@@ -33,4 +33,23 @@ router.put('/update/:id', (req, res) => {
     })
 });
 
+router.post('/', (req, res) => {
+    var prdt = new Course({
+        course: req.body.course,
+        semester: req.body.semester,
+        updatedBy: req.body.updatedBy,
+        updatedDate: req.body.updatedDate,
+        department: req.body.department,
+        degree: req.body.degree,
+    });
+    prdt.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller')
+        }
+    });
+
+});
+
 module.exports = router;
