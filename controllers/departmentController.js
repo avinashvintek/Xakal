@@ -35,4 +35,24 @@ router.put('/update/:id', (req, res) => {
     })
 });
 
+router.post('/', (req, res) => {
+    var prdt = new DepartmentDetails({
+        name: req.body.name,
+        headOfDepartment: req.body.headOfDepartment,
+        updatedBy: req.body.uploadedBy,
+        updatedDate: req.body.uploadedDate,
+        email: req.body.email,
+        contact: req.body.contact,
+        startingYear: req.body.startingYear,
+        studentCapacity: req.body.studentCapacity,
+    });
+    prdt.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller')
+        }
+    });
+
+});
 module.exports = router;
