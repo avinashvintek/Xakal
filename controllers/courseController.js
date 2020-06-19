@@ -21,7 +21,8 @@ router.put('/update/:id', (req, res) => {
         updatedBy: req.body.updatedBy,
         updatedDate: req.body.updatedDate,
         department: req.body.department,
-        degree: req.body.degree,
+        courseCode: req.body.courseCode,
+        courseCredits: req.body.courseCredits,
     };
     var id = req.params.id;
     Course.findByIdAndUpdate(id, { $set: details }, { new: true }, (err, doc) => {
@@ -40,7 +41,8 @@ router.post('/', (req, res) => {
         updatedBy: req.body.updatedBy,
         updatedDate: req.body.updatedDate,
         department: req.body.department,
-        degree: req.body.degree,
+        courseCode: req.body.courseCode,
+        courseCredits: req.body.courseCredits,
     });
     prdt.save((err, docs) => {
         if (!err) {

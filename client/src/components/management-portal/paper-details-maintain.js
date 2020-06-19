@@ -32,9 +32,11 @@ class PaperDetailsMaintain extends Component {
             return (
                 <tr className="odd gradeX" key={index++}>
                     <td className={"left"} key={index++}>{singleData.course}</td>
+                    <td className={"left"} key={index++}>{singleData.courseCode}</td>
+                    <td className={"left"} key={index++}>{singleData.courseCredits}</td>
                     <td className={"left"} key={index++}>{singleData.semester}</td>
                     <td className={"left"} key={index++}>{singleData.department}</td>
-                    <td className={"left"} key={index++}>{singleData.degree}</td>
+
                 </tr>
             )
         })
@@ -96,7 +98,8 @@ class PaperDetailsMaintain extends Component {
                     updatedBy: this.state.userID.toUpperCase(),
                     updatedDate: new Date(Date.now()).toLocaleString(),
                     department: element.department,
-                    degree: element.degree,
+                    courseCode: element.courseCode,
+                    courseCredits: element.courseCredits,
                 }
                 axios.put(`/xakal/coursedetail/update/${element._id}`, params)
                     .then(() => {
@@ -118,9 +121,10 @@ class PaperDetailsMaintain extends Component {
             return (
                 <tr className="odd gradeX" key={index++}>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'course')} defaultValue={singleData.course}></input></td>
+                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'courseCode')} defaultValue={singleData.courseCode}></input></td>
+                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'courseCredits')} defaultValue={singleData.courseCredits}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'semester')} defaultValue={singleData.semester}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'department')} defaultValue={singleData.department}></input></td>
-                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'degree')} defaultValue={singleData.degree}></input></td>
                 </tr>
             )
         })
@@ -139,9 +143,10 @@ class PaperDetailsMaintain extends Component {
                         <thead>
                             <tr>
                                 <th> Name </th>
+                                <th> Code </th>
+                                <th> Credits </th>
                                 <th> Semester </th>
                                 <th> Department </th>
-                                <th> Degree </th>
                             </tr>
                         </thead>
                         {this.state.isEdit ?

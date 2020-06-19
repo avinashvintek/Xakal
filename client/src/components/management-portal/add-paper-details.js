@@ -9,7 +9,6 @@ class AddPaperDetails extends Component {
             departmentDetails: [],
             courseDetails: [],
             hasDepartmentValue: false,
-            hasDegreeValue: false,
         };
         this.baseState = this.state;
 
@@ -20,7 +19,6 @@ class AddPaperDetails extends Component {
             this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
         }
         this.fetchDepartmentDetails();
-        this.fetchDegreeDetails();
     }
 
     /**
@@ -31,28 +29,6 @@ class AddPaperDetails extends Component {
             .then((response) => {
                 this.setState({ departmentDetails: response.data });
             });
-    }
-
-    /**
-     * Fetches all degree
-     */
-    fetchDegreeDetails() {
-        axios.get(`/xakal/degreecoursedetail`)
-            .then((response) => {
-                this.setState({ courseDetails: response.data });
-            });
-    }
-
-    /**
-    * Displays the list of degree based on the API response
-    */
-    displayDegree() {
-        if (this.state && this.state.courseDetails && this.state.courseDetails.length) {
-            console.log(this.state.courseDetails)
-            return this.state.courseDetails.map((singleDegree, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleDegree.name} onClick={this.handleDegreeChange.bind(this)}>{singleDegree.name}</a></li>)
-            });
-        }
     }
 
     /**
@@ -72,13 +48,7 @@ class AddPaperDetails extends Component {
      */
     onDeptDropDownFocus() {
         this.setState({ isDepartmentFocussed: 'is-focused', onDepartmentFocus: true, backgroundDepartment: 'is-shown' });
-    }
-
-    /**
-     * Triggers when degree dropdown is focused
-     */
-    onDegreeDropDownFocus() {
-        this.setState({ isDegreeFocussed: 'is-focused', onDegreeFocus: true, backgroundDegree: 'is-shown' });
+        this.handleSemesterFocus()
     }
 
     /**
@@ -86,6 +56,30 @@ class AddPaperDetails extends Component {
      */
     onSemesterDropDownFocus() {
         this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown' });
+        this.handleDepartmentFocus()
+
+    }
+
+    /**
+     * Resets the department focus based on the value selected
+     */
+    handleDepartmentFocus() {
+        if (this.state.hasDepartmentValue === true) {
+            this.setState({ isDepartmentFocussed: 'is-focused', onDepartmentFocus: false, backgroundDepartment: 'is-hidden' });
+        } else {
+            this.setState({ onDepartmentFocus: false, backgroundDepartment: 'is-hidden' });
+        }
+    }
+
+    /**
+     * Resets the semester focus based on the value selected
+     */
+    handleSemesterFocus() {
+        if (this.state.hasValue === true) {
+            this.setState({ isFocussed: 'is-focused', onFocus: false, background: 'is-hidden' });
+        } else {
+            this.setState({ onFocus: false, background: 'is-hidden' });
+        }
     }
 
     /**
@@ -96,16 +90,8 @@ class AddPaperDetails extends Component {
             event.target.parentNode.classList.add('is-focused');
             event.target.nextSibling.classList.add('is-shown');
         }
-        if (this.state.hasDepartmentValue === true) {
-            this.setState({ isDepartmentFocussed: 'is-focused', onDepartmentFocus: false, backgroundDepartment: 'is-hidden' });
-        } else {
-            this.setState({ onDepartmentFocus: false, backgroundDepartment: 'is-hidden' });
-        }
-        if (this.state.hasDegreeValue === true) {
-            this.setState({ isDegreeFocussed: 'is-focused', onDegreeFocus: false, backgroundDegree: 'is-hidden' });
-        } else {
-            this.setState({ onDegreeFocus: false, backgroundDegree: 'is-hidden' });
-        }
+        this.handleSemesterFocus();
+        this.handleDepartmentFocus();
     }
 
     /**
@@ -139,14 +125,6 @@ class AddPaperDetails extends Component {
     }
 
     /**
-     * Triggers when the degree is changed and stores the values in state
-     * @param event form values 
-     */
-    handleDegreeChange(event) {
-        this.setState({ selectedDegree: event.target.id, onDegreeFocus: false, backgroundDegree: 'is-hidden', background: 'is-hidden', hasDegreeValue: true });
-    }
-
-    /**
      * Triggers when the semester is changed and stores the values in state
      * @param event form values 
      */
@@ -160,14 +138,15 @@ class AddPaperDetails extends Component {
      */
     formSubmit() {
         let isUpdated = false;
-        if (this.state.paperName && this.state.hasDegreeValue === true && this.state.hasDepartmentValue === true && this.state.hasValue === true) {
+        if (this.state.paperName && this.state.courseCode && this.state.courseCredits && this.state.hasDepartmentValue === true && this.state.hasValue === true) {
             const params = {
                 course: this.state.paperName,
                 semester: this.state.selectedSemester.toLowerCase(),
                 updatedBy: this.state.userID.toUpperCase(),
                 updatedDate: new Date(Date.now()).toLocaleString(),
                 department: this.state.selectedDepartment,
-                degree: this.state.selectedDegree,
+                courseCode: this.state.courseCode,
+                courseCredits: this.state.courseCredits,
             }
             axios.post(`/xakal/coursedetail`, params)
                 .then(() => {
@@ -192,7 +171,7 @@ class AddPaperDetails extends Component {
                     <div className="col-sm-12">
                         <div className="card-box">
                             <div className="card-body row">
-                                <div className="col-lg-6 p-t-20">
+                                <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="name"
@@ -200,24 +179,23 @@ class AddPaperDetails extends Component {
                                         <label className={"mdl-textfield__label "}>Name</label>
                                     </div>
                                 </div>
-                                <div className="col-lg-6 p-t-20">
+                                <div className="col-lg-2 p-t-20">
                                     <div
-                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isDegreeFocussed}>
-                                        <input name="selectedDegree" autoComplete="off" onFocus={this.onDegreeDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="degree"
-                                            value={this.state.selectedDegree} />
-                                        <label className={"mdl-textfield__label " + this.state.backgroundDegree}>Degree</label>
-                                        {this.state.onDegreeFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
-                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
-                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                    {this.displayDegree()}
-                                                </ul>
-                                            </div>
-                                        </div> : <p></p>}
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
+                                        <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="courseCode"
+                                            onChange={this.handleFormChange.bind(this)} name="courseCode" />
+                                        <label className={"mdl-textfield__label "}>Code</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="card-body row">
-                                <div className="col-lg-6 p-t-20">
+                                <div className="col-lg-2 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
+                                        <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="number" id="courseCredits"
+                                            onChange={this.handleFormChange.bind(this)} name="courseCredits" />
+                                        <label className={"mdl-textfield__label "}>Credits</label>
+                                    </div>
+                                </div>
+                                <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isDepartmentFocussed}>
                                         <input name="selectedDepartment" autoComplete="off" onFocus={this.onDeptDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="department"
@@ -232,7 +210,7 @@ class AddPaperDetails extends Component {
                                         </div> : <p></p>}
                                     </div>
                                 </div>
-                                <div className="col-lg-6 p-t-20">
+                                <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
                                         <input autoComplete="off" onFocus={this.onSemesterDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
@@ -253,6 +231,9 @@ class AddPaperDetails extends Component {
                                             </div>
                                         </div> : <p></p>}
                                     </div>
+                                </div>
+                                <div className="col-sm-2 p-t-20">
+                                    <button type="button" className="btn btn-primary m-t-15 m-l-30">Add</button>
                                 </div>
                             </div>
                             <div className="col-sm-8 p-t-20">

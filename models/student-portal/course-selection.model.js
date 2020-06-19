@@ -10,7 +10,10 @@ var Course = mongoose.model('Course', {
     department: {
         type: String
     },
-    degree: {
+    courseCode: {
+        type: String
+    },
+    courseCredits: {
         type: String
     },
     updatedBy: {
