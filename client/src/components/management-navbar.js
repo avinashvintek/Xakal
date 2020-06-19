@@ -35,7 +35,7 @@ class ManagementNavBar extends Component {
     }
 
     componentWillUnmount() {
-        this.unlisten();
+        // this.unlisten();
     }
 
     logout() {
