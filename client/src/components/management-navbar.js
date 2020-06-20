@@ -16,6 +16,8 @@ import AddDepartmentDetails from './management-portal/add-department-details';
 import SalaryDetails from './staff-portal/salary-details';
 import AddSalaryDetails from './management-portal/accounts/add-salary-details';
 import AddFeesReceipt from './management-portal/accounts/add-fees-receipt';
+import Attendance from './students-portal/attendance';
+import StaffAttendance from './staff-portal/attendance';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -292,9 +294,15 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/student-attendance`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
-                                    <span>Attendance</span>
+                                    <span>Student Attendance</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/staff-attendance`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Staff Attendance</span>
                                 </Link>
                             </li>
                         </div> : <div></div>}
@@ -316,6 +324,9 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/add-department-details" component={AddDepartmentDetails} />
                                 <Route path="/management-portal/add-salary-details" component={AddSalaryDetails} />
                                 <Route path="/management-portal/add-fees-receipt" component={AddFeesReceipt} />
+
+                                <Route path="/management-portal/student-attendance" component={Attendance} />
+                                <Route path="/management-portal/staff-attendance" component={StaffAttendance} />
                             </Switch>
                         </div>
                     </div>
