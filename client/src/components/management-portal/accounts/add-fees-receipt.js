@@ -5,7 +5,7 @@ import '../../../styles/dropdowns.css';
 import '../../../styles/theme-style.css';
 import axios from 'axios';
 import * as moment from 'moment'
-class AddSalaryDetails extends Component {
+class AddFeesReceipt extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,14 +15,13 @@ class AddSalaryDetails extends Component {
             onFocus: false,
             onYearFocus: false,
             isYearFocussed: '',
-            selectedMonth: '',
-            selectedYear: '',
+            selectedSemester: '',
             background: '',
             yearBackground: '',
             selectedDepartment: '',
             userID: '',
-            staffDetails: [],
-            values: [{ selectedYear: '', selectedMonth: '', uploadedFile: '', selectedStaff: '', selectedStaffName: '' }]
+            studentDetails: [],
+            values: [{ selectedSemester: '', uploadedFile: '', selectedStudent: '', selectedStudentName: '' }]
         };
         this.onFileUpload = this.onFileUpload.bind(this)
         this.fileUpload = this.fileUpload.bind(this)
@@ -43,13 +42,13 @@ class AddSalaryDetails extends Component {
     }
 
     /**
-     * Fetches all staff
+     * Fetches all students for selected department
      */
-    fetchStaffDetailsByDept(departmentName) {
-        this.setState({ staffDetails: [] })
-        axios.get(`/xakal/staffdetail/department/${departmentName}`)
+    fetchStudentDetailsByDept(departmentName) {
+        this.setState({ studentDetails: [] })
+        axios.get(`/xakal/studentdetail/department/${departmentName}`)
             .then((response) => {
-                this.setState({ staffDetails: response.data });
+                this.setState({ studentDetails: response.data });
             });
     }
 
@@ -59,57 +58,26 @@ class AddSalaryDetails extends Component {
     }
 
     /**
-     * Sets the month selected
+     * Triggers when semester is focused
      */
-    onMonthSelect(event) {
-        this.setState({ selectedMonth: event.target.id, onFocus: false, background: 'is-hidden' });
-        if (this.state.searchAllowed) {
-            this.setState({ searchAllowed: false })
-        }
+    onSemesterFocus(i) {
+        this.setState({ isFocussed: 'is-focused', selectedSemesterIndex: i, onFocus: true, onYearFocus: false, background: 'is-shown' });
     }
 
     /**
-     * Triggers when month is focused
+     * Triggers when student is focused
      */
-    onMonthFocus(i) {
-        this.setState({ isFocussed: 'is-focused', selectedMonthIndex: i, onFocus: true, onYearFocus: false, background: 'is-shown' });
+    onStudentFocussed(i) {
+        this.setState({ isStudentFocussed: 'is-focused', selectedStudentIndex: i, onFocus: false, onStudentFocus: true, backgroundStudent: 'is-shown' });
     }
 
     /**
-     * Triggers when year is focused
+     * Fetches all the semester name
      */
-    onYearFocus(i) {
-        this.setState({ isYearFocussed: 'is-focused', selectedIndex: i, onFocus: false, onYearFocus: true, yearBackground: 'is-shown' });
-    }
-
-    /**
-     * Triggers when staff is focused
-     */
-    onStaffFocus(i) {
-        this.setState({ isStaffFocussed: 'is-focused', selectedStaffIndex: i, onFocus: false, onStaffFocus: true, backgroundStaff: 'is-shown' });
-    }
-
-    /**
-     * Fetches all the month name
-     */
-    getMonths(i) {
-        return moment.months().map((name, index) => {
+    getSemester(i) {
+        return [1, 2, 3, 4, 5, 6, 7, 8,].map((name, index) => {
             return (
-                <li id={name} key={index++} className="mdl-menu__item animation" onClick={this.handleMonthChange.bind(this, i)} >{name}</li>
-            )
-        })
-    }
-
-
-    /**
-     * Gets the previous 10 years
-     */
-    getYear(i) {
-        const year = (new Date()).getFullYear();
-        const years = Array.from(new Array(10), (val, index) => -(index - year));
-        return years.map((year, index) => {
-            return (
-                <li id={year} name="selectedYear" key={index++} className="mdl-menu__item animation" onClick={this.handleYearChange.bind(this, i)} >{year}</li>
+                <li id={`semester ${name}`} key={index++} className="mdl-menu__item animation" onClick={this.handleSemesterChange.bind(this, i)} >Semester {name}</li>
             )
         })
     }
@@ -118,7 +86,7 @@ class AddSalaryDetails extends Component {
      * Adds the empty form element
      */
     addClick() {
-        this.setState(prevState => ({ values: [...prevState.values, { selectedYear: '', selectedMonth: '', uploadedFile: '', selectedStaff: '', selectedStaffName: '' }] }))
+        this.setState(prevState => ({ values: [...prevState.values, { selectedSemester: '', uploadedFile: '', selectedStudent: '', selectedStudentName: '' }] }))
     }
 
     /**
@@ -167,46 +135,31 @@ class AddSalaryDetails extends Component {
 
 
     /**
-     * Triggers when the year is changed and stores the values in state
+     * Triggers when the semester is changed and stores the values in state
      * @param event form values 
      */
-    handleYearChange(i, event) {
-        this.setState({ onYearFocus: false, yearBackground: 'is-hidden' });
-        if (event && event.target) {
-            let values = [...this.state.values];
-            const { id } = event.target;
-            values[i]['selectedYear'] = id;
-            this.setState({ values });
-        }
-    }
-
-
-    /**
-     * Triggers when the month is changed and stores the values in state
-     * @param event form values 
-     */
-    handleMonthChange(i, event) {
+    handleSemesterChange(i, event) {
         this.setState({ onFocus: false, background: 'is-hidden' });
         if (event && event.target) {
             let values = [...this.state.values];
             const { id } = event.target;
-            values[i]['selectedMonth'] = id;
+            values[i]['selectedSemester'] = id;
             this.setState({ values });
         }
     }
 
 
     /**
-     * Triggers when the staff is changed and stores the values in state
+     * Triggers when the student is changed and stores the values in state
      * @param event form values 
      */
-    handleStaffChange(i, event) {
-        this.setState({ onStaffFocus: false, backgroundStaff: 'is-hidden' });
+    handleStudentChange(i, event) {
+        this.setState({ onStudentFocus: false, backgroundStudent: 'is-hidden' });
         if (event && event.target) {
             let values = [...this.state.values];
             const { id, name } = event.target;
-            values[i]['selectedStaff'] = id;
-            values[i]['selectedStaffName'] = name;
+            values[i]['selectedStudent'] = id;
+            values[i]['selectedStudentName'] = name;
             this.setState({ values });
         }
     }
@@ -215,6 +168,7 @@ class AddSalaryDetails extends Component {
      * Uploads the file to online URL
      */
     fileUpload(files, element) {
+        var isUpdated = false
         const formData = new FormData();
         formData.append('file', files);
         axios.post('https://file.io', formData, { reportProgress: true, observe: 'events' })
@@ -222,16 +176,18 @@ class AddSalaryDetails extends Component {
                 if (event.data && event.data.link) {
                     this.setState({ file: event.data.link });
                     const reqBody = {
-                        salaryStatus: 'Salary credited',
-                        creditedDate: new Date(),
-                        userID: element.selectedStaff,
-                        salaryReceipt: this.state.file,
-                        salaryMonth: element.selectedMonth,
-                        salaryYear: element.selectedYear,
+                        userID: element.selectedStudent,
+                        semester: element.selectedSemester,
+                        description: 'Paid',
+                        uploadedReceipt: this.state.file,
+                        paymentDate: new Date(),
                     }
-                    axios.post('/xakal/salary', reqBody)
+                    axios.post('/xakal/payment', reqBody)
                         .then(() => {
-                            alert('File uploaded successfully');
+                            if (isUpdated === false) {
+                                isUpdated = true
+                                alert('File uploaded successfully');
+                            }
                         });
                 }
             });
@@ -241,16 +197,16 @@ class AddSalaryDetails extends Component {
      * Resets to base state
      */
     resetForm() {
-        this.setState({ values: [{ selectedYear: '', selectedMonth: '', uploadedFile: '', selectedStaff: '', selectedStaffName: '' }] })
+        this.setState({ values: [{ selectedSemester: '', uploadedFile: '', selectedStudent: '', selectedStudentName: '' }] })
     }
 
     /**
     * Displays the list of HOD based on the API response
     */
-    displayStaff(i) {
-        if (this.state && this.state.staffDetails && this.state.staffDetails.length) {
-            return this.state.staffDetails.map((singleStaff, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleStaff.userID} name={singleStaff.name} onClick={this.handleStaffChange.bind(this, i)}>{singleStaff.name}</a></li>)
+    displayStudent(i) {
+        if (this.state && this.state.studentDetails && this.state.studentDetails.length) {
+            return this.state.studentDetails.map((singleStudent, index) => {
+                return (<li className="mdl-menu__item animation" key={index}><a id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this, i)}>{singleStudent.name}</a></li>)
             });
         }
     }
@@ -289,7 +245,7 @@ class AddSalaryDetails extends Component {
      */
     handleDepartmentChange(event) {
         this.setState({ selectedDepartment: event.target.id, onDepartmentFocus: false, backgroundDepartment: 'is-hidden', background: 'is-hidden', hasDepartmentValue: true });
-        this.fetchStaffDetailsByDept(event.target.id);
+        this.fetchStudentDetailsByDept(event.target.id);
         this.resetForm();
     }
 
@@ -297,7 +253,7 @@ class AddSalaryDetails extends Component {
         return (
             <div>
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Add Salary Details</h1>
+                    <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Add Fees Receipt</h1>
                 </div>
                 <div className="row">
                     <div className="col-sm-12">
@@ -324,14 +280,14 @@ class AddSalaryDetails extends Component {
                                     <div className="card-body row" key={i}>
                                         <div className="col-lg-2 p-t-20">
                                             <div
-                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isStaffFocussed}>
-                                                <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onStaffFocus.bind(this, i)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="selectedStaff"
-                                                    value={el.selectedStaffName || ''} onChange={this.handleStaffChange.bind(this, i)} name="selectedStaff" />
-                                                <label className={"mdl-textfield__label " + this.state.backgroundStaff}>Staff</label>
-                                                {this.state.onStaffFocus && this.state.selectedStaffIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isStudentFocussed}>
+                                                <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onStudentFocussed.bind(this, i)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="selectedStudent"
+                                                    value={el.selectedStudentName || ''} onChange={this.handleStudentChange.bind(this, i)} name="selectedStudent" />
+                                                <label className={"mdl-textfield__label " + this.state.backgroundStudent}>Student</label>
+                                                {this.state.onStudentFocus && this.state.selectedStudentIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
                                                     <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
                                                         <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                            {this.displayStaff(i)}
+                                                            {this.displayStudent(i)}
                                                         </ul>
                                                     </div>
                                                 </div> : <p></p>}
@@ -340,34 +296,17 @@ class AddSalaryDetails extends Component {
                                         <div className="col-lg-2 p-t-20">
                                             <div
                                                 className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                                <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onMonthFocus.bind(this, i)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                                    value={el.selectedMonth} name="selectedMonth" />
-                                                <label className={"mdl-textfield__label " + this.state.background}>Month</label>
-                                                {this.state.onFocus && this.state.selectedMonthIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                                <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onSemesterFocus.bind(this, i)} className="mdl-textfield__input display-border" type="text" id="selectedSemester"
+                                                    value={el.selectedSemester} name="selectedSemester" />
+                                                <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
+                                                {this.state.onFocus && this.state.selectedSemesterIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
                                                     <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
                                                         <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                            {this.getMonths(i)}
+                                                            {this.getSemester(i)}
                                                         </ul>
                                                     </div>
                                                 </div> : <p></p>}
                                             </div>
-                                        </div>
-
-                                        <div className="col-lg-2 p-t-20">
-                                            <div
-                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isYearFocussed}>
-                                                <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onYearFocus.bind(this, i)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="selectedYear"
-                                                    value={el.selectedYear} onChange={this.handleYearChange.bind(this, i)} name="selectedYear" />
-                                                <label className={"mdl-textfield__label " + this.state.yearBackground}>Year</label>
-                                                {this.state.onYearFocus && this.state.selectedIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
-                                                    <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
-                                                        <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                            {this.getYear(i)}
-                                                        </ul>
-                                                    </div>
-                                                </div> : <p></p>}
-                                            </div>
-
                                         </div>
 
                                         <div className="col-sm-4 p-t-20">
@@ -395,4 +334,4 @@ class AddSalaryDetails extends Component {
     }
 }
 
-export default AddSalaryDetails;
+export default AddFeesReceipt;

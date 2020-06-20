@@ -12,7 +12,7 @@ router.get('/:userID', (req, res) => {
 
 router.get('/department/:departmentID', (req, res) => {
     let departmentID = req.params.departmentID.toUpperCase();
-    StaffDetails.findOne({ departmentName: departmentID }, { _id: 0, }).then((eachOne) => {
+    StaffDetails.find({ departmentName: departmentID }, { _id: 0, }).then((eachOne) => {
         res.json(eachOne)
     })
 });
