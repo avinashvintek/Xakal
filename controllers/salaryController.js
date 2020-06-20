@@ -9,4 +9,24 @@ router.get('/salarydetail', (req, res) => {
     })
 });
 
+
+router.post('/', (req, res) => {
+    var prdt = new SalaryDetails({
+        salaryStatus: req.body.salaryStatus,
+        creditedDate: req.body.creditedDate,
+        userID: req.body.userID,
+        salaryReceipt: req.body.salaryReceipt,
+        salaryMonth: req.body.salaryMonth,
+        salaryYear: req.body.salaryYear,
+    });
+    prdt.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller')
+        }
+    });
+
+});
+
 module.exports = router;

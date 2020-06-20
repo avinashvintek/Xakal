@@ -172,7 +172,7 @@ class SalaryDetails extends Component {
                     <td className="column100 column1" data-column="column1">{++index}</td>
                     <td className={"column100 column2 "} onMouseEnter={this.creditedstatusHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.creditedDate}</td>
                     <td className={"column100 column3 "} onMouseEnter={this.statusHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.salaryStatus}</td>
-                    <td className={"column100 column4 "} onMouseEnter={this.receiptHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.salaryReceipt}</td>
+                    <td className={"column100 column4 "} onMouseEnter={this.receiptHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" href={singleData.salaryReceipt}>Download File</a></td>
                 </tr>
             )
         })
@@ -181,6 +181,9 @@ class SalaryDetails extends Component {
     render() {
         return (
             <div>
+                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Salary Details</h1>
+                </div>
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="card-box">

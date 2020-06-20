@@ -227,10 +227,18 @@ class AddPaperDetails extends Component {
                     alert('Please give all the details')
                 }
             });
+            this.resetForm()
 
         } else {
             alert('Please give atleast one record to proceed')
         }
+    }
+
+    /**
+     * Resets to base state
+     */
+    resetForm() {
+        this.setState({ values: [{ paperName: '', courseCode: '', courseCredits: '', selectedDepartment: '', selectedSemester: '', }] })
     }
 
     render() {
@@ -312,7 +320,7 @@ class AddPaperDetails extends Component {
                             <div className="col-sm-8 p-t-20">
                                 <button type="button" onClick={this.addClick.bind(this)} className="btn btn-primary m-t-15 m-l-30">Add</button>
                                 <button type="button" onClick={this.formSubmit.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button>
-                                <button type="button" className="btn btn-primary m-t-15 m-l-30">Cancel</button>
+                                <button type="button" onClick={this.resetForm.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button>
                             </div>
                         </div>
                     </div>

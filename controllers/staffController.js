@@ -10,6 +10,13 @@ router.get('/:userID', (req, res) => {
     })
 });
 
+router.get('/department/:departmentID', (req, res) => {
+    let departmentID = req.params.departmentID.toUpperCase();
+    StaffDetails.findOne({ departmentName: departmentID }, { _id: 0, }).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
+
 router.get('/', (req, res) => {
     StaffDetails.find({}, {}).then((eachOne) => {
         res.json(eachOne)
@@ -32,7 +39,8 @@ router.put('/update/:id', (req, res) => {
         contact: req.body.contact,
         emergencyContact: req.body.emergencyContact,
         parentSpouse: req.body.parentSpouse,
-        joiningDate: req.body.joiningDate
+        joiningDate: req.body.joiningDate,
+        departmentName: req.body.departmentName
     };
     var id = req.params.id;
     StaffDetails.findByIdAndUpdate(id, { $set: details }, { new: true }, (err, doc) => {

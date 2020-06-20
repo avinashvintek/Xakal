@@ -34,6 +34,7 @@ class StaffDetailsMaintain extends Component {
                     <td className={"left"} key={index++}>{singleData.userID}</td>
                     <td className={"left"} key={index++}>{singleData.name}</td>
                     <td className={"left"} key={index++}>{singleData.designation}</td>
+                    <td className={"left"} key={index++}>{singleData.departmentName}</td>
                     <td className={"left"} key={index++}>{singleData.qualification}</td>
                     <td className={"left"} key={index++}>{singleData.email}</td>
                     <td className={"left"} key={index++}>{singleData.contact}</td>
@@ -107,7 +108,8 @@ class StaffDetailsMaintain extends Component {
                     contact: element.contact,
                     emergencyContact: element.emergencyContact,
                     joiningDate: element.joiningDate,
-                    parentSpouse: element.parentSpouse
+                    parentSpouse: element.parentSpouse,
+                    departmentName: element.departmentName
                 }
                 axios.put(`/xakal/staffdetail/update/${element._id}`, params)
                     .then(() => {
@@ -131,6 +133,7 @@ class StaffDetailsMaintain extends Component {
                     <td className={"left"} key={index++}>{singleData.userID}</td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'name')} defaultValue={singleData.name}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'designation')} defaultValue={singleData.designation}></input></td>
+                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'departmentName')} defaultValue={singleData.departmentName}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'qualification')} defaultValue={singleData.qualification}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'email')} defaultValue={singleData.email}></input></td>
                     <td className={"left"} key={index++}><input type="number" className="add-border" onChange={this.onEdit.bind(this, singleData, 'contact')} defaultValue={singleData.contact}></input></td>
@@ -158,6 +161,7 @@ class StaffDetailsMaintain extends Component {
                                 <th> User ID </th>
                                 <th> Name </th>
                                 <th> Designation </th>
+                                <th> Department Name</th>
                                 <th> Qualification </th>
                                 <th> Email </th>
                                 <th> Mobile </th>

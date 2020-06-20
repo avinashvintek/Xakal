@@ -13,6 +13,8 @@ import AddStudentDetails from './management-portal/add-student-details';
 import AddCourseDetails from './management-portal/add-course-details';
 import AddPaperDetails from './management-portal/add-paper-details';
 import AddDepartmentDetails from './management-portal/add-department-details';
+import SalaryDetails from './staff-portal/salary-details';
+import AddSalaryDetails from './management-portal/accounts/add-salary-details';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -261,7 +263,7 @@ class ManagementNavBar extends Component {
                         </li>
                         {this.state.accounts ? <div>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/add-salary-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Salary</span>
                                 </Link>
@@ -311,6 +313,7 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/add-course-details" component={AddCourseDetails} />
                                 <Route path="/management-portal/add-paper-details" component={AddPaperDetails} />
                                 <Route path="/management-portal/add-department-details" component={AddDepartmentDetails} />
+                                <Route path="/management-portal/add-salary-details" component={AddSalaryDetails} />
                             </Switch>
                         </div>
                     </div>
