@@ -9,6 +9,7 @@ class AddPaperDetails extends Component {
             departmentDetails: [],
             courseDetails: [],
             hasDepartmentValue: false,
+            courseCode: [],
             values: [{ paperName: '', courseCode: '', courseCredits: '', selectedDepartment: '', selectedSemester: '', }]
         };
         this.baseState = this.state;
@@ -20,6 +21,23 @@ class AddPaperDetails extends Component {
             this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
         }
         this.fetchDepartmentDetails();
+        this.fetchCourseDetails();
+    }
+
+    /**
+     * Fetches course detials to check on course code
+     */
+    fetchCourseDetails() {
+        const courseCode = [];
+        axios.get(`/xakal/coursedetail`)
+            .then((response) => {
+                if (response.data) {
+                    response.data.forEach(element => {
+                        courseCode.push(element.courseCode.toUpperCase());
+                    });
+                }
+                this.setState({ courseCode: courseCode });
+            });
     }
 
     /**
@@ -46,16 +64,16 @@ class AddPaperDetails extends Component {
     /**
      * Triggers when department dropdown is focused
      */
-    onDeptDropDownFocus() {
-        this.setState({ isDepartmentFocussed: 'is-focused', onDepartmentFocus: true, backgroundDepartment: 'is-shown' });
+    onDeptDropDownFocus(i) {
+        this.setState({ isDepartmentFocussed: 'is-focused', selectedDepartmentIndex: i, onDepartmentFocus: true, backgroundDepartment: 'is-shown' });
         this.handleSemesterFocus()
     }
 
     /**
      * Triggers when semester dropdown is focused
      */
-    onSemesterDropDownFocus() {
-        this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown' });
+    onSemesterDropDownFocus(i) {
+        this.setState({ isFocussed: 'is-focused', selectedIndex: i, onFocus: true, background: 'is-shown' });
         this.handleDepartmentFocus()
 
     }
@@ -111,11 +129,32 @@ class AddPaperDetails extends Component {
      * @param event form values 
      */
     handleFormChange(i, event) {
-        if (event && event.target && event.target.value) {
+        if (event && event.target) {
             let values = [...this.state.values];
             const { name, value } = event.target;
-            values[i][name] = value;
-            this.setState({ values });
+            if (event.target.value !== '') {
+                if (name === 'courseCode') {
+                    if (this.state.courseCode.includes(value.toUpperCase())) {
+                        event.target.value = '';
+                        values[i][name] = '';
+                        this.setState({ values });
+                        alert('Course code already exists')
+                    } else {
+                        values[i][name] = value;
+                        this.setState({ values });
+                    }
+                } else {
+                    console.log(value)
+                    values[i][name] = value;
+                    this.setState({ values });
+                }
+
+            } else {
+                let values = [...this.state.values];
+                const { name } = event.target;
+                values[i][name] = '';
+                this.setState({ values });
+            }
         }
     }
 
@@ -164,26 +203,33 @@ class AddPaperDetails extends Component {
      */
     formSubmit() {
         let isUpdated = false;
-        if (this.state.paperName && this.state.courseCode && this.state.courseCredits && this.state.hasDepartmentValue === true && this.state.hasValue === true) {
-            const params = {
-                course: this.state.paperName,
-                semester: this.state.selectedSemester.toLowerCase(),
-                updatedBy: this.state.userID.toUpperCase(),
-                updatedDate: new Date(Date.now()).toLocaleString(),
-                department: this.state.selectedDepartment,
-                courseCode: this.state.courseCode,
-                courseCredits: this.state.courseCredits,
-            }
-            axios.post(`/xakal/coursedetail`, params)
-                .then(() => {
-                    if (!isUpdated) {
-                        alert('Updated Successfully');
+        if (this.state.values && this.state.values.length > 0) {
+            this.state.values.forEach(element => {
+                if (element.paperName && element.courseCode && element.courseCredits && element.selectedDepartment && element.selectedSemester) {
+                    const params = {
+                        course: element.paperName,
+                        semester: element.selectedSemester.toLowerCase(),
+                        updatedBy: this.state.userID.toUpperCase(),
+                        updatedDate: new Date(Date.now()).toLocaleString(),
+                        department: element.selectedDepartment,
+                        courseCode: element.courseCode,
+                        courseCredits: element.courseCredits,
                     }
-                    isUpdated = true;
-                })
-                .catch((err) => console.log(err));
+                    axios.post(`/xakal/coursedetail`, params)
+                        .then(() => {
+                            if (!isUpdated) {
+                                alert('Updated Successfully');
+                            }
+                            isUpdated = true;
+                        })
+                        .catch((err) => console.log(err));
+                } else {
+                    alert('Please give all the details')
+                }
+            });
+
         } else {
-            alert('Please give all the details')
+            alert('Please give atleast one record to proceed')
         }
     }
 
@@ -202,7 +248,7 @@ class AddPaperDetails extends Component {
                                         <div
                                             className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                             <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id={`name${i}`}
-                                                value={el.paperName} onChange={this.handleFormChange.bind(this, i)} name="paperName" />
+                                                value={el.paperName || ''} onChange={this.handleFormChange.bind(this, i)} name="paperName" />
                                             <label className={"mdl-textfield__label "}>Name</label>
                                         </div>
                                     </div>
@@ -210,7 +256,7 @@ class AddPaperDetails extends Component {
                                         <div
                                             className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                             <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id={`courseCode${i}`}
-                                                value={el.courseCode} onChange={this.handleFormChange.bind(this, i)} name="courseCode" />
+                                                value={el.courseCode || ''} onChange={this.handleFormChange.bind(this, i)} name="courseCode" />
                                             <label className={"mdl-textfield__label "}>Code</label>
                                         </div>
                                     </div>
@@ -218,17 +264,17 @@ class AddPaperDetails extends Component {
                                         <div
                                             className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
                                             <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="number" id={`courseCredits${i}`}
-                                                value={el.courseCredits} onChange={this.handleFormChange.bind(this, i)} name="courseCredits" />
+                                                value={el.courseCredits || ''} onChange={this.handleFormChange.bind(this, i)} name="courseCredits" />
                                             <label className={"mdl-textfield__label "}>Credits</label>
                                         </div>
                                     </div>
                                     <div className="col-lg-2 p-t-20">
                                         <div
                                             className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isDepartmentFocussed}>
-                                            <input name="selectedDepartment" autoComplete="off" onFocus={this.onDeptDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id={`department${i}`}
-                                                value={el.selectedDepartment} onChange={this.handleFormChange.bind(this, i)} />
+                                            <input name="selectedDepartment" onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onDeptDropDownFocus.bind(this, i)} className="mdl-textfield__input display-border" type="text" id={`department${i}`}
+                                                value={el.selectedDepartment || ''} onChange={this.handleFormChange.bind(this, i)} />
                                             <label className={"mdl-textfield__label " + this.state.backgroundDepartment}>Department</label>
-                                            {this.state.onDepartmentFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            {this.state.onDepartmentFocus && this.state.selectedDepartmentIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
                                                 <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
                                                     <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
                                                         {this.displayDepartment(i)}
@@ -240,12 +286,12 @@ class AddPaperDetails extends Component {
                                     <div className="col-lg-2 p-t-20">
                                         <div
                                             className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                            <input name="selectedSemester" autoComplete="off" value={el.selectedSemester} onChange={this.handleFormChange.bind(this, i)} onFocus={this.onSemesterDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id={`sample2"${i}`}
+                                            <input name="selectedSemester" onKeyPress={(e) => e.preventDefault()} autoComplete="off" value={el.selectedSemester || ''} onChange={this.handleFormChange.bind(this, i)} onFocus={this.onSemesterDropDownFocus.bind(this, i)} className="mdl-textfield__input display-border" type="text" id={`sample2"${i}`}
                                             />
                                             <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
-                                            {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            {this.state.onFocus && this.state.selectedIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
                                                 <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
-                                                    <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    <ul key={i} className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
                                                         <li className="mdl-menu__item animation" id="Semester 1" onClick={this.handleSemesterChange.bind(this, i)} >Semester 1</li>
                                                         <li className="mdl-menu__item animation1" id="Semester 2" onClick={this.handleSemesterChange.bind(this, i)} >Semester 2</li>
                                                         <li className="mdl-menu__item animation2" id="Semester 3" onClick={this.handleSemesterChange.bind(this, i)} >Semester 3</li>
@@ -260,7 +306,7 @@ class AddPaperDetails extends Component {
                                         </div>
                                     </div>
                                     <div className="col-sm-2 p-t-20">
-                                        <button type="button" onClick={this.removeClick.bind(this, i)} className="btn btn-primary m-t-15 m-l-30">Remove</button>
+                                        <button type="button" onClick={this.removeClick.bind(this, i)} className="btn btn-primary m-t-15 m-l-30">X</button>
                                     </div>
                                 </div >)}
                             <div className="col-sm-8 p-t-20">
