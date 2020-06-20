@@ -231,7 +231,7 @@ class Attendance extends Component {
     }
 
     /**
-   * Displays the list of HOD based on the API response
+   * Displays the list of student based on the API response
    */
     displayStudent() {
         if (this.state && this.state.studentDetails && this.state.studentDetails.length) {
