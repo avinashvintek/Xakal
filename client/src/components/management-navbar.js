@@ -63,6 +63,17 @@ class ManagementNavBar extends Component {
     }
 
     /**
+     * Handles the sub menu of college notes
+     */
+    onNotesClick() {
+        if (this.state.showNotes) {
+            this.setState({ showNotes: false })
+        } else {
+            this.setState({ showNotes: true })
+        }
+    }
+
+    /**
      * Handles the sub menu of professors
      */
     onProfessorsClick() {
@@ -261,6 +272,32 @@ class ManagementNavBar extends Component {
                             </li>
                         </div> : <div></div>}
                         <hr className="sidebar-divider d-none d-md-block" />
+
+                        {this.state.routerLink === '/hod-portal' ? <div>
+                            <li className="nav-item">
+                                <a className="nav-link" onClick={this.onNotesClick.bind(this)}>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>College Notes</span>
+                                    {this.state.showNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
+                                        <i className="fa fa-angle-right fa-lg notes-margin " aria-hidden="true"></i>}
+                                </a>
+                            </li>
+                            {this.state.showNotes ? <div>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/class-notes`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <span>Class Notes</span>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/question-papers`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <span>Question Papers</span>
+                                    </Link>
+                                </li>
+                            </div> : <div></div>}
+                            <hr className="sidebar-divider d-none d-md-block" />
+                        </div> : <span></span>}
                         {this.state.routerLink === '/management-portal' ? <div>
                             <li className="nav-item">
                                 <a className="nav-link collapsed" onClick={this.onAccountsClick.bind(this)}>
@@ -377,6 +414,9 @@ class ManagementNavBar extends Component {
                                 <Route path="/hod-portal/add-semester-details" component={AddSemesterDetails} />
                                 <Route path="/hod-portal/view-semester-details" component={ViewSemesterDetails} />
 
+                                <Route path="/hod-portal/class-notes" component={classNotes} />
+                                <Route path="/hod-portal/xakal-notes" component={classNotes} />
+                                <Route path="/hod-portal/question-papers" component={classNotes} />
                             </Switch>
                         </div>
                     </div>

@@ -267,9 +267,11 @@ class ClassNotes extends Component {
         if (this.props.location) {
             switch (this.props.location.pathname) {
                 case '/staff-portal/question-papers':
+                case '/hod-portal/question-papers':
                     this.uploadQuestionPapers();
                     break;
                 case '/staff-portal/class-notes':
+                case '/hod-portal/class-notes':
                     this.uploadClassNotes();
                     break;
                 default: break
