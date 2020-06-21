@@ -29,7 +29,16 @@ router.get('/internaldetail/:semester', (req, res) => {
 });
 
 router.get('/internaldetail', (req, res) => {
-    InternalDetails.find(req.query, { }).then((eachOne) => {
+    InternalDetails.find(req.query, {}).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
+
+router.get('/internaldetail/exists/:userID/:course', (req, res) => {
+    let course = req.params.course;
+    let userID = req.params.userID ? req.params.userID.toUpperCase() : null;
+    let filter = { course: course, userID: userID };
+    InternalDetails.find(filter, {}).then((eachOne) => {
         res.json(eachOne)
     })
 });
@@ -74,4 +83,49 @@ router.put('/internaldetail/update/:id', (req, res) => {
         }
     })
 });
+
+
+router.post('/internaldetail', (req, res) => {
+    var marks;
+    if (req.body.model === 'model 1') {
+        marks = new InternalDetails({
+            userID: req.body.userID,
+            semester: req.body.semester,
+            course: req.body.course,
+            uploadedBy: req.body.uploadedBy,
+            uploadedDate: req.body.uploadedDate,
+            model1: req.body.marksObtained,
+            internals: req.body.internals
+        });
+    } else if (req.body.model === 'model 2') {
+        marks = new InternalDetails({
+            userID: req.body.userID,
+            semester: req.body.semester,
+            course: req.body.course,
+            uploadedBy: req.body.uploadedBy,
+            uploadedDate: req.body.uploadedDate,
+            model2: req.body.marksObtained,
+            internals: req.body.internals
+        });
+    } else if (req.body.model === 'model 3') {
+        marks = new InternalDetails({
+            userID: req.body.userID,
+            semester: req.body.semester,
+            course: req.body.course,
+            uploadedBy: req.body.uploadedBy,
+            uploadedDate: req.body.uploadedDate,
+            model3: req.body.marksObtained,
+            internals: req.body.internals
+        });
+
+    }
+    marks.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller')
+        }
+    });
+});
+
 module.exports = router;

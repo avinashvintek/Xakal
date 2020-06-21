@@ -13,11 +13,12 @@ import AddStudentDetails from './management-portal/add-student-details';
 import AddCourseDetails from './management-portal/add-course-details';
 import AddPaperDetails from './management-portal/add-paper-details';
 import AddDepartmentDetails from './management-portal/add-department-details';
-import SalaryDetails from './staff-portal/salary-details';
 import AddSalaryDetails from './management-portal/accounts/add-salary-details';
 import AddFeesReceipt from './management-portal/accounts/add-fees-receipt';
 import Attendance from './students-portal/attendance';
 import StaffAttendance from './staff-portal/attendance';
+import EditInternalDetails from './staff-portal/assessments/edit-internal-details';
+import AddInternalDetails from './staff-portal/assessments/add-internal-details';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -288,9 +289,15 @@ class ManagementNavBar extends Component {
                         </li>
                         {this.state.view ? <div>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/add-internal-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
-                                    <span>Assessments</span>
+                                    <span>Add Internal Assessments</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/edit-internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Edit Internal Assessments</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
@@ -327,6 +334,8 @@ class ManagementNavBar extends Component {
 
                                 <Route path="/management-portal/student-attendance" component={Attendance} />
                                 <Route path="/management-portal/staff-attendance" component={StaffAttendance} />
+                                <Route path="/management-portal/edit-internal-details" component={EditInternalDetails} />
+                                <Route path="/management-portal/add-internal-details" component={AddInternalDetails} />
                             </Switch>
                         </div>
                     </div>

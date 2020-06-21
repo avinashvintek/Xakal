@@ -1,432 +1,467 @@
 import React, { Component } from 'react';
 import '../../../styles/table.css';
-import '../../../styles/dropdown.css';
-import '../../../styles/course-dropdown.css';
+import '../../../minified-css/material-min.css';
+import '../../../styles/dropdowns.css';
+import '../../../styles/theme-style.css';
 import axios from 'axios';
 class AddInternalDetails extends Component {
+    insertedValues = [];
+    insertedUserID = [];
     constructor(props) {
         super(props);
-        this.marksArray = [];
-        this.studentID = [];
         this.state = {
-            column1: '',
-            column2: '',
-            column3: '',
-            column4: '',
-            column5: '',
-            selectedSemester: '',
-            selectedCourse: '',
             searchAllowed: false,
-            uploadAllowed: false,
-            courseList: [],
-            marksList: [],
-            background: '',
-            backgroundCourse: '',
-            backgroundModel: '',
+            salaryDetails: [],
             isFocussed: '',
-            isCourseFocussed: '',
             onFocus: false,
-            onCourseFocus: false,
-            file: null,
+            onModelFocus: false,
+            isModelFocussed: '',
+            selectedSemester: '',
             selectedModel: '',
+            background: '',
+            modelBackground: '',
+            selectedDepartment: '',
             userID: '',
-            isEdit: false,
-            internals: 0
+            studentDetails: [],
+            values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '' }]
         };
-        this.courseChange = this.onCourseChange.bind(this);
         this.baseState = this.state;
+
     }
 
     componentDidMount() {
+        this.fetchDepartmentDetails();
         if (this.props && this.props.location && this.props.location.userID) {
             const userID = this.props.location.userID;
             this.setState({ userID: userID.userID });
         }
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
+            this.fetchDepartmentDetails();
         });
     }
+
+    /**
+     * Fetches all student
+     */
+    fetchStudentDetailsByDept(departmentName) {
+        this.setState({ studentDetails: [] })
+        axios.get(`/xakal/studentdetail/department/${departmentName}`)
+            .then((response) => {
+                this.setState({ studentDetails: response.data });
+            });
+    }
+
 
     componentWillUnmount() {
         this.unlisten();
     }
 
     /**
-     * Adds the hover class when description is hovered
+     * Sets the semester selected
      */
-    userIDHover(event) {
-        var element = event.target.className;
-        if (element === 'column100 column2 ') {
-            this.setState({ column1: 'hov-column-head-ver5' })
+    onSemesterSelect(event) {
+        this.setState({ selectedSemester: event.target.id, onFocus: false, background: 'is-hidden' });
+        if (this.state.searchAllowed) {
+            this.setState({ searchAllowed: false })
         }
     }
 
     /**
-     * Adds the hover class when download is hovered
+     * Triggers when semester is focused
      */
-    marksHover(event) {
-        var element = event.target.className;
-        if (element === 'column100 column3 ') {
-            this.setState({ column2: 'hov-column-head-ver5' })
-        }
+    onSemesterFocus(i) {
+        this.setState({ isFocussed: 'is-focused', selectedSemesterIndex: i, onFocus: true, onModelFocus: false, background: 'is-shown' });
     }
 
     /**
-     * Adds the hover class when update date is hovered
+     * Triggers when model is focused
      */
-    uploadDateHover(event) {
-        var element = event.target.className;
-        if (element === 'column100 column4 ') {
-            this.setState({ column3: 'hov-column-head-ver5' })
-        }
+    onModelFocus(i) {
+        this.setState({ isModelFocussed: 'is-focused', selectedIndex: i, onFocus: false, onModelFocus: true, modelBackground: 'is-shown' });
     }
 
     /**
-     * Adds the hover class when upload by is hovered
+     * Triggers when student is focused
      */
-    uploadByHover(event) {
-        var element = event.target.className;
-        if (element === 'column100 column5 ') {
-            this.setState({ column4: 'hov-column-head-ver5' })
-        }
+    onStudentFocus(i) {
+        this.setState({ isStudentFocussed: 'is-focused', selectedStudentIndex: i, onFocus: false, onStudentFocus: true, backgroundStudent: 'is-shown' });
     }
 
     /**
-     * Adds the hover class when upload by is hovered
+     * Fetches all the semester name
      */
-    actionHover(event) {
-        var element = event.target.className;
-        if (element === 'column100 column6 ') {
-            this.setState({ column5: 'hov-column-head-ver5' })
-        }
-    }
-
-    /**
-     * Resets the state variables when hover is removed
-     */
-    hoverOff() {
-        this.setState({
-            column1: '',
-            column2: '',
-            column3: '',
-            column4: '',
-            column5: '',
+    getSemesters(i) {
+        return [1, 2, 3, 4, 5, 6, 7, 8,].map((name, index) => {
+            return (
+                <li id={`semester ${name}`} key={index++} className="mdl-menu__item animation" onClick={this.handleSemesterChange.bind(this, i)} >Semester {name}</li>
+            )
         })
     }
 
-    /**
-     * Triggers the API call for course, based on the semester selected
-     */
-    onDropDownSelect(event) {
-        this.setState({ selectedSemester: event.target.id, selectedCourse: '', onFocus: false, background: 'is-hidden' });
-        var semester = event.target.id;
-        axios.get(`/xakal/class-notes/course/${semester}`)
-            .then((response) => {
-                this.setState({ courseList: response.data });
-            });
-        if (this.state.searchAllowed) {
-            this.setState({ searchAllowed: false })
-        } else if (this.state.uploadAllowed) {
-            this.setState({ uploadAllowed: false })
-        }
-    }
-
-    onDropDownFocus() {
-        this.setState({ isFocussed: 'is-focused', onFocus: true, onCourseFocus: false, background: 'is-shown', backgroundCourse: 'is-hidden', backgroundModel: 'is-hidden' });
-        if (this.state.selectedCourse === '') {
-            this.setState({ isCourseFocussed: '' })
-        }
-    }
-
-    onCourseDropDownFocus() {
-        this.setState({ isCourseFocussed: 'is-focused', onCourseFocus: true, onFocus: false, background: 'is-hidden', backgroundCourse: 'is-shown', backgroundModel: 'is-hidden' });
-    }
-
-    onModelFocus() {
-        this.setState({ isModelFocussed: 'is-focused', onCourseFocus: false, onFocus: false, onModelFocus: true, background: 'is-hidden', backgroundCourse: 'is-hidden', backgroundModel: 'is-shown' });
-    }
 
     /**
-     * Updates the selected course name
+     * Gets the previous 10 models
      */
-    onCourseChange(event) {
-        this.setState({ selectedCourse: event.target.id, onCourseFocus: false, backgroundCourse: 'is-hidden', background: 'is-hidden', });
-        if (this.state.searchAllowed) {
-            this.setState({ searchAllowed: false })
-        } else if (this.state.uploadAllowed) {
-            this.setState({ uploadAllowed: false })
-        }
-    }
-
-    onDescriptionChanged(event) {
-        this.setState({ selectedModel: event.target.id, onModelFocus: false, backgroundCourse: 'is-hidden', background: 'is-hidden', backgroundModel: 'is-hidden' });
-        if (this.state.searchAllowed) {
-            this.setState({ searchAllowed: false })
-        } else if (this.state.uploadAllowed) {
-            this.setState({ uploadAllowed: false })
-        }
-    }
-
-    /**
-     * Allows the grid to display the values based on routing
-     */
-    getDetails() {
-        if (this.state.selectedSemester !== '' && this.state.selectedCourse !== '' && this.state.selectedModel !== '') {
-            var params = { semester: this.state.selectedSemester.toLowerCase(), course: this.state.selectedCourse };
-            axios.get(`/xakal/assessment/internaldetail`, { params: params })
-                .then((response) => {
-                    this.setState({ marksList: response.data, searchAllowed: true });
-                });
-        } else {
-            alert('Please select the values');
-            this.setState({ searchAllowed: false, uploadAllowed: false })
-        }
-
-    }
-
-    redirect() {
-        this.setState({ isEdit: true });
-    }
-
-    /**
-     * Displays the list of notes based on the API response
-     */
-    displayTable() {
-        const selectedModel = this.state.selectedModel;
-        const modelName = selectedModel.toLowerCase().replace(/ /g, ''); //remove white spaces
-        return this.state.marksList.map((singleData, index) => {
+    getModel(i) {
+        return [1, 2, 3].map((model, index) => {
             return (
-                <tr className="row100" key={index++}>
-                    <td className="column100 column1" data-column="column1">{index}</td>
-                    <td className={"column100 column2 "} key={index++} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
-                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData[modelName]}</td>
-                    <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
-                    <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
-                    <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Add / Edit</a></td>
-                </tr>
+                <li id={`Model ${model}`} name="selectedModel" key={index++} className="mdl-menu__item animation" onClick={this.handleModelChange.bind(this, i)} >Model {model}</li>
             )
         })
     }
 
     /**
-     * Reverts back to the original state
+     * Adds the empty form element
      */
-    discardChanges() {
-        this.studentID = [];
-        this.marksArray = [];
-        this.setState({ isEdit: false });
-        this.displayTable();
+    addClick() {
+        this.setState(prevState => ({ values: [...prevState.values, { selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '' }] }))
     }
 
-    updatedMarks(singleElement, context) {
-        const userID = singleElement._id;
-        if (this.marksArray.length) {
-            this.marksArray.forEach(element => {
-                if (element.id === userID) {
-                    element.marksObtained = context.target.value
-                } else {
-                    if (!this.studentID.includes(userID)) {
-                        this.insertUpdatedMarks(userID, context);
+    /**
+     * Removes the selected row
+     * @param i selected row index
+     */
+    removeClick(i) {
+        let values = [...this.state.values];
+        values.splice(i, 1);
+        this.setState({ values });
+    }
+
+    /**
+     * Triggers when the model is changed and stores the values in state
+     * @param event form values 
+     */
+    handleModelChange(i, event) {
+        this.setState({ onModelFocus: false, modelBackground: 'is-hidden' });
+        if (event && event.target) {
+            let values = [...this.state.values];
+            const { id } = event.target;
+            values[i]['selectedModel'] = id;
+            this.setState({ values });
+        }
+    }
+
+    /**
+     * Triggers when the semester is changed and stores the values in state
+     * @param event form values 
+     */
+    handleSemesterChange(i, event) {
+        this.setState({ onFocus: false, background: 'is-hidden' });
+        if (event && event.target) {
+            let values = [...this.state.values];
+            const { id } = event.target;
+            values[i]['selectedSemester'] = id;
+            this.setState({ values });
+        }
+    }
+
+
+    /**
+     * Triggers when the student is changed and stores the values in state
+     * @param event form values 
+     */
+    handleStudentChange(i, event) {
+        this.setState({ onStudentFocus: false, backgroundStudent: 'is-hidden' });
+        if (event && event.target) {
+            let values = [...this.state.values];
+            const { id, name } = event.target;
+            values[i]['selectedStudent'] = id;
+            values[i]['selectedStudentName'] = name;
+            this.setState({ values });
+        }
+    }
+
+
+
+    /**
+     * Resets to base state
+     */
+    resetForm() {
+        this.setState({ values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '' }] })
+    }
+
+    /**
+    * Displays the list of HOD based on the API response
+    */
+    displayStudent(i) {
+        if (this.state && this.state.studentDetails && this.state.studentDetails.length) {
+            return this.state.studentDetails.map((singleStudent, index) => {
+                return (<li className="mdl-menu__item animation" key={index}><a id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this, i)}>{singleStudent.name}</a></li>)
+            });
+        }
+    }
+
+    /**
+     * Fetches all department
+     */
+    fetchDepartmentDetails() {
+        axios.get(`/xakal/departmentdetail`)
+            .then((response) => {
+                this.setState({ departmentDetails: response.data });
+            });
+    }
+
+    /**
+     * Displays the list of department based on the API response
+     */
+    displayDepartment() {
+        if (this.state && this.state.departmentDetails && this.state.departmentDetails.length) {
+            return this.state.departmentDetails.map((singleDepartment, index) => {
+                return (<li className="mdl-menu__item animation" key={index}><a id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this)}>{singleDepartment.name}</a></li>)
+            });
+        }
+    }
+
+    /**
+    * Triggers when department dropdown is focused
+    */
+    onDeptDropDownFocus() {
+        this.setState({ isDepartmentFocussed: 'is-focused', onDepartmentFocus: true, backgroundDepartment: 'is-shown' });
+    }
+
+    /**
+     * Triggers when the department is changed and stores the values in state
+     * @param event form values 
+     */
+    handleDepartmentChange(event) {
+        this.setState({ selectedDepartment: event.target.id, onDepartmentFocus: false, backgroundDepartment: 'is-hidden', background: 'is-hidden', hasDepartmentValue: true });
+        this.fetchStudentDetailsByDept(event.target.id);
+        this.resetForm();
+    }
+
+    onMarkFocus() {
+        this.setState({ isFocussed: 'is-focused', isMarkFocussed: 'is-focused', onFocus: false, background: 'is-hidden', backgroundMark: 'is-shown' });
+    }
+
+    onMarkChanged(i, event) {
+        this.setState({ onMarkFocus: false, backgroundMark: 'is-hidden' });
+        if (event && event.target) {
+            let values = [...this.state.values];
+            const { value } = event.target;
+            values[i]['uploadedMark'] = value;
+            this.setState({ values });
+        }
+    }
+
+    /**
+     * Triggers when the form is submitted
+     * Checks whether the values are entered properly
+     */
+    formSubmit() {
+        if (this.state.values && this.state.values.length > 0) {
+            this.state.values.forEach(element => {
+                if (element.selectedStudent && element.selectedSemester && element.selectedModel && element.uploadedMark) {
+                    const params = {
+                        course: 'Physics 1'
                     }
+                    axios.get(`/xakal/assessment/internaldetail/exists/${element.selectedStudent}/${params.course}`)
+                        .then((response) => {
+                            if (!this.insertedUserID.includes(element.selectedStudent)) {
+                                if (response.data && response.data.length > 0) {
+                                    this.updateInternalMarks(element, response.data[0])
+                                } else {
+                                    this.insertedUserID.push(element.selectedStudent);
+                                    this.insertInternals(element);
+                                }
+                            } else {
+                                this.insertedValues.push(element);
+                            }
+
+                        })
+                        .catch((err) => console.log(err));
+
+                } else {
+                    alert('Please give all the details')
                 }
             });
+            setTimeout(() => {
+                this.updateRemainingValues();
+                this.resetForm();
+            }, 5000);
         } else {
-            if (!this.studentID.includes(userID)) {
-                this.insertUpdatedMarks(userID, context);
-            }
-        }
-        if (this.state.selectedModel === 'Model 3') {
-            this.calculateInternalMarks(singleElement);
+            alert('Please give atleast one record to proceed')
         }
     }
 
-    insertUpdatedMarks(userID, context) {
-        this.studentID.push(userID);
-        this.marksArray.push({
-            id: userID,
-            marksObtained: context.target.value
+    updateRemainingValues() {
+        const params = {
+            course: 'Physics 1'
+        }
+        this.insertedValues.forEach(element => {
+            axios.get(`/xakal/assessment/internaldetail/exists/${element.selectedStudent}/${params.course}`)
+                .then((response) => {
+                    if (response.data && response.data.length > 0) {
+                        this.updateInternalMarks(element, response.data[0])
+                    }
+                })
+                .catch((err) => console.log(err));
         });
+        this.insertedUserID = [];
+        this.insertedValues = [];
     }
 
     /**
      * Calculates the internal marks
      * Attendance marks - To be defined
      */
-    calculateInternalMarks(singleElement) {
-        const assessment1 = (singleElement.model1 / 100) * 5;
-        const assessment2 = (singleElement.model2 / 100) * 5;
-        const assessment3 = (singleElement.model3 / 100) * 5;
+    calculateInternalMarks(element, response) {
+        var model1 = element.selectedModel.toLocaleLowerCase() === 'model 1' ? parseInt(element.uploadedMark) : response.model1;
+        var model2 = element.selectedModel.toLocaleLowerCase() === 'model 2' ? parseInt(element.uploadedMark) : response.model2;
+        var model3 = element.selectedModel.toLocaleLowerCase() === 'model 3' ? parseInt(element.uploadedMark) : response.model3;
+        const assessment1 = (model1 / 100) * 5;
+        const assessment2 = (model2 / 100) * 5;
+        const assessment3 = (model3 / 100) * 5;
         const totalInternals = assessment1 + assessment2 + assessment3 + 5;
-        this.setState({ internals: totalInternals });
+        return totalInternals;
     }
 
-    updateMarks() {
+    insertInternals(element) {
         let isUpdated = false;
-        if (this.marksArray && this.marksArray.length) {
-            this.marksArray.forEach(element => {
-                const params = {
-                    marksObtained: element.marksObtained,
-                    semester: this.state.selectedSemester.toLowerCase(),
-                    course: this.state.selectedCourse,
-                    model: this.state.selectedModel.toLowerCase(),
-                    uploadedBy: this.state.userID.toUpperCase(),
-                    uploadedDate: new Date(Date.now()).toLocaleString(),
-                    internals: this.state.internals
+        const params = {
+            semester: element.selectedSemester,
+            userID: element.selectedStudent,
+            course: "Physics 1",
+            uploadedBy: this.state.userID.toUpperCase(),
+            uploadedDate: new Date(Date.now()).toLocaleString(),
+            model: element.selectedModel.toLocaleLowerCase(),
+            marksObtained: parseInt(element.uploadedMark),
+            internals: this.state.internals
+        }
+        axios.post(`/xakal/assessment/internaldetail/`, params)
+            .then(() => {
+                if (!isUpdated) {
+                    alert('Updated Successfully');
                 }
-                axios.put(`/xakal/assessment/internaldetail/update/${element.id}`, params)
-                    .then(() => {
-                        if (!isUpdated) {
-                            alert('Updated Successfully');
-                        }
-                        isUpdated = true;
-                        this.setState({ searchAllowed: false, isEdit: false })
-                    })
-                    .catch((err) => console.log(err));
-            });
-        }
+                isUpdated = true;
+            })
+            .catch((err) => console.log(err));
     }
 
-    /**
-     * Inline table edit
-     */
-    editTable() {
-        const selectedModel = this.state.selectedModel;
-        const modelName = selectedModel.toLowerCase().replace(/ /g, ''); //remove white spaces
-        return this.state.marksList.map((singleData, index) => {
-            return (
-                <tr className="row100" key={index++}>
-                    <td className="column100 column1" data-column="column1">{index}</td>
-                    <td className={"column100 column2 "} key={index++} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
-                    <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" onChange={this.updatedMarks.bind(this, singleData)} defaultValue={singleData[modelName]}></input></td>
-                    <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
-                    <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
-                    <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Add / Edit</a></td>
-                </tr>
-            )
-        })
-    }
-
-    /**
-     * Displays the list of courses based on the API response
-     */
-    displayCourse() {
-        if (this.state && this.state.courseList && this.state.courseList.length) {
-            return this.state.courseList.map((singleCourse, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</a></li>)
-            });
+    updateInternalMarks(element, response) {
+        let isUpdated = false;
+        const params = {
+            semester: element.selectedSemester,
+            course: "Physics 1",
+            uploadedBy: this.state.userID.toUpperCase(),
+            uploadedDate: new Date(Date.now()).toLocaleString(),
+            model: element.selectedModel.toLocaleLowerCase(),
+            marksObtained: parseInt(element.uploadedMark),
+            internals: this.calculateInternalMarks(element, response)
         }
+        axios.put(`/xakal/assessment/internaldetail/update/${response._id}`, params)
+            .then(() => {
+                if (!isUpdated) {
+                    alert('Updated Successfully');
+                }
+                isUpdated = true;
+                this.setState({ searchAllowed: false, isEdit: false })
+            })
+            .catch((err) => console.log(err));
     }
 
     render() {
         return (
             <div>
+                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Add Internal Details</h1>
+                </div>
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="card-box">
                             <div className="card-body row">
-                                <div className="col-lg-2 p-t-20">
+                                <div className="col-sm-8 p-t-20">
                                     <div
-                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                        <input onFocus={this.onDropDownFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
-                                            value={this.state.selectedSemester} />
-                                        <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
-                                        {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isDepartmentFocussed}>
+                                        <input name="selectedDepartment" onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onDeptDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id={`department`}
+                                            value={this.state.selectedDepartment} onChange={this.handleDepartmentChange.bind(this)} />
+                                        <label className={"mdl-textfield__label " + this.state.backgroundDepartment}>Department</label>
+                                        {this.state.onDepartmentFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
                                             <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
                                                 <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                    <li className="mdl-menu__item animation" id="Semester 1" onClick={this.onDropDownSelect.bind(this)} >Semester 1</li>
-                                                    <li className="mdl-menu__item animation1" id="Semester 2" onClick={this.onDropDownSelect.bind(this)} >Semester 2</li>
-                                                    <li className="mdl-menu__item animation2" id="Semester 3" onClick={this.onDropDownSelect.bind(this)} >Semester 3</li>
-                                                    <li className="mdl-menu__item animation" id="Semester 4" onClick={this.onDropDownSelect.bind(this)} >Semester 4</li>
-                                                    <li className="mdl-menu__item animation1" id="Semester 5" onClick={this.onDropDownSelect.bind(this)} >Semester 5</li>
-                                                    <li className="mdl-menu__item animation2" id="Semester 6" onClick={this.onDropDownSelect.bind(this)} >Semester 6</li>
-                                                    <li className="mdl-menu__item animation" id="Semester 7" onClick={this.onDropDownSelect.bind(this)} >Semester 7</li>
-                                                    <li className="mdl-menu__item animation1" id="Semester 8" onClick={this.onDropDownSelect.bind(this)} >Semester 8</li>
+                                                    {this.displayDepartment()}
                                                 </ul>
                                             </div>
                                         </div> : <p></p>}
                                     </div>
-                                </div>
-                                <div className="col-lg-2 p-t-20">
-                                    <div
-                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isCourseFocussed}>
-                                        <input onFocus={this.onCourseDropDownFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
-                                            value={this.state.selectedCourse} />
-                                        <label className={"mdl-textfield__label " + this.state.backgroundCourse}>Course</label>
-                                        {this.state.onCourseFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
-                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
-                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                    {this.displayCourse()}
-                                                </ul>
-                                            </div>
-                                        </div> : <p></p>}
-                                    </div>
-                                </div>
-                                <div className="col-lg-2 p-t-20">
-                                    <div
-                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isModelFocussed}>
-                                        <input onFocus={this.onModelFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
-                                            value={this.state.selectedModel} />
-                                        <label className={"mdl-textfield__label " + this.state.backgroundModel}>Model</label>
-                                        {this.state.onModelFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
-                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
-                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                    <li className="mdl-menu__item animation" id="Model 1" onClick={this.onDescriptionChanged.bind(this)} >Model 1</li>
-                                                    <li className="mdl-menu__item animation1" id="Model 2" onClick={this.onDescriptionChanged.bind(this)} >Model 2</li>
-                                                    <li className="mdl-menu__item animation2" id="Model 3" onClick={this.onDescriptionChanged.bind(this)} >Model 3</li>
-
-                                                </ul>
-                                            </div>
-                                        </div> : <p></p>}
-                                    </div>
-                                </div>
-                                <div className="col-sm-4 p-t-20">
-                                    <button type="button" onClick={this.getDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Get Results!</button>
                                 </div>
                             </div>
+                            {this.state.selectedDepartment !== '' ? <div>
+                                {this.state.values.map((el, i) =>
+                                    <div className="card-body row" key={i}>
+                                        <div className="col-lg-2 p-t-20">
+                                            <div
+                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isStudentFocussed}>
+                                                <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onStudentFocus.bind(this, i)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="selectedStudent"
+                                                    value={el.selectedStudentName || ''} onChange={this.handleStudentChange.bind(this, i)} name="selectedStudent" />
+                                                <label className={"mdl-textfield__label " + this.state.backgroundStudent}>Student</label>
+                                                {this.state.onStudentFocus && this.state.selectedStudentIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                                    <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                        <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                            {this.displayStudent(i)}
+                                                        </ul>
+                                                    </div>
+                                                </div> : <p></p>}
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-2 p-t-20">
+                                            <div
+                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
+                                                <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onSemesterFocus.bind(this, i)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                                    value={el.selectedSemester} name="selectedSemester" />
+                                                <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
+                                                {this.state.onFocus && this.state.selectedSemesterIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                                    <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                        <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                            {this.getSemesters(i)}
+                                                        </ul>
+                                                    </div>
+                                                </div> : <p></p>}
+                                            </div>
+                                        </div>
+
+                                        <div className="col-lg-2 p-t-20">
+                                            <div
+                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isModelFocussed}>
+                                                <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onModelFocus.bind(this, i)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="selectedModel"
+                                                    value={el.selectedModel} onChange={this.handleModelChange.bind(this, i)} name="selectedModel" />
+                                                <label className={"mdl-textfield__label " + this.state.modelBackground}>Model</label>
+                                                {this.state.onModelFocus && this.state.selectedIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                                    <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                        <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                            {this.getModel(i)}
+                                                        </ul>
+                                                    </div>
+                                                </div> : <p></p>}
+                                            </div>
+
+                                        </div>
+
+                                        <div className="col-sm-4 p-t-20">
+                                            <div className="row">
+                                                <div
+                                                    className={"col-sm-8 m-t-15 m-l-30 mdl-textfield mdl-js-textfield mdl-textfield--floating-label " + this.state.isMarkFocussed}>
+                                                    <input onFocus={this.onMarkFocus.bind(this)} autoComplete="off" value={el.uploadedMark} className=" col-sm-8 m-t-15 m-l-30 mdl-textfield__input display-border" type="number" id="uploadedMark" onChange={this.onMarkChanged.bind(this, i)}
+                                                    />
+                                                    <label className={"mdl-textfield__label " + this.state.backgroundMark}>Marks Obtained</label>
+                                                </div>
+                                                <button style={{ height: '5%' }} type="button" onClick={this.removeClick.bind(this, i)} className="m-l-15 col-sm-1 btn btn-primary m-t-15">X</button>
+                                            </div>
+                                        </div>
+
+                                    </div>)}
+                            </div> : <p></p>}
+                            {this.state.selectedDepartment !== '' ?
+                                <div className="card-body row">
+                                    <div className="col-sm-8 p-t-20">
+                                        <button type="button" onClick={this.addClick.bind(this)} className="btn btn-primary m-t-15">Add</button>
+                                        <button type="button" onClick={this.formSubmit.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button>
+                                        <button type="button" onClick={this.resetForm.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button>
+                                    </div>
+                                </div> : <p></p>}
                         </div>
                     </div>
                 </div>
-                {this.state.searchAllowed ? <div className="limiter">
-                    <div className="container-table100">
-                        <div className="wrap-table100">
-                            <div className="table100 ver5 m-b-110 table table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr className="row100 head">
-                                            <th className="column100 column1" data-column="column1"></th>
-                                            <th className={"column100 column2 " + this.state.column1} onMouseEnter={this.userIDHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Student ID</th>
-                                            <th className={"column100 column3 " + this.state.column2} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Marks Obtained</th>
-                                            <th className={"column100 column4 " + this.state.column3} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Uploaded DateTime</th>
-                                            <th className={"column100 column5 " + this.state.column4} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Uploaded By</th>
-                                            <th className={"column100 column6 " + this.state.column5} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Action</th>
-                                        </tr>
-                                    </thead>
-                                    {this.state.isEdit ?
-                                        <tbody>
-                                            {this.editTable()}
-                                        </tbody> :
-                                        <tbody>
-                                            {this.displayTable()}
-                                        </tbody>}
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div> : <span></span>}
-                {this.state.isEdit && this.state.searchAllowed ? <div className="right p-t-20 m-r-100">
-                    {/* <td>
-                        <a href="edit_professor.html"
-                            class="btn btn-primary btn-xs">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <a href="javasctipt().html"
-                            class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash-o "></i>
-                        </a>
-                    </td> */}
-                    <button type="button" onClick={this.updateMarks.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save Details</button>
-                    <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button>
-                </div> : <p></p>}
             </div>
         )
     }
