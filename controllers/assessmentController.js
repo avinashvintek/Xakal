@@ -43,6 +43,15 @@ router.get('/internaldetail/exists/:userID/:course', (req, res) => {
     })
 });
 
+router.get('/semesterdetail/exists/:userID/:course', (req, res) => {
+    let course = req.params.course;
+    let userID = req.params.userID ? req.params.userID.toUpperCase() : null;
+    let filter = { course: course, userID: userID };
+    SemesterDetails.find(filter, {}).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
+
 router.put('/internaldetail/update/:id', (req, res) => {
     var marks;
     if (!ObjectId.isValid(req.params.id)) {
@@ -126,6 +135,47 @@ router.post('/internaldetail', (req, res) => {
             console.log('error in controller')
         }
     });
+});
+
+router.post('/semesterdetail', function (req, res) {
+    var prdt = new SemesterDetails({
+        semester: req.body.semester.toLowerCase(),
+        course: req.body.course.toLowerCase(),
+        grade: req.body.grade,
+        result: req.body.result,
+        gradeValue: req.body.gradeValue,
+        userID: req.body.userID,
+    });
+    prdt.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller', err)
+        }
+    });
+});
+
+router.put('/semesterdetail/update/:id', (req, res) => {
+    var details;
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).send('No record with id');
+    }
+    details = {
+        semester: req.body.semester.toLowerCase(),
+        course: req.body.course.toLowerCase(),
+        grade: req.body.grade,
+        result: req.body.result,
+        gradeValue: req.body.gradeValue,
+        userID: req.body.userID,
+    };
+    var id = req.params.id;
+    SemesterDetails.findByIdAndUpdate(id, { $set: details }, { new: true }, (err, doc) => {
+        if (!err) {
+            res.send(doc);
+        } else {
+            console.log('Error in controller', err)
+        }
+    })
 });
 
 module.exports = router;

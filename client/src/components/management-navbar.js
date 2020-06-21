@@ -19,6 +19,7 @@ import Attendance from './students-portal/attendance';
 import StaffAttendance from './staff-portal/attendance';
 import EditInternalDetails from './staff-portal/assessments/edit-internal-details';
 import AddInternalDetails from './staff-portal/assessments/add-internal-details';
+import AddSemesterDetails from './management-portal/add-semester-details';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -301,6 +302,12 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                             <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/add-semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Add Semester Results</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/student-attendance`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Student Attendance</span>
@@ -336,6 +343,7 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/staff-attendance" component={StaffAttendance} />
                                 <Route path="/management-portal/edit-internal-details" component={EditInternalDetails} />
                                 <Route path="/management-portal/add-internal-details" component={AddInternalDetails} />
+                                <Route path="/management-portal/add-semester-details" component={AddSemesterDetails} />
                             </Switch>
                         </div>
                     </div>

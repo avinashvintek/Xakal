@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import '../../../styles/table.css';
-import '../../../minified-css/material-min.css';
-import '../../../styles/dropdowns.css';
-import '../../../styles/theme-style.css';
+import '../../styles/table.css';
+import '../../minified-css/material-min.css';
+import '../../styles/dropdowns.css';
+import '../../styles/theme-style.css';
 import axios from 'axios';
-class AddInternalDetails extends Component {
+class AddSemesterDetails extends Component {
     insertedValues = [];
     insertedUserID = [];
     constructor(props) {
@@ -14,17 +14,13 @@ class AddInternalDetails extends Component {
             salaryDetails: [],
             isFocussed: '',
             onFocus: false,
-            onModelFocus: false,
-            isModelFocussed: '',
             selectedSemester: '',
-            selectedModel: '',
             background: '',
-            modelBackground: '',
             selectedDepartment: '',
             userID: '',
             studentDetails: [],
             courseList: [],
-            values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedCourse: '', selectedStudent: '', selectedStudentName: '' }]
+            values: [{ selectedSemester: '', uploadedMark: '', selectedCourse: '', selectedStudent: '', selectedStudentName: '' }]
         };
         this.baseState = this.state;
 
@@ -72,14 +68,7 @@ class AddInternalDetails extends Component {
      * Triggers when semester is focused
      */
     onSemesterFocus(i) {
-        this.setState({ isFocussed: 'is-focused', selectedSemesterIndex: i, onFocus: true, onModelFocus: false, background: 'is-shown' });
-    }
-
-    /**
-     * Triggers when model is focused
-     */
-    onModelFocus(i) {
-        this.setState({ isModelFocussed: 'is-focused', selectedIndex: i, onFocus: false, onModelFocus: true, modelBackground: 'is-shown' });
+        this.setState({ isFocussed: 'is-focused', selectedSemesterIndex: i, onFocus: true, background: 'is-shown' });
     }
 
     /**
@@ -100,23 +89,11 @@ class AddInternalDetails extends Component {
         })
     }
 
-
-    /**
-     * Gets the previous 10 models
-     */
-    getModel(i) {
-        return [1, 2, 3].map((model, index) => {
-            return (
-                <li id={`Model ${model}`} name="selectedModel" key={index++} className="mdl-menu__item animation" onClick={this.handleModelChange.bind(this, i)} >Model {model}</li>
-            )
-        })
-    }
-
     /**
      * Adds the empty form element
      */
     addClick() {
-        this.setState(prevState => ({ values: [...prevState.values, { selectedModel: '', selectedCourse: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '', selectedCourse: '', }] }))
+        this.setState(prevState => ({ values: [...prevState.values, { selectedCourse: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '', selectedCourse: '', }] }))
     }
 
     /**
@@ -127,20 +104,6 @@ class AddInternalDetails extends Component {
         let values = [...this.state.values];
         values.splice(i, 1);
         this.setState({ values });
-    }
-
-    /**
-     * Triggers when the model is changed and stores the values in state
-     * @param event form values 
-     */
-    handleModelChange(i, event) {
-        this.setState({ onModelFocus: false, modelBackground: 'is-hidden' });
-        if (event && event.target) {
-            let values = [...this.state.values];
-            const { id } = event.target;
-            values[i]['selectedModel'] = id;
-            this.setState({ values });
-        }
     }
 
     /**
@@ -184,7 +147,7 @@ class AddInternalDetails extends Component {
      * Resets to base state
      */
     resetForm() {
-        this.setState({ values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '', selectedCourse: '', }] })
+        this.setState({ values: [{ selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '', selectedCourse: '', }] })
     }
 
     /**
@@ -257,18 +220,18 @@ class AddInternalDetails extends Component {
     formSubmit() {
         if (this.state.values && this.state.values.length > 0) {
             this.state.values.forEach(element => {
-                if (element.selectedStudent && element.selectedSemester && element.selectedCourse && element.selectedModel && element.uploadedMark) {
+                if (element.selectedStudent && element.selectedSemester && element.uploadedMark) {
                     const params = {
-                        course: element.selectedCourse
+                        course: 'Physics 1'
                     }
-                    axios.get(`/xakal/assessment/internaldetail/exists/${element.selectedStudent}/${params.course}`)
+                    axios.get(`/xakal/assessment/semesterdetail/exists/${element.selectedStudent}/${params.course}`)
                         .then((response) => {
                             if (!this.insertedUserID.includes(element.selectedStudent)) {
                                 if (response.data && response.data.length > 0) {
-                                    this.updateInternalMarks(element, response.data[0])
+                                    this.updateSemesterMarks(element, response.data[0])
                                 } else {
                                     this.insertedUserID.push(element.selectedStudent);
-                                    this.insertInternals(element);
+                                    this.insertSemester(element);
                                 }
                             } else {
                                 this.insertedValues.push(element);
@@ -291,14 +254,14 @@ class AddInternalDetails extends Component {
     }
 
     updateRemainingValues() {
+        const params = {
+            course: 'Physics 1'
+        }
         this.insertedValues.forEach(element => {
-            const params = {
-                course: element.selectedCourse
-            }
-            axios.get(`/xakal/assessment/internaldetail/exists/${element.selectedStudent}/${params.course}`)
+            axios.get(`/xakal/assessment/semesterdetail/exists/${element.selectedStudent}/${params.course}`)
                 .then((response) => {
                     if (response.data && response.data.length > 0) {
-                        this.updateInternalMarks(element, response.data[0])
+                        this.updateSemesterMarks(element, response.data[0])
                     }
                 })
                 .catch((err) => console.log(err));
@@ -307,34 +270,18 @@ class AddInternalDetails extends Component {
         this.insertedValues = [];
     }
 
-    /**
-     * Calculates the internal marks
-     * Attendance marks - To be defined
-     */
-    calculateInternalMarks(element, response) {
-        var model1 = element.selectedModel.toLocaleLowerCase() === 'model 1' ? parseInt(element.uploadedMark) : response.model1;
-        var model2 = element.selectedModel.toLocaleLowerCase() === 'model 2' ? parseInt(element.uploadedMark) : response.model2;
-        var model3 = element.selectedModel.toLocaleLowerCase() === 'model 3' ? parseInt(element.uploadedMark) : response.model3;
-        const assessment1 = (model1 / 100) * 5;
-        const assessment2 = (model2 / 100) * 5;
-        const assessment3 = (model3 / 100) * 5;
-        const totalInternals = assessment1 + assessment2 + assessment3 + 5;
-        return totalInternals;
-    }
-
-    insertInternals(element) {
+    insertSemester(element) {
         let isUpdated = false;
         const params = {
-            semester: element.selectedSemester,
+            semester: element.selectedSemester.toLocaleLowerCase(),
             userID: element.selectedStudent,
-            course: "Physics 1",
-            uploadedBy: this.state.userID.toUpperCase(),
-            uploadedDate: new Date(Date.now()).toLocaleString(),
-            model: element.selectedModel.toLocaleLowerCase(),
-            marksObtained: parseInt(element.uploadedMark),
-            internals: this.state.internals
+            course: element.selectedCourse.toLocaleLowerCase(),
+            grade: element.uploadedMark,
+            result: this.checkResult(element),
+            gradeValue: this.checkGrade(element),
+            credits: 2
         }
-        axios.post(`/xakal/assessment/internaldetail/`, params)
+        axios.post(`/xakal/assessment/semesterdetail/`, params)
             .then(() => {
                 if (!isUpdated) {
                     alert('Updated Successfully');
@@ -344,18 +291,64 @@ class AddInternalDetails extends Component {
             .catch((err) => console.log(err));
     }
 
-    updateInternalMarks(element, response) {
+    checkGrade(element) {
+        switch (element.uploadedMark) {
+            case 'a':
+            case 'A':
+                return 9;
+            case 'b':
+            case 'B':
+                return 8;
+            case 'c':
+            case 'C':
+                return 7;
+            case 'd':
+            case 'D':
+                return 6;
+            case 'e':
+            case 'E':
+                return 5;
+            case 'u':
+            case 'U':
+                return 0
+            default:
+                return 0
+        }
+    }
+
+    checkResult(element) {
+        switch (element.uploadedMark) {
+            case 'a':
+            case 'A':
+            case 'b':
+            case 'B':
+            case 'c':
+            case 'C':
+            case 'd':
+            case 'D':
+            case 'e':
+            case 'E':
+                return 'Pass';
+            case 'u':
+            case 'U':
+                return 'Fail'
+            default:
+                return 'Pending'
+        }
+    }
+
+    updateSemesterMarks(element, response) {
         let isUpdated = false;
         const params = {
-            semester: element.selectedSemester,
-            course: "Physics 1",
-            uploadedBy: this.state.userID.toUpperCase(),
-            uploadedDate: new Date(Date.now()).toLocaleString(),
-            model: element.selectedModel.toLocaleLowerCase(),
-            marksObtained: parseInt(element.uploadedMark),
-            internals: this.calculateInternalMarks(element, response)
+            semester: element.selectedSemester.toLocaleLowerCase(),
+            userID: element.selectedStudent,
+            course: element.selectedCourse.toLocaleLowerCase(),
+            grade: element.uploadedMark,
+            result: this.checkResult(element),
+            gradeValue: this.checkGrade(element),
+            credits: 2
         }
-        axios.put(`/xakal/assessment/internaldetail/update/${response._id}`, params)
+        axios.put(`/xakal/assessment/semesterdetail/update/${response._id}`, params)
             .then(() => {
                 if (!isUpdated) {
                     alert('Updated Successfully');
@@ -400,7 +393,7 @@ class AddInternalDetails extends Component {
         return (
             <div>
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Add Internal Details</h1>
+                    <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Add Semester Details</h1>
                 </div>
                 <div className="row">
                     <div className="col-sm-12">
@@ -470,29 +463,14 @@ class AddInternalDetails extends Component {
                                                 </div> : <p></p>}
                                             </div>
                                         </div>
-                                        <div className="col-lg-2 p-t-20">
-                                            <div
-                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isModelFocussed}>
-                                                <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onModelFocus.bind(this, i)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="selectedModel"
-                                                    value={el.selectedModel} onChange={this.handleModelChange.bind(this, i)} name="selectedModel" />
-                                                <label className={"mdl-textfield__label " + this.state.modelBackground}>Model</label>
-                                                {this.state.onModelFocus && this.state.selectedIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
-                                                    <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
-                                                        <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                            {this.getModel(i)}
-                                                        </ul>
-                                                    </div>
-                                                </div> : <p></p>}
-                                            </div>
-                                        </div>
 
                                         <div className="col-sm-4 p-t-20">
                                             <div className="row">
                                                 <div
                                                     className={"col-sm-8 m-t-15 m-l-30 mdl-textfield mdl-js-textfield mdl-textfield--floating-label " + this.state.isMarkFocussed}>
-                                                    <input onFocus={this.onMarkFocus.bind(this)} autoComplete="off" value={el.uploadedMark} className=" col-sm-8 m-t-15 m-l-30 mdl-textfield__input display-border" type="number" id="uploadedMark" onChange={this.onMarkChanged.bind(this, i)}
+                                                    <input onFocus={this.onMarkFocus.bind(this)} autoComplete="off" value={el.uploadedMark} className=" col-sm-8 m-t-15 m-l-30 mdl-textfield__input display-border" type="text" maxLength={1} id="uploadedMark" onChange={this.onMarkChanged.bind(this, i)}
                                                     />
-                                                    <label className={"mdl-textfield__label " + this.state.backgroundMark}>Marks Obtained</label>
+                                                    <label className={"mdl-textfield__label " + this.state.backgroundMark}>Grades</label>
                                                 </div>
                                                 <button style={{ height: '5%' }} type="button" onClick={this.removeClick.bind(this, i)} className="m-l-15 col-sm-1 btn btn-primary m-t-15">X</button>
                                             </div>
@@ -516,4 +494,4 @@ class AddInternalDetails extends Component {
     }
 }
 
-export default AddInternalDetails;
+export default AddSemesterDetails;
