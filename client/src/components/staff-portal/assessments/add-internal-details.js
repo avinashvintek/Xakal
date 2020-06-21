@@ -23,6 +23,7 @@ class AddInternalDetails extends Component {
             selectedDepartment: '',
             userID: '',
             studentDetails: [],
+            courseList: [],
             values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '' }]
         };
         this.baseState = this.state;
@@ -153,6 +154,11 @@ class AddInternalDetails extends Component {
             const { id } = event.target;
             values[i]['selectedSemester'] = id;
             this.setState({ values });
+            var semester = event.target.id;
+            axios.get(`/xakal/class-notes/course/${semester}`)
+                .then((response) => {
+                    this.setState({ courseList: response.data });
+                });
         }
     }
 
@@ -360,6 +366,36 @@ class AddInternalDetails extends Component {
             .catch((err) => console.log(err));
     }
 
+    onCourseDropDownFocus(i) {
+        this.setState({ isCourseFocussed: 'is-focused', selectedCourseIndex: i, onCourseFocus: true, onFocus: false, background: 'is-hidden', backgroundCourse: 'is-shown', backgroundDesc: 'is-hidden' });
+    }
+
+    /**
+     * Triggers when the student is changed and stores the values in state
+     * @param event form values 
+     */
+    handleCourseChange(i, event) {
+        this.setState({ onCourseFocus: false, backgroundCourse: 'is-hidden', hasCourseValue: true });
+        if (event && event.target) {
+            let values = [...this.state.values];
+            const { id, name } = event.target;
+            values[i]['selectedCourse'] = id;
+            values[i]['selectedCourseName'] = name;
+            this.setState({ values });
+        }
+    }
+
+    /**
+    * Displays the list of courses based on the API response
+    */
+    displayCourse(i) {
+        if (this.state && this.state.courseList && this.state.courseList.length) {
+            return this.state.courseList.map((singleCourse, index) => {
+                return (<li className="mdl-menu__item animation" key={index}><a id={singleCourse.course} onClick={this.handleCourseChange.bind(this, i)}>{singleCourse.course}</a></li>)
+            });
+        }
+    }
+
     render() {
         return (
             <div>
@@ -419,7 +455,21 @@ class AddInternalDetails extends Component {
                                                 </div> : <p></p>}
                                             </div>
                                         </div>
-
+                                        <div className="col-lg-2 p-t-20">
+                                            <div
+                                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isCourseFocussed}>
+                                                <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onCourseDropDownFocus.bind(this, i)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                                    value={el.selectedCourse} />
+                                                <label className={"mdl-textfield__label " + this.state.backgroundCourse}>Course</label>
+                                                {this.state.onCourseFocus && this.state.selectedCourseIndex === i ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                                    <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                        <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                            {this.displayCourse(i)}
+                                                        </ul>
+                                                    </div>
+                                                </div> : <p></p>}
+                                            </div>
+                                        </div>
                                         <div className="col-lg-2 p-t-20">
                                             <div
                                                 className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isModelFocussed}>
@@ -434,7 +484,6 @@ class AddInternalDetails extends Component {
                                                     </div>
                                                 </div> : <p></p>}
                                             </div>
-
                                         </div>
 
                                         <div className="col-sm-4 p-t-20">
