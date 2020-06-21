@@ -214,28 +214,30 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                         </div> : <div></div>}
-                        <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onCourseClick.bind(this)}>
-                                <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>Courses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                {this.state.course ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
-                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </a>
-                        </li>
-                        {this.state.course ? <div>
+                        {this.state.routerLink === '/management-portal' ? <div>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/course-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
-                                    <span>All Courses</span>
-                                </Link>
+                                <a className="nav-link collapsed" onClick={this.onCourseClick.bind(this)}>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Courses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {this.state.course ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                        <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                                </a>
                             </li>
-                            <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/add-course-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
-                                    <span>Add Course</span>
-                                </Link>
-                            </li>
-                        </div> : <div></div>}
+                            {this.state.course ? <div>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/course-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <span>All Courses</span>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/add-course-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <span>Add Course</span>
+                                    </Link>
+                                </li>
+                            </div> : <div></div>}
+                        </div> : <span></span>}
                         <li className="nav-item">
                             <a className="nav-link collapsed" onClick={this.onPaperClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -259,28 +261,32 @@ class ManagementNavBar extends Component {
                             </li>
                         </div> : <div></div>}
                         <hr className="sidebar-divider d-none d-md-block" />
-                        <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onAccountsClick.bind(this)}>
-                                <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>Accounts&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                {this.state.accounts ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
-                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </a>
-                        </li>
-                        {this.state.accounts ? <div>
+                        {this.state.routerLink === '/management-portal' ? <div>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/add-salary-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
-                                    <span>Salary</span>
-                                </Link>
+                                <a className="nav-link collapsed" onClick={this.onAccountsClick.bind(this)}>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Accounts&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {this.state.accounts ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                        <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                                </a>
                             </li>
-                            <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/add-fees-receipt`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
-                                    <span>Fees</span>
-                                </Link>
-                            </li>
-                        </div> : <div></div>}
+                            {this.state.accounts ? <div>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/add-salary-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <span>Salary</span>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/add-fees-receipt`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <span>Fees</span>
+                                    </Link>
+                                </li>
+                            </div> : <div></div>}
+                        </div>
+                            : <span></span>
+                        }
                         <li className="nav-item">
                             <a className="nav-link collapsed" onClick={this.onViewClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -332,7 +338,7 @@ class ManagementNavBar extends Component {
                         <div id="content">
                             <a href="#" class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</a>
                             <Switch>
-                                {/* student portal links */}
+                                {/* management portal links */}
                                 <Route path="/management-portal/view-student-details" component={StudentDetailsMaintain} />
                                 <Route path="/management-portal/staff-details" component={StaffDetailsMaintain} />
                                 <Route path="/management-portal/department-details" component={DepartmentDetailsMaintain} />
@@ -352,6 +358,25 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/add-internal-details" component={AddInternalDetails} />
                                 <Route path="/management-portal/add-semester-details" component={AddSemesterDetails} />
                                 <Route path="/management-portal/view-semester-details" component={ViewSemesterDetails} />
+
+                                {/* hod portal links */}
+                                <Route path="/hod-portal/view-student-details" component={StudentDetailsMaintain} />
+                                <Route path="/hod-portal/staff-details" component={StaffDetailsMaintain} />
+                                <Route path="/hod-portal/department-details" component={DepartmentDetailsMaintain} />
+                                <Route path="/hod-portal/course-details" component={CourseDetailsMaintain} />
+                                <Route path="/hod-portal/paper-details" component={PaperDetailsMaintain} />
+
+                                <Route path="/hod-portal/add-student-details" component={AddStudentDetails} />
+                                <Route path="/hod-portal/add-paper-details" component={AddPaperDetails} />
+                                <Route path="/hod-portal/add-department-details" component={AddDepartmentDetails} />
+
+                                <Route path="/hod-portal/student-attendance" component={Attendance} />
+                                <Route path="/hod-portal/staff-attendance" component={StaffAttendance} />
+                                <Route path="/hod-portal/edit-internal-details" component={EditInternalDetails} />
+                                <Route path="/hod-portal/add-internal-details" component={AddInternalDetails} />
+                                <Route path="/hod-portal/add-semester-details" component={AddSemesterDetails} />
+                                <Route path="/hod-portal/view-semester-details" component={ViewSemesterDetails} />
+
                             </Switch>
                         </div>
                     </div>

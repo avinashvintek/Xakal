@@ -41,7 +41,7 @@ class Attendance extends Component {
      */
     getPortal() {
         const pathArray = this.props.location.pathname.split('/');
-        if (pathArray.includes('management-portal')) {
+        if (pathArray.includes('management-portal') || pathArray.includes('hod-portal')) {
             this.setState({ isManagementPortal: true, });
             this.fetchDepartmentDetails();
         } else {

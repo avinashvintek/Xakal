@@ -7,6 +7,7 @@ import StudentsPortal from './components/students-portal';
 import * as serviceWorker from './serviceWorker';
 import StaffPortal from './components/staff-portal';
 import ManagementPortal from './components/management-portal';
+import HODPortal from './components/hod-portal';
 const routing = (
     <Router>
         <div>
@@ -14,6 +15,7 @@ const routing = (
             <Route path="/students-portal" component={StudentsPortal} />
             <Route path="/staff-portal" component={StaffPortal} />
             <Route path="/management-portal" component={ManagementPortal} />
+            <Route path="/hod-portal" component={HODPortal} />
             {/* <Route path="/students-portal/class-notes" component={ClassNotes} /> */}
         </div>
     </Router>
