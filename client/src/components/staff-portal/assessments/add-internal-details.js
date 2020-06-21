@@ -24,7 +24,7 @@ class AddInternalDetails extends Component {
             userID: '',
             studentDetails: [],
             courseList: [],
-            values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '' }]
+            values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedCourse: '', selectedStudent: '', selectedStudentName: '' }]
         };
         this.baseState = this.state;
 
@@ -116,7 +116,7 @@ class AddInternalDetails extends Component {
      * Adds the empty form element
      */
     addClick() {
-        this.setState(prevState => ({ values: [...prevState.values, { selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '' }] }))
+        this.setState(prevState => ({ values: [...prevState.values, { selectedModel: '', selectedCourse: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '', selectedCourse: '', }] }))
     }
 
     /**
@@ -184,7 +184,7 @@ class AddInternalDetails extends Component {
      * Resets to base state
      */
     resetForm() {
-        this.setState({ values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '' }] })
+        this.setState({ values: [{ selectedModel: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '', selectedCourse: '', }] })
     }
 
     /**
