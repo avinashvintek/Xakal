@@ -65,10 +65,12 @@ class AddDepartmentDetails extends Component {
     formSubmit() {
         let isUpdated = false;
         if (this.state.name && this.state.startingYear &&
-            this.state.email && this.state.studentCapacity && this.state.contact) {
+            this.state.email && this.state.studentCapacity && this.state.contact && this.state.hodName
+            && this.state.qualification && this.state.designation && this.state.hodEmail && this.state.hodContact && this.state.hodEmergencyContact
+            && this.state.joiningDate) {
             const params = {
                 name: this.state.name,
-                headOfDepartment: 'NA',
+                headOfDepartment: this.state.hodName,
                 updatedBy: this.state.userID.toUpperCase(),
                 updatedDate: new Date(Date.now()).toLocaleString(),
                 email: this.state.email,
@@ -84,9 +86,35 @@ class AddDepartmentDetails extends Component {
                     isUpdated = true;
                 })
                 .catch((err) => console.log(err));
+            this.insertHODDetails();
         } else {
             alert('Please give all the details')
         }
+    }
+
+    /**
+     * Inserts hod staff detailss
+     */
+    insertHODDetails() {
+        const params = {
+            name: this.state.hodName,
+            qualification: this.state.qualification,
+            uploadedBy: this.state.userID.toUpperCase(),
+            uploadedDate: new Date(Date.now()).toLocaleString(),
+            designation: this.state.designation,
+            email: this.state.hodEmail,
+            bloodGroup: 'NA',
+            contact: this.state.hodContact,
+            emergencyContact: this.state.hodEmergencyContact,
+            parentSpouse: 'NA',
+            joiningDate: this.state.joiningDate,
+            departmentName: this.state.name,
+        }
+        axios.post(`/xakal/staffdetail`, params)
+            .then(() => {
+                console.log('inserted')
+            })
+            .catch((err) => console.log(err));
     }
 
     render() {
@@ -96,6 +124,7 @@ class AddDepartmentDetails extends Component {
                     <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Add Department</h1>
                 </div>
                 <div className="row">
+                    <h3 className="h3 mb-0 text-gray-800 m-l-30">Department details</h3>
                     <div className="col-sm-12">
                         <div className="card-box">
                             <div className="card-body row">
@@ -137,6 +166,75 @@ class AddDepartmentDetails extends Component {
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="number" id="studentCapacity"
                                             onChange={this.handleFormChange.bind(this)} name="studentCapacity" />
                                         <label className={"mdl-textfield__label "}>Student Capacity</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <h3 className="h3 mb-0 text-gray-800 m-l-30">Add HOD details</h3>
+                    <div className="col-sm-12">
+                        <div className="card-box">
+                            <div className="card-body row">
+                                <div className="col-lg-2 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
+                                        <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="name"
+                                            onChange={this.handleFormChange.bind(this)} name="hodName" />
+                                        <label className={"mdl-textfield__label "}>Name</label>
+                                    </div>
+                                </div>
+                                <div className="col-lg-2 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
+                                        <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border"
+                                            type="text" id="designation"
+                                            onChange={this.handleFormChange.bind(this)} name="designation" />
+                                        <label className={"mdl-textfield__label "}>Designation</label>
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-1 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
+                                        <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="qualification"
+                                            onChange={this.handleFormChange.bind(this)} name="qualification" />
+                                        <label className={"mdl-textfield__label "}>Qualification</label>
+                                    </div>
+
+                                </div>
+                                <div className="col-lg-1 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
+                                        <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="number" id="contact"
+                                            onChange={this.handleFormChange.bind(this)} name="hodContact" />
+                                        <label className={"mdl-textfield__label "}>Mobile</label>
+                                    </div>
+                                </div>
+                                <div className="col-lg-1 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
+                                        <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="email" id="email"
+                                            onChange={this.handleFormChange.bind(this)} name="hodEmail" />
+                                        <label className={"mdl-textfield__label "}>Email</label>
+                                    </div>
+                                </div>
+                                <div className="col-lg-2 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width "}>
+                                        <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="emergencyContact"
+                                            onChange={this.handleFormChange.bind(this)} name="hodEmergencyContact" />
+                                        <label className={"mdl-textfield__label "}>Emergency contact</label>
+                                    </div>
+                                </div>
+                                <div className="col-lg-2 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width is-focused"}>
+                                        <input autoComplete="off" placeholder="" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="date" id="joiningDate"
+                                            onChange={this.handleFormChange.bind(this)} name="joiningDate" />
+                                        <label htmlFor="joiningDate" className={"mdl-textfield__label "}>Joining date</label>
                                     </div>
                                 </div>
                             </div>
