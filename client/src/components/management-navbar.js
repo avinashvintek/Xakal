@@ -22,6 +22,7 @@ import AddInternalDetails from './staff-portal/assessments/add-internal-details'
 import AddSemesterDetails from './management-portal/add-semester-details';
 import ViewSemesterDetails from './staff-portal/assessments/view-semester-details';
 import AddStaffDetails from './management-portal/add-staff-details';
+import ManagementDashboard from './management-portal/dashboard';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -421,6 +422,7 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/add-semester-details" component={AddSemesterDetails} />
                                 <Route path="/management-portal/view-semester-details" component={ViewSemesterDetails} />
                                 <Route path="/management-portal/add-staff-details" component={AddStaffDetails} />
+                                <Route path="/management-portal/dashboard" component={ManagementDashboard} />
 
                                 {/* hod portal links */}
                                 <Route path="/hod-portal/view-student-details" component={StudentDetailsMaintain} />
