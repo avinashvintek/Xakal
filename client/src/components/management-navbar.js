@@ -21,6 +21,7 @@ import EditInternalDetails from './staff-portal/assessments/edit-internal-detail
 import AddInternalDetails from './staff-portal/assessments/add-internal-details';
 import AddSemesterDetails from './management-portal/add-semester-details';
 import ViewSemesterDetails from './staff-portal/assessments/view-semester-details';
+import AddStaffDetails from './management-portal/add-staff-details';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -31,7 +32,8 @@ class ManagementNavBar extends Component {
             course: false,
             paper: false,
             accounts: false,
-            view: false,
+            attendance: false,
+            assessment: false,
             routerLink: ''
         }
     }
@@ -107,13 +109,25 @@ class ManagementNavBar extends Component {
     }
 
     /**
-     * Handles the sub menu of view
+     * Handles the sub menu of attendance
      */
-    onViewClick() {
-        if (this.state.view) {
-            this.setState({ view: false })
+    onAttendanceClick() {
+        if (this.state.attendance) {
+            this.setState({ attendance: false })
         } else {
-            this.setState({ view: true })
+            this.setState({ attendance: true })
+        }
+    }
+
+
+    /**
+     * Handles the sub menu of assessment
+     */
+    onAssessmentClick() {
+        if (this.state.assessment) {
+            this.setState({ assessment: false })
+        } else {
+            this.setState({ assessment: true })
         }
     }
 
@@ -197,7 +211,7 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                <Link to={{ pathname: `${this.state.routerLink}/add-staff-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Add Professors</span>
                                 </Link>
@@ -325,14 +339,37 @@ class ManagementNavBar extends Component {
                             : <span></span>
                         }
                         <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onViewClick.bind(this)}>
+                            <a className="nav-link collapsed" onClick={this.onAttendanceClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>View&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                {this.state.view ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                <span>Attendance&nbsp;</span>
+                                {this.state.attendance ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
                             </a>
                         </li>
-                        {this.state.view ? <div>
+                        {this.state.attendance ? <div>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/student-attendance`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Student Attendance</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/staff-attendance`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <span>Staff Attendance</span>
+                                </Link>
+                            </li>
+                        </div> : <div></div>}
+
+                        <li className="nav-item">
+                            <a className="nav-link collapsed" onClick={this.onAssessmentClick.bind(this)}>
+                                <i className="fas fa-fw fa-tachometer-alt"></i>
+                                <span>Assessment</span>
+                                {this.state.assessment ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                            </a>
+                        </li>
+                        {this.state.assessment ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/add-internal-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
@@ -355,18 +392,6 @@ class ManagementNavBar extends Component {
                                 <Link to={{ pathname: `${this.state.routerLink}/view-semester-details`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-wrench"></i>
                                     <span>Semester Results</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/student-attendance`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
-                                    <span>Student Attendance</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/staff-attendance`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
-                                    <span>Staff Attendance</span>
                                 </Link>
                             </li>
                         </div> : <div></div>}
@@ -395,6 +420,7 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/add-internal-details" component={AddInternalDetails} />
                                 <Route path="/management-portal/add-semester-details" component={AddSemesterDetails} />
                                 <Route path="/management-portal/view-semester-details" component={ViewSemesterDetails} />
+                                <Route path="/management-portal/add-staff-details" component={AddStaffDetails} />
 
                                 {/* hod portal links */}
                                 <Route path="/hod-portal/view-student-details" component={StudentDetailsMaintain} />
@@ -417,6 +443,8 @@ class ManagementNavBar extends Component {
                                 <Route path="/hod-portal/class-notes" component={classNotes} />
                                 <Route path="/hod-portal/xakal-notes" component={classNotes} />
                                 <Route path="/hod-portal/question-papers" component={classNotes} />
+                                <Route path="/hod-portal/add-staff-details" component={AddStaffDetails} />
+
                             </Switch>
                         </div>
                     </div>
