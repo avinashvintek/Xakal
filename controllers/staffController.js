@@ -51,4 +51,30 @@ router.put('/update/:id', (req, res) => {
         }
     })
 });
+
+router.post('/', (req, res) => {
+    var prdt = new StaffDetails({
+        name: req.body.name,
+        qualification: req.body.qualification,
+        uploadedBy: req.body.uploadedBy,
+        uploadedDate: req.body.uploadedDate,
+        designation: req.body.designation,
+        email: req.body.email,
+        bloodGroup: req.body.bloodGroup,
+        contact: req.body.contact,
+        emergencyContact: req.body.emergencyContact,
+        parentSpouse: req.body.parentSpouse,
+        joiningDate: req.body.joiningDate,
+        departmentName: req.body.departmentName,
+        userID: 'Sample ID'
+    });
+    prdt.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller')
+        }
+    });
+
+});
 module.exports = router;

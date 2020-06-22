@@ -56,39 +56,6 @@ class AddDepartmentDetails extends Component {
         if (event.target.value) {
             this.setState({ [event.target.name]: event.target.value })
         }
-
-        if (this.state.hasHODName === true) {
-            this.setState({ isHODFocussed: 'is-focused', onHODFocus: false, backgroundHOD: 'is-hidden' });
-        } else {
-            this.setState({ onHODFocus: false, backgroundHOD: 'is-hidden' });
-        }
-    }
-
-    /**
-    * Triggers when HOD dropdown is focused
-    */
-    onHODDropDownFocus() {
-        this.setState({ isHODFocussed: 'is-focused', onHODFocus: true, backgroundHOD: 'is-shown' });
-    }
-
-
-    /**
-    * Displays the list of HOD based on the API response
-    */
-    displayHOD() {
-        if (this.state && this.state.staffDetails && this.state.staffDetails.length) {
-            return this.state.staffDetails.map((singleHOD, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleHOD.name} onClick={this.handleHODChange.bind(this)}>{singleHOD.name}</a></li>)
-            });
-        }
-    }
-
-    /**
-     * Triggers when the HOD is changed and stores the values in state
-     * @param event form values 
-     */
-    handleHODChange(event) {
-        this.setState({ hodName: event.target.id, onHODFocus: false, backgroundHOD: 'is-hidden', background: 'is-hidden', hasHODValue: true });
     }
 
     /**
@@ -97,11 +64,11 @@ class AddDepartmentDetails extends Component {
      */
     formSubmit() {
         let isUpdated = false;
-        if (this.state.name && this.state.hodName && this.state.startingYear &&
+        if (this.state.name && this.state.startingYear &&
             this.state.email && this.state.studentCapacity && this.state.contact) {
             const params = {
                 name: this.state.name,
-                headOfDepartment: this.state.hodName,
+                headOfDepartment: 'NA',
                 updatedBy: this.state.userID.toUpperCase(),
                 updatedDate: new Date(Date.now()).toLocaleString(),
                 email: this.state.email,
@@ -138,21 +105,6 @@ class AddDepartmentDetails extends Component {
                                         <input autoComplete="off" onBlur={this.onFocusOut.bind(this)} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="name"
                                             onChange={this.handleFormChange.bind(this)} name="name" />
                                         <label className={"mdl-textfield__label "}>Name</label>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 p-t-20">
-                                    <div
-                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isHODFocussed}>
-                                        <input name="hodName" autoComplete="off" onFocus={this.onHODDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="hodName"
-                                            value={this.state.hodName} />
-                                        <label className={"mdl-textfield__label " + this.state.backgroundHOD}>HOD Name</label>
-                                        {this.state.onHODFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
-                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
-                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                    {this.displayHOD()}
-                                                </ul>
-                                            </div>
-                                        </div> : <p></p>}
                                     </div>
                                 </div>
                                 <div className="col-lg-4 p-t-20">
