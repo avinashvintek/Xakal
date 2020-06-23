@@ -16,7 +16,7 @@ var staffController = require('./controllers/staffController.js');
 var departmentController = require('./controllers/departmentController.js');
 var degreeCourseController = require('./controllers/degreeCourseController.js');
 var courseController = require('./controllers/courseController.js');
-
+var collegeController = require('./controllers/collegeController.js');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -38,6 +38,7 @@ app.use('/xakal/staffdetail', staffController);
 app.use('/xakal/departmentdetail', departmentController);
 app.use('/xakal/degreecoursedetail', degreeCourseController);
 app.use('/xakal/coursedetail', courseController);
+app.use('/xakal/collegedetail', collegeController);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"));

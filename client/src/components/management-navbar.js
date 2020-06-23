@@ -23,6 +23,7 @@ import AddSemesterDetails from './management-portal/add-semester-details';
 import ViewSemesterDetails from './staff-portal/assessments/view-semester-details';
 import AddStaffDetails from './management-portal/add-staff-details';
 import ManagementDashboard from './management-portal/dashboard';
+import StaffDashboard from './staff-portal/dashboard';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -446,6 +447,7 @@ class ManagementNavBar extends Component {
                                 <Route path="/hod-portal/xakal-notes" component={classNotes} />
                                 <Route path="/hod-portal/question-papers" component={classNotes} />
                                 <Route path="/hod-portal/add-staff-details" component={AddStaffDetails} />
+                                <Route path="/hod-portal/dashboard" component={StaffDashboard} />
 
                             </Switch>
                         </div>
