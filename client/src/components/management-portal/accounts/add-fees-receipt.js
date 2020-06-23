@@ -4,7 +4,6 @@ import '../../../minified-css/material-min.css';
 import '../../../styles/dropdowns.css';
 import '../../../styles/theme-style.css';
 import axios from 'axios';
-import * as moment from 'moment'
 class AddFeesReceipt extends Component {
     constructor(props) {
         super(props);
@@ -126,7 +125,7 @@ class AddFeesReceipt extends Component {
     handleFormChange(i, event) {
         if (event && event.target) {
             let values = [...this.state.values];
-            const { name, id, files } = event.target;
+            const { name, files } = event.target;
             values[i][name] = files[0];
             this.setState({ values });
             this.onChange(event)
@@ -206,7 +205,7 @@ class AddFeesReceipt extends Component {
     displayStudent(i) {
         if (this.state && this.state.studentDetails && this.state.studentDetails.length) {
             return this.state.studentDetails.map((singleStudent, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this, i)}>{singleStudent.name}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this, i)}>{singleStudent.name}</button></li>)
             });
         }
     }
@@ -227,7 +226,7 @@ class AddFeesReceipt extends Component {
     displayDepartment() {
         if (this.state && this.state.departmentDetails && this.state.departmentDetails.length) {
             return this.state.departmentDetails.map((singleDepartment, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this)}>{singleDepartment.name}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this)}>{singleDepartment.name}</button></li>)
             });
         }
     }

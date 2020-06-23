@@ -160,12 +160,12 @@ class ManagementNavBar extends Component {
             <Router>
                 <div id="wrapper">
                     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-                        <a className="sidebar-brand d-flex align-items-center justify-content-center">
+                        <button className="sidebar-brand d-flex align-items-center justify-content-center">
                             <div className="sidebar-brand-icon rotate-n-15">
                                 <i className="fas fa-laugh-wink"></i>
                             </div>
                             <div className="sidebar-brand-text mx-3 logo-color">Xakal</div>
-                        </a>
+                        </button>
                         <hr className="sidebar-divider my-0" />
                         <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/dashboard`, userID: this.props.userID }} className="nav-link">
@@ -175,12 +175,12 @@ class ManagementNavBar extends Component {
                         </li>
                         <hr className="sidebar-divider" />
                         <li className="nav-item">
-                            <a className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
+                            <button className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Students &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 {this.state.showClassNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg notes-margin " aria-hidden="true"></i>}
-                            </a>
+                            </button>
                         </li>
                         {this.state.showClassNotes ? <div>
                             <li className="nav-item">
@@ -197,12 +197,12 @@ class ManagementNavBar extends Component {
                             </li>
                         </div> : <div></div>}
                         <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onProfessorsClick.bind(this)}>
+                            <button className="nav-link collapsed" onClick={this.onProfessorsClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Professors&nbsp;&nbsp;</span>
                                 {this.state.professors ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </a>
+                            </button>
                         </li>
                         {this.state.professors ? <div>
                             <li className="nav-item">
@@ -219,12 +219,12 @@ class ManagementNavBar extends Component {
                             </li>
                         </div> : <div></div>}
                         <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onDepartmentsClick.bind(this)}>
+                            <button className="nav-link collapsed" onClick={this.onDepartmentsClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Department</span>
                                 {this.state.departments ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </a>
+                            </button>
                         </li>
                         {this.state.departments ? <div>
                             <li className="nav-item">
@@ -242,12 +242,12 @@ class ManagementNavBar extends Component {
                         </div> : <div></div>}
                         {this.state.routerLink === '/management-portal' ? <div>
                             <li className="nav-item">
-                                <a className="nav-link collapsed" onClick={this.onCourseClick.bind(this)}>
+                                <button className="nav-link collapsed" onClick={this.onCourseClick.bind(this)}>
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Courses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     {this.state.course ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                         <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                                </a>
+                                </button>
                             </li>
                             {this.state.course ? <div>
                                 <li className="nav-item">
@@ -265,12 +265,12 @@ class ManagementNavBar extends Component {
                             </div> : <div></div>}
                         </div> : <span></span>}
                         <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onPaperClick.bind(this)}>
+                            <button className="nav-link collapsed" onClick={this.onPaperClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Papers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 {this.state.paper ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </a>
+                            </button>
                         </li>
                         {this.state.paper ? <div>
                             <li className="nav-item">
@@ -290,12 +290,12 @@ class ManagementNavBar extends Component {
 
                         {this.state.routerLink === '/hod-portal' ? <div>
                             <li className="nav-item">
-                                <a className="nav-link" onClick={this.onNotesClick.bind(this)}>
+                                <button className="nav-link" onClick={this.onNotesClick.bind(this)}>
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>College Notes</span>
                                     {this.state.showNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
                                         <i className="fa fa-angle-right fa-lg notes-margin " aria-hidden="true"></i>}
-                                </a>
+                                </button>
                             </li>
                             {this.state.showNotes ? <div>
                                 <li className="nav-item">
@@ -315,12 +315,12 @@ class ManagementNavBar extends Component {
                         </div> : <span></span>}
                         {this.state.routerLink === '/management-portal' ? <div>
                             <li className="nav-item">
-                                <a className="nav-link collapsed" onClick={this.onAccountsClick.bind(this)}>
+                                <button className="nav-link collapsed" onClick={this.onAccountsClick.bind(this)}>
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Accounts&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     {this.state.accounts ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                         <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                                </a>
+                                </button>
                             </li>
                             {this.state.accounts ? <div>
                                 <li className="nav-item">
@@ -340,12 +340,12 @@ class ManagementNavBar extends Component {
                             : <span></span>
                         }
                         <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onAttendanceClick.bind(this)}>
+                            <button className="nav-link collapsed" onClick={this.onAttendanceClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Attendance&nbsp;</span>
                                 {this.state.attendance ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </a>
+                            </button>
                         </li>
                         {this.state.attendance ? <div>
                             <li className="nav-item">
@@ -363,12 +363,12 @@ class ManagementNavBar extends Component {
                         </div> : <div></div>}
 
                         <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onAssessmentClick.bind(this)}>
+                            <button className="nav-link collapsed" onClick={this.onAssessmentClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Assessment</span>
                                 {this.state.assessment ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </a>
+                            </button>
                         </li>
                         {this.state.assessment ? <div>
                             <li className="nav-item">
@@ -399,7 +399,7 @@ class ManagementNavBar extends Component {
                     </ul>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
-                            <a href="#" class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</a>
+                            <button class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</button>
                             <Switch>
                                 {/* management portal links */}
                                 <Route path="/management-portal/view-student-details" component={StudentDetailsMaintain} />

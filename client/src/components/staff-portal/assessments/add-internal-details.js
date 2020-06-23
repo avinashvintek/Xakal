@@ -116,7 +116,7 @@ class AddInternalDetails extends Component {
      * Adds the empty form element
      */
     addClick() {
-        this.setState(prevState => ({ values: [...prevState.values, { selectedModel: '', selectedCourse: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '', selectedCourse: '', }] }))
+        this.setState(prevState => ({ values: [...prevState.values, { selectedModel: '', selectedCourse: '', selectedSemester: '', uploadedMark: '', selectedStudent: '', selectedStudentName: '' }] }))
     }
 
     /**
@@ -193,7 +193,7 @@ class AddInternalDetails extends Component {
     displayStudent(i) {
         if (this.state && this.state.studentDetails && this.state.studentDetails.length) {
             return this.state.studentDetails.map((singleStudent, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this, i)}>{singleStudent.name}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this, i)}>{singleStudent.name}</button></li>)
             });
         }
     }
@@ -214,7 +214,7 @@ class AddInternalDetails extends Component {
     displayDepartment() {
         if (this.state && this.state.departmentDetails && this.state.departmentDetails.length) {
             return this.state.departmentDetails.map((singleDepartment, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this)}>{singleDepartment.name}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this)}>{singleDepartment.name}</button></li>)
             });
         }
     }
@@ -391,7 +391,7 @@ class AddInternalDetails extends Component {
     displayCourse(i) {
         if (this.state && this.state.courseList && this.state.courseList.length) {
             return this.state.courseList.map((singleCourse, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleCourse.course} onClick={this.handleCourseChange.bind(this, i)}>{singleCourse.course}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleCourse.course} onClick={this.handleCourseChange.bind(this, i)}>{singleCourse.course}</button></li>)
             });
         }
     }

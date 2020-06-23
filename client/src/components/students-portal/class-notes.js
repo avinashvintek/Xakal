@@ -326,7 +326,7 @@ class ClassNotes extends Component {
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>
                     <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.description}</td>
-                    <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" href={singleData.uploadedFile}>Download File</a></td>
+                    <td className={"column100 column3 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" rel="noopener noreferrer" href={singleData.uploadedFile}>Download File</a></td>
                     <td className={"column100 column4 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
                     <td className={"column100 column5 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
                 </tr>
@@ -340,7 +340,7 @@ class ClassNotes extends Component {
     displayCourse() {
         if (this.state && this.state.courseList && this.state.courseList.length) {
             return this.state.courseList.map((singleCourse, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</button></li>)
             });
         }
     }

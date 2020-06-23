@@ -69,12 +69,12 @@ class NavBar extends Component {
             <Router>
                 <div id="wrapper">
                     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-                        <a className="sidebar-brand d-flex align-items-center justify-content-center">
+                        <button className="sidebar-brand d-flex align-items-center justify-content-center">
                             <div className="sidebar-brand-icon rotate-n-15">
                                 <i className="fas fa-laugh-wink"></i>
                             </div>
                             <div className="sidebar-brand-text mx-3 logo-color">Xakal</div>
-                        </a>
+                        </button>
                         <hr className="sidebar-divider my-0" />
                         <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/dashboard`, userID: this.props.userID }} className="nav-link">
@@ -95,12 +95,12 @@ class NavBar extends Component {
                             </li>}
                         <hr className="sidebar-divider" />
                         <li className="nav-item">
-                            <a className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
+                            <button className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>College Notes</span>
                                 {this.state.showClassNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg notes-margin " aria-hidden="true"></i>}
-                            </a>
+                            </button>
                         </li>
                         {this.state.showClassNotes ? <div>
                             <li className="nav-item">
@@ -123,12 +123,12 @@ class NavBar extends Component {
                             </li>
                         </div> : <div></div>}
                         <li className="nav-item">
-                            <a className="nav-link collapsed" onClick={this.onAssessmentsClick.bind(this)}>
+                            <button className="nav-link collapsed" onClick={this.onAssessmentsClick.bind(this)}>
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Assessments</span>
                                 {this.state.assessments ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
                                     <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </a>
+                            </button>
                         </li>
                         {this.state.assessments ? <div>
                             <li className="nav-item">
@@ -177,7 +177,7 @@ class NavBar extends Component {
                     </ul>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
-                            <a href="#" class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</a>
+                            <button class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</button>
                             
                             <Switch>
                                 {/* student portal links */}

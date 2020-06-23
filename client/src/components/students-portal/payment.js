@@ -131,7 +131,7 @@ class Payment extends Component {
                     <td className="column100 column1" data-column="column1">{++index}</td>
                     <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.description}</td>
                     <td className={"column100 column3 "} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.paymentDate}</td>
-                    <td className={"column100 column4 "} onMouseEnter={this.receiptHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" href={singleData.uploadedReceipt}>Download Receipt</a></td>
+                    <td className={"column100 column4 "} onMouseEnter={this.receiptHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" rel="noopener noreferrer" href={singleData.uploadedReceipt}>Download Receipt</a></td>
                 </tr>
             )
         })

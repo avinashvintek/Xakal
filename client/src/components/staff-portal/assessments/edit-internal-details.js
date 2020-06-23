@@ -202,7 +202,7 @@ class EditInternalDetails extends Component {
                     <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData[modelName]}</td>
                     <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
                     <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
-                    <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Edit</a></td>
+                    <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><button onClick={this.redirect.bind(this)}>Edit</button></td>
                 </tr>
             )
         })
@@ -300,7 +300,7 @@ class EditInternalDetails extends Component {
                     <td className={"column100 column3 "} key={index++} onMouseEnter={this.marksHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><input type="number" className="add-border" onChange={this.updatedMarks.bind(this, singleData)} defaultValue={singleData[modelName]}></input></td>
                     <td className={"column100 column4 "} key={index++} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
                     <td className={"column100 column5 "} key={index++} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
-                    <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a onClick={this.redirect.bind(this)}>Add / Edit</a></td>
+                    <td className={"column100 column6 "} key={index++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><button onClick={this.redirect.bind(this)}>Add / Edit</button></td>
                 </tr>
             )
         })
@@ -312,7 +312,7 @@ class EditInternalDetails extends Component {
     displayCourse() {
         if (this.state && this.state.courseList && this.state.courseList.length) {
             return this.state.courseList.map((singleCourse, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleCourse.course} onClick={this.courseChange}>{singleCourse.course}</button></li>)
             });
         }
     }

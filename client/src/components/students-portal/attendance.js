@@ -182,7 +182,7 @@ class Attendance extends Component {
     displayDepartment() {
         if (this.state && this.state.departmentDetails && this.state.departmentDetails.length) {
             return this.state.departmentDetails.map((singleDepartment, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this)}>{singleDepartment.name}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this)}>{singleDepartment.name}</button></li>)
             });
         }
     }
@@ -236,7 +236,7 @@ class Attendance extends Component {
     displayStudent() {
         if (this.state && this.state.studentDetails && this.state.studentDetails.length) {
             return this.state.studentDetails.map((singleStudent, index) => {
-                return (<li className="mdl-menu__item animation" key={index}><a id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this)}>{singleStudent.name}</a></li>)
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this)}>{singleStudent.name}</button></li>)
             });
         }
     }
