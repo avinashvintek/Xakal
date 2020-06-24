@@ -8,11 +8,15 @@ class StaffDashboard extends Component {
         super(props);
         this.state = {
             staffDetails: [],
+            isEdit: false,
         };
         this.baseState = this.state;
     }
 
     componentDidMount() {
+        if (this.props && this.props.location && this.props.location.userID) {
+            this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
+        }
         this.fetchStaffDetails();
     }
 
@@ -25,6 +29,59 @@ class StaffDashboard extends Component {
                 });
         }
     }
+
+    /**
+     * sets the edit flag to true
+     */
+    redirect() {
+        this.setState({ isEdit: true });
+    }
+
+    /**
+     * Reverts back to the original state
+     */
+    discardChanges() {
+        this.setState({ isEdit: false });
+    }
+
+    /**
+     * Triggers when the form is changed and stores the values in state
+     * @param event form values 
+     */
+    handleFormChange(event) {
+        if (event.target.value) {
+            this.setState({ [event.target.name]: event.target.value })
+        }
+    }
+
+    updateDetails() {
+        let isUpdated = false;
+        const params = {
+            name: this.state.staffDetails.name,
+            qualification: this.state.staffDetails.qualification,
+            uploadedBy: this.state.userID.toUpperCase(),
+            uploadedDate: new Date(Date.now()).toLocaleString(),
+            designation: this.state.staffDetails.designation,
+            email: this.state.email ? this.state.email : this.state.staffDetails.email,
+            bloodGroup: this.state.staffDetails.bloodGroup,
+            contact: this.state.contact ? this.state.contact : this.state.staffDetails.contact,
+            emergencyContact: this.state.emergencyContact ? this.state.emergencyContact : this.state.staffDetails.emergencyContact,
+            parentSpouse: this.state.parentSpouse ? this.state.parentSpouse : this.state.staffDetails.parentSpouse,
+            joiningDate: this.state.staffDetails.joiningDate,
+            departmentName: this.state.staffDetails.departmentName,
+        }
+        axios.put(`/xakal/staffdetail/update/${this.state.staffDetails._id}`, params)
+            .then(() => {
+                if (!isUpdated) {
+                    alert('Updated Successfully');
+                }
+                isUpdated = true;
+                this.setState({ isEdit: false });
+                this.fetchStaffDetails()
+            })
+            .catch((err) => console.log(err));
+    }
+
 
     render() {
         return (
@@ -96,17 +153,35 @@ class StaffDashboard extends Component {
                                             <li><i className="fa fa-bookmark m-r-10"></i>Email ID:</li>
                                             <li><i className="fa fa-bookmark m-r-10"></i>Parents / Spouse name:</li>
                                         </ul>
-                                        <ul className="list-unstyled">
+                                        {this.state.isEdit === true ? <ul>
                                             <li>{this.state.staffDetails.name}</li>
                                             <li>{this.state.staffDetails.designation}</li>
                                             <li>{this.state.staffDetails.qualification}</li>
                                             <li>{this.state.staffDetails.bloodGroup}</li>
-                                            <li>{this.state.staffDetails.contact}</li>
-                                            <li>{this.state.staffDetails.emergencyContact}</li>
-                                            <li>{this.state.staffDetails.email}</li>
-                                            <li>{this.state.staffDetails.parentSpouse}</li>
-                                        </ul>
+                                            <li><input name="contact" onChange={this.handleFormChange.bind(this)} className="add-border"
+                                                type="text" defaultValue={this.state.staffDetails.contact}></input></li>
+                                            <li><input name="emergencyContact" onChange={this.handleFormChange.bind(this)} className="add-border"
+                                                type="text" defaultValue={this.state.staffDetails.emergencyContact}></input></li>
+                                            <li><input name="email" onChange={this.handleFormChange.bind(this)} className="add-border"
+                                                type="text" defaultValue={this.state.staffDetails.email}></input></li>
+                                            <li><input name="parentSpouse" onChange={this.handleFormChange.bind(this)} className="add-border"
+                                                type="text" defaultValue={this.state.staffDetails.parentSpouse}></input></li>
+                                        </ul> :
+                                            <ul className="list-unstyled">
+                                                <li>{this.state.staffDetails.name}</li>
+                                                <li>{this.state.staffDetails.designation}</li>
+                                                <li>{this.state.staffDetails.qualification}</li>
+                                                <li>{this.state.staffDetails.bloodGroup}</li>
+                                                <li>{this.state.staffDetails.contact}</li>
+                                                <li>{this.state.staffDetails.emergencyContact}</li>
+                                                <li>{this.state.staffDetails.email}</li>
+                                                <li>{this.state.staffDetails.parentSpouse}</li>
+                                            </ul>}
                                     </div>
+                                    <button type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
+                                    {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
+                                    {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
+
                                 </div>
                             </div>
                         </div>

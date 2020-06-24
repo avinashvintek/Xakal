@@ -24,6 +24,9 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
+        if (this.props && this.props.location && this.props.location.userID) {
+            this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
+        }
         this.fetchStudentDetails();
     }
 
@@ -44,6 +47,58 @@ class Dashboard extends Component {
                 this.calculateGPA(response.data);
             });
     }
+
+    /**
+     * sets the edit flag to true
+     */
+    redirect() {
+        this.setState({ isEdit: true });
+    }
+
+    /**
+     * Reverts back to the original state
+     */
+    discardChanges() {
+        this.setState({ isEdit: false });
+    }
+
+    /**
+     * Triggers when the form is changed and stores the values in state
+     * @param event form values 
+     */
+    handleFormChange(event) {
+        if (event.target.value) {
+            this.setState({ [event.target.name]: event.target.value })
+        }
+    }
+
+    updateDetails() {
+        let isUpdated = false;
+        const params = {
+            name: this.state.studentDetails.name,
+            course: this.state.studentDetails.course,
+            uploadedBy: this.state.userID.toUpperCase(),
+            uploadedDate: new Date(Date.now()).toLocaleString(),
+            branch: this.state.studentDetails.branch,
+            email: this.state.email ? this.state.email : this.state.studentDetails.email,
+            bloodGroup: this.state.studentDetails.bloodGroup,
+            contact: this.state.contact ? this.state.contact : this.state.studentDetails.contact,
+            emergencyContact: this.state.emergencyContact ? this.state.emergencyContact : this.state.studentDetails.emergencyContact,
+            parentName: this.state.parentName ? this.state.parentName : this.state.studentDetails.parentName,
+            admissionDate: this.state.studentDetails.admissionDate,
+        }
+        axios.put(`/xakal/studentdetail/update/${this.state.studentDetails._id}`, params)
+            .then(() => {
+                if (!isUpdated) {
+                    alert('Updated Successfully');
+                }
+                isUpdated = true;
+                this.setState({ isEdit: false });
+                this.fetchStudentDetails()
+            })
+            .catch((err) => console.log(err));
+    }
+
 
     //gpa = (grades*credits) / credits
     calculateGPA(response) {
@@ -77,7 +132,7 @@ class Dashboard extends Component {
             });
             const gpa = gradeCredit / totalCredit;
             const percentage = gpa * 10;
-            obj[stateValue] = percentage;
+            obj[stateValue] = percentage > 0 ? percentage : 0;
             const counter = this.state.counter + 1;
             this.setState({ lastSemester: gpa, counter: counter })
             this.setState(obj);
@@ -86,7 +141,9 @@ class Dashboard extends Component {
 
     calculateCGPA() {
         const cgpa = (this.state.semester1 + this.state.semester2 + this.state.semester3 + this.state.semester4 + this.state.semester5 + this.state.semester6 + this.state.semester7 + this.state.semester8) / (this.state.counter * 10);
-        this.setState({ cgpa: cgpa })
+        if (cgpa > 0) {
+            this.setState({ cgpa: cgpa })
+        }
     }
 
     render() {
@@ -159,17 +216,34 @@ class Dashboard extends Component {
                                             <li><i className="fa fa-bookmark m-r-10"></i>Email ID:</li>
                                             <li><i className="fa fa-bookmark m-r-10"></i>Parents name:</li>
                                         </ul>
-                                        <ul className="list-unstyled">
+                                        {this.state.isEdit === true ? <ul>
                                             <li>{this.state.studentDetails.name}</li>
                                             <li>{this.state.studentDetails.course}</li>
                                             <li>{this.state.studentDetails.branch}</li>
                                             <li>{this.state.studentDetails.bloodGroup}</li>
-                                            <li>{this.state.studentDetails.contact}</li>
-                                            <li>{this.state.studentDetails.emergencyContact}</li>
-                                            <li>{this.state.studentDetails.email}</li>
-                                            <li>{this.state.studentDetails.parentName}</li>
-                                        </ul>
+                                            <li><input name="contact" onChange={this.handleFormChange.bind(this)} className="add-border"
+                                                type="text" defaultValue={this.state.studentDetails.contact}></input></li>
+                                            <li><input name="emergencyContact" onChange={this.handleFormChange.bind(this)} className="add-border"
+                                                type="text" defaultValue={this.state.studentDetails.emergencyContact}></input></li>
+                                            <li><input name="email" onChange={this.handleFormChange.bind(this)} className="add-border"
+                                                type="text" defaultValue={this.state.studentDetails.email}></input></li>
+                                            <li><input name="parentName" onChange={this.handleFormChange.bind(this)} className="add-border"
+                                                type="text" defaultValue={this.state.studentDetails.parentName}></input></li>
+                                        </ul> :
+                                            <ul className="list-unstyled">
+                                                <li>{this.state.studentDetails.name}</li>
+                                                <li>{this.state.studentDetails.course}</li>
+                                                <li>{this.state.studentDetails.branch}</li>
+                                                <li>{this.state.studentDetails.bloodGroup}</li>
+                                                <li>{this.state.studentDetails.contact}</li>
+                                                <li>{this.state.studentDetails.emergencyContact}</li>
+                                                <li>{this.state.studentDetails.email}</li>
+                                                <li>{this.state.studentDetails.parentName}</li>
+                                            </ul>}
                                     </div>
+                                    <button type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
+                                    {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
+                                    {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
                                 </div>
                             </div>
                         </div>

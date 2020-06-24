@@ -89,7 +89,6 @@ class ManagementDashboard extends Component {
 
     updateDetails() {
         let isUpdated = false;
-        console.log(this.state)
         const params = {
             name: this.state.name ? this.state.name : this.state.collegeDetail.name,
             collegeCode: this.state.collegeDetail.collegeCode,

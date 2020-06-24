@@ -5,7 +5,7 @@ var { StaffDetails } = require('../models/staff-portal/staff.model.js');
 
 router.get('/:userID', (req, res) => {
     let userID = req.params.userID.toUpperCase();
-    StaffDetails.findOne({ userID: userID }, { _id: 0, }).then((eachOne) => {
+    StaffDetails.findOne({ userID: userID }, {}).then((eachOne) => {
         res.json(eachOne)
     })
 });
