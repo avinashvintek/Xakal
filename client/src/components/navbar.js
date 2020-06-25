@@ -16,6 +16,7 @@ import StaffDashboard from './staff-portal/dashboard';
 import StudentDetailsMaintain from './staff-portal/student-details-maintain';
 import Login from './login';
 import EditInternalDetails from './staff-portal/assessments/edit-internal-details';
+import Forum from './forum';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +40,7 @@ class NavBar extends Component {
     }
 
     componentWillUnmount() {
-        this.unlisten();
+        // this.unlisten();
     }
 
     /**
@@ -83,7 +84,7 @@ class NavBar extends Component {
                             </Link>
                         </li>
                         {this.state.routerLink === '/students-portal' ? <li className="nav-item">
-                            <Link to={`${this.state.routerLink}/dashboard`} className="nav-link">
+                            <Link to={`${this.state.routerLink}/forum`} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Forum</span>
                             </Link>
@@ -189,6 +190,7 @@ class NavBar extends Component {
                                 <Route path="/students-portal/internal-details" component={InternalDetails} />
                                 <Route path="/students-portal/attendance" component={Attendance} />
                                 <Route path="/students-portal/payment" component={Payment} />
+                                <Route path="/students-portal/forum" component={Forum} />
 
                                 {/* staff portal links */}
                                 <Route path="/staff-portal/class-notes" component={classNotes} />
