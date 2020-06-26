@@ -75,9 +75,14 @@ class Forum extends Component {
                                                                 </li>
                                                                 <li>
                                                                     <div className="post-box panel">
+                                                                        <span
+                                                                            class="text-muted text-small"><i
+                                                                                class="fa fa-clock-o"
+                                                                                aria-hidden="true"></i>
+																			13 minutes ago</span>
                                                                         <div className="post-img"><img
-                                                                            src="../assets/img/slider/fullimage1.jpg"
-                                                                            className="img-responsive" alt="" /></div>
+                                                                            src={require('../images/staffProfile.png')}
+                                                                            className="img-responsive" height="50%" width="50%" alt="" /></div>
                                                                         <div className="p-l-15 p-b-15">
                                                                             <h4 className="">Lorem Ipsum is simply dummy
 																				text of the printing</h4>

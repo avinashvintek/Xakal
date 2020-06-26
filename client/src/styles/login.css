@@ -9,7 +9,7 @@
   
   body, html {
       height: 100%;
-      font-family: Roboto, sans-serif;
+      font-family: Raleway, sans-serif;
   }
     
   /*---------------------------------------------*/
@@ -18,7 +18,7 @@
   }
   
   p {
-      font-family: Roboto;
+      font-family: Raleway;
       font-size: 14px;
       line-height: 1.7;
       color: #666666;
@@ -85,14 +85,14 @@
   /*//////////////////////////////////////////////////////////////////
   [ Utility ]*/
   .txt1 {
-    font-family: Roboto;
+    font-family: Raleway;
     font-size: 15px;
     color: #999999;
     line-height: 1.5;
   }
   
   .txt2 {
-    font-family: Roboto;
+    font-family: Raleway;
     font-size: 15px;
     color: #57b846;
     line-height: 1.5;
@@ -136,7 +136,7 @@
   
   .login100-form-title {
     display: block;
-    font-family: Roboto;
+    font-family: Raleway;
     font-size: 39px;
     color: #009999;
     line-height: 1.2;
@@ -166,7 +166,7 @@
   }
   
   .input100 {
-    font-family: Roboto;
+    font-family: Raleway;
     font-size: 18px;
     color: #555555;
     line-height: 1.2;
@@ -207,7 +207,7 @@
   }
   
   .focus-input100::after {
-    font-family: Roboto;
+    font-family: Raleway;
     font-size: 18px;
     color: #999999;
     line-height: 1.2;
@@ -266,7 +266,7 @@
   }
   
   .login100-form-btn {
-    font-family: Roboto;
+    font-family: Raleway;
     font-size: 16px;
     color: #fff;
     line-height: 1.2;
