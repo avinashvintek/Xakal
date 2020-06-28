@@ -83,17 +83,19 @@ class NavBar extends Component {
                                 <span>Dashboard</span>
                             </Link>
                         </li>
-                        {this.state.routerLink === '/students-portal' ? <li className="nav-item">
-                            <Link to={{ pathname: `${this.state.routerLink}/forum`, userID: this.props.userID }}  className="nav-link">
+                        {this.state.routerLink === '/students-portal' || this.state.routerLink === '/staff-portal' ? <li className="nav-item">
+                            <Link to={{ pathname: `${this.state.routerLink}/forum`, userID: this.props.userID }} className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Forum</span>
                             </Link>
-                        </li> : <li className="nav-item">
+                        </li> : <span></span>}
+                        {this.state.routerLink === '/staff-portal' ?
+                            <li className="nav-item">
                                 <Link to={`${this.state.routerLink}/view-student-details`} className="nav-link">
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Student Details</span>
                                 </Link>
-                            </li>}
+                            </li> : <span></span>}
                         <hr className="sidebar-divider" />
                         <li className="nav-item">
                             <button className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
@@ -179,7 +181,7 @@ class NavBar extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <button class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</button>
-                            
+
                             <Switch>
                                 {/* student portal links */}
                                 <Route path="/students-portal/class-notes" component={classNotes} />
@@ -201,8 +203,9 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/attendance" component={StaffAttendance} />
                                 <Route path="/staff-portal/salary" component={SalaryDetails} />
                                 <Route path="/staff-portal/view-student-details" component={StudentDetailsMaintain} />
+                                <Route path="/staff-portal/forum" component={Forum} />
 
-                                <Route exact path="/"  component={Login} />
+                                <Route exact path="/" component={Login} />
                             </Switch>
                         </div>
                     </div>

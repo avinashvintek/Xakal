@@ -30,7 +30,7 @@ class Forum extends Component {
                         this.setState({ userDetails: response.data });
                     });
             } else {
-                axios.get(`/xakal/staffdetail`)
+                axios.get(`/xakal/staffdetail/${this.props.location.userID.userID}`)
                     .then((response) => {
                         this.setState({ userDetails: response.data });
                     });
@@ -71,17 +71,17 @@ class Forum extends Component {
                             class="text-muted text-small"><i
                                 class="fa fa-clock-o"
                                 aria-hidden="true"></i>
-                            {singleDetail.postedTime} minutes ago</span>
+                            {this.timeConverter(singleDetail.postedTime)}</span>
                         <div className="post-img"><img
                             src={require('../images/staffProfile.png')}
                             className="img-responsive" height="50%" width="50%" alt="" /></div>
                         <div className="p-l-15 p-b-15">
                             <h4 className="">{singleDetail.fullName}</h4>
                             <p>{singleDetail.caption} </p>
-                            <p> <button
+                            <p> <button type="button" onClick={this.updateLikes.bind(this, singleDetail)}
                                 className="btn btn-raised btn-info btn-sm"><i
                                     className="fa fa-heart-o"
-                                    aria-hidden="true"></i>
+                                ></i>
                             Like ({singleDetail.likes}) </button> <button
                                     className="btn btn-raised bg-soundcloud btn-sm"><i
                                         className="zmdi zmdi-long-arrow-return"></i>
@@ -106,7 +106,7 @@ class Forum extends Component {
                 userID: this.state.userID,
                 fullName: this.state.userDetails.name,
                 likes: 0,
-                postedTime: new Date().toTimeString(),
+                postedTime: Math.floor(Date.now() / 1000),
                 caption: this.state.caption,
             }
             axios.post(`/xakal/forumdetail`, params)
@@ -121,6 +121,71 @@ class Forum extends Component {
                 .catch((err) => console.log(err));
         } else {
             alert('Please give the captions')
+        }
+    }
+
+    /**
+     * Updates the likes for selected photo
+     * @param singleDetail likes photo reference
+     */
+    updateLikes(singleDetail) {
+        const params = {
+            "likes": singleDetail.likes + 1
+        }
+        axios.put(`/xakal/forumdetail/updatelikes/${singleDetail._id}`, params)
+            .then(() => {
+                this.setState(prevState => ({
+                    ...prevState,
+                    forumDetails: this.state.forumDetails.filter((element) => {
+                        if (element._id === singleDetail._id) {
+                            element.likes = element.likes + 1;
+                        }
+                        return element
+                    })
+                }))
+            })
+            .catch((err) => console.log(err));
+    }
+
+    /**
+     * Converts timestamp to readable format
+     * @param timestamp response from API
+     */
+    timeConverter(timestamp) {
+        let a = new Date(timestamp * 1000);
+        let seconds = Math.floor((new Date() - a) / 1000);
+
+        let interval = Math.floor(seconds / 31536000);
+        if (interval > 1) {
+            return interval + ' year' + this.pluralCheck(interval);
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + ' month' + this.pluralCheck(interval);
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + ' day' + this.pluralCheck(interval);
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + ' hour' + this.pluralCheck(interval);
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + ' minute' + this.pluralCheck(interval);
+        }
+        return Math.floor(seconds) + ' second' + this.pluralCheck(seconds);
+    }
+
+    /**
+     * Checks for plural
+     */
+    pluralCheck(interval) {
+        if (interval === 1) {
+            return ' ago';
+        } else {
+            return 's ago';
         }
     }
 

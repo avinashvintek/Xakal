@@ -26,4 +26,17 @@ router.post('/', (req, res) => {
 
 });
 
+router.put('/updatelikes/:id', (req, res) => {
+    var id = req.params.id;
+    console.log(req, res.body)
+    // WallPosts.find({}).snapshot().forEach(element => {
+    WallPosts.findOneAndUpdate({ _id: id }, { "likes": req.body.likes }, { new: true, }, (err, doc) => {
+        if (!err) {
+            res.send(doc);
+        } else {
+            console.log('Error in controller', err)
+        }
+    })
+
+});
 module.exports = router;
