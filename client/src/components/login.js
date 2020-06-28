@@ -62,6 +62,7 @@ class Login extends Component {
             axios.get(`/xakal/user/${this.state.loginID}`)
                 .then((response) => {
                     if (response && response.data) {
+                        this.setState({ userRole: response.data.userRole })
                         this.resetLogin();
                         if (this.state.password === response.data.password) {
                             if (response.data.userRole === 'student') {
@@ -92,13 +93,13 @@ class Login extends Component {
 
     render() {
         if (this.state.studentRedirect) {
-            return <Redirect to={{ pathname: "students-portal", state: { userID: this.state.loginID } }} />
+            return <Redirect to={{ pathname: "students-portal", state: { userID: this.state.loginID, userRole: this.state.userRole } }} />
         } else if (this.state.staffRedirect) {
-            return <Redirect to={{ pathname: "staff-portal", state: { userID: this.state.loginID } }} />
+            return <Redirect to={{ pathname: "staff-portal", state: { userID: this.state.loginID, userRole: this.state.userRole } }} />
         } else if (this.state.managementRedirect) {
             return <Redirect to={{ pathname: "management-portal", state: { userID: this.state.loginID } }} />
         } else if (this.state.hodRedirect) {
-            return <Redirect to={{ pathname: "hod-portal", state: { userID: this.state.loginID } }} />
+            return <Redirect to={{ pathname: "hod-portal", state: { userID: this.state.loginID, userRole: this.state.userRole } }} />
         } else {
             return (
 

@@ -84,7 +84,7 @@ class NavBar extends Component {
                             </Link>
                         </li>
                         {this.state.routerLink === '/students-portal' ? <li className="nav-item">
-                            <Link to={`${this.state.routerLink}/forum`} className="nav-link">
+                            <Link to={{ pathname: `${this.state.routerLink}/forum`, userID: this.props.userID }}  className="nav-link">
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Forum</span>
                             </Link>
