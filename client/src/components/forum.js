@@ -65,6 +65,11 @@ class Forum extends Component {
     displayPosts() {
         if (this.state && this.state.forumDetails && this.state.forumDetails.length) {
             return this.state.forumDetails.map((singleDetail, index) => {
+                if (this.props.location && this.props.location.userID && singleDetail.likedUsers.includes(this.props.location.userID.userID.toUpperCase())) {
+                    singleDetail.isAlreadyLiked = "btn-success"
+                } else {
+                    singleDetail.isAlreadyLiked = "btn-info"
+                }
                 return (<li className="m-t-20" key={index}>
                     <div className="post-box panel">
                         <span
@@ -79,7 +84,7 @@ class Forum extends Component {
                             <h4 className="">{singleDetail.fullName}</h4>
                             <p>{singleDetail.caption} </p>
                             <p> <button type="button" onClick={this.updateLikes.bind(this, singleDetail)}
-                                className="btn btn-raised btn-info btn-sm"><i
+                                className={"btn btn-raised btn-sm " + singleDetail.isAlreadyLiked}><i
                                     className="fa fa-heart-o"
                                 ></i>
                             Like ({singleDetail.likes}) </button> <button
@@ -129,8 +134,19 @@ class Forum extends Component {
      * @param singleDetail likes photo reference
      */
     updateLikes(singleDetail) {
-        const params = {
-            "likes": singleDetail.likes + 1
+        let params;
+        if (singleDetail.isAlreadyLiked === 'btn-info') {
+            singleDetail.likedUsers.push(this.state.userID.toUpperCase())
+            params = {
+                "likes": singleDetail.likes + 1,
+                "likedUsers": singleDetail.likedUsers
+            }
+        } else if (singleDetail.isAlreadyLiked === 'btn-success') {
+            singleDetail.likedUsers = singleDetail.likedUsers.filter((response) => response !== this.state.userID.toUpperCase())
+            params = {
+                "likes": singleDetail.likes - 1,
+                "likedUsers": singleDetail.likedUsers
+            }
         }
         axios.put(`/xakal/forumdetail/updatelikes/${singleDetail._id}`, params)
             .then(() => {
@@ -138,7 +154,13 @@ class Forum extends Component {
                     ...prevState,
                     forumDetails: this.state.forumDetails.filter((element) => {
                         if (element._id === singleDetail._id) {
-                            element.likes = element.likes + 1;
+                            if (singleDetail.isAlreadyLiked === 'btn-info') {
+                                element.likes = element.likes + 1;
+                                element.isAlreadyLiked = 'btn-success'
+                            } else if (singleDetail.isAlreadyLiked === 'btn-success') {
+                                element.likes = element.likes - 1;
+                                element.isAlreadyLiked = 'btn-info'
+                            }
                         }
                         return element
                     })

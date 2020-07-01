@@ -15,6 +15,7 @@ router.post('/', (req, res) => {
         likes: req.body.likes,
         postedTime: req.body.postedTime,
         caption: req.body.caption,
+        likedUsers: []
     });
     prdt.save((err, docs) => {
         if (!err) {
@@ -28,9 +29,7 @@ router.post('/', (req, res) => {
 
 router.put('/updatelikes/:id', (req, res) => {
     var id = req.params.id;
-    console.log(req, res.body)
-    // WallPosts.find({}).snapshot().forEach(element => {
-    WallPosts.findOneAndUpdate({ _id: id }, { "likes": req.body.likes }, { new: true, }, (err, doc) => {
+    WallPosts.findOneAndUpdate({ _id: id }, { "likes": req.body.likes, "likedUsers": req.body.likedUsers }, { new: true, }, (err, doc) => {
         if (!err) {
             res.send(doc);
         } else {

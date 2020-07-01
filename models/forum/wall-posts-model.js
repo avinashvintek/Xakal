@@ -10,6 +10,9 @@ var WallPosts = mongoose.model('WallPosts', {
     likes: {
         type: Number
     },
+    likedUsers: [{
+        type: String
+    }],
     postedTime: {
         type: String
     },
