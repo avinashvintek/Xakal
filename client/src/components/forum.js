@@ -59,12 +59,33 @@ class Forum extends Component {
         }
     }
 
+
+    handleCommentsChange(singleDetail, event) {
+        console.log(singleDetail, event)
+        if (event.target && event.target.value) {
+            const value = event.target.value;
+            console.log(value);
+            this.setState(prevState => ({
+                ...prevState,
+                forumDetails: this.state.forumDetails.filter((element) => {
+                    if (element._id === singleDetail._id) {
+                        element.comments = value;
+                    }
+                    return element
+                })
+            }));
+        }
+    }
+
     /**
      * Displays the list of department based on the API response
      */
     displayPosts() {
         if (this.state && this.state.forumDetails && this.state.forumDetails.length) {
             return this.state.forumDetails.map((singleDetail, index) => {
+                if (singleDetail.isVisible !== 'isVisible') {
+                    singleDetail.isVisible = 'isHidden';
+                }
                 if (this.props.location && this.props.location.userID && singleDetail.likedUsers.includes(this.props.location.userID.userID.toUpperCase())) {
                     singleDetail.isAlreadyLiked = "btn-success"
                 } else {
@@ -88,9 +109,30 @@ class Forum extends Component {
                                     className="fa fa-heart-o"
                                 ></i>
                             Like ({singleDetail.likes}) </button> <button
+                                    onClick={this.visibleReplySection.bind(this, singleDetail)}
                                     className="btn btn-raised bg-soundcloud btn-sm"><i
                                         className="zmdi zmdi-long-arrow-return"></i>
                             Reply</button> </p>
+                        </div>
+                        <div hidden={singleDetail.isVisible === 'isHidden'} className="row">
+                            <div className="col-md-12">
+                                <div className="panel p-r-10 p-b-10 p-t-10">
+                                    <div className="col-md-2 block">
+                                        <img
+                                            src={require('../images/staffProfile.png')}
+                                            className="img-responsive pull-right" height="45%" width="45%" alt="" />
+                                    </div>
+                                    <div className="col-md-8 block">
+                                        <input type="text" value={singleDetail.comments} onChange={this.handleCommentsChange.bind(this, singleDetail)} name="comments" placeholder="Your comments..." className="add-border col-md-12"></input>
+                                    </div>
+                                    <button
+                                        onClick={this.insertComments.bind(this, singleDetail)}
+                                        className="col-md-2 block btn btn-info bg-soundcloud btn-sm">
+                                        Comment</button>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
 
@@ -108,11 +150,12 @@ class Forum extends Component {
         let isUpdated = false;
         if (this.state.caption) {
             const params = {
-                userID: this.state.userID,
+                userID: this.state.userID.toUpperCase(),
                 fullName: this.state.userDetails.name,
                 likes: 0,
                 postedTime: Math.floor(Date.now() / 1000),
                 caption: this.state.caption,
+                postID: `${this.state.userID.toUpperCase()}-${this.randomId()}`
             }
             axios.post(`/xakal/forumdetail`, params)
                 .then(() => {
@@ -127,6 +170,25 @@ class Forum extends Component {
         } else {
             alert('Please give the captions')
         }
+    }
+
+    // Generate random Id for images
+    randomId() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+
+    visibleReplySection(singleDetail) {
+        this.setState(prevState => ({
+            ...prevState,
+            forumDetails: this.state.forumDetails.filter((element) => {
+                if (element._id === singleDetail._id) {
+                    element.isVisible = 'isVisible';
+                }
+                return element
+            })
+        }))
     }
 
     /**
@@ -165,6 +227,29 @@ class Forum extends Component {
                         return element
                     })
                 }))
+            })
+            .catch((err) => console.log(err));
+    }
+
+    insertComments(singleDetail) {
+        let params;
+        params = {
+            postID: singleDetail.postID,
+            userID: this.state.userID.toUpperCase(),
+            comments: singleDetail.comments,
+            postedTime: Math.floor(Date.now() / 1000),
+        }
+        axios.post(`/xakal/comments`, params)
+            .then(() => {
+                this.setState(prevState => ({
+                    ...prevState,
+                    forumDetails: this.state.forumDetails.filter((element) => {
+                        if (element._id === singleDetail._id) {
+                            element.comments = '';
+                        }
+                        return element
+                    })
+                }));
             })
             .catch((err) => console.log(err));
     }

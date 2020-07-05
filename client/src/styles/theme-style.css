@@ -1863,3 +1863,7 @@ h6 .label {
     color: #18B2BF;
     text-decoration: none;
 }
+
+.block {
+    display: inline-block;
+}

@@ -1,7 +1,6 @@
 const express = require('express');
 var router = express.Router();
 var { WallPosts } = require('../models/forum/wall-posts-model');
-
 router.get('/', (req, res) => {
     WallPosts.find({}, {}).then((eachOne) => {
         res.json(eachOne)
@@ -10,6 +9,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     var prdt = new WallPosts({
+        postID: req.body.postID,
         userID: req.body.userID,
         fullName: req.body.fullName,
         likes: req.body.likes,
@@ -38,4 +38,5 @@ router.put('/updatelikes/:id', (req, res) => {
     })
 
 });
+
 module.exports = router;

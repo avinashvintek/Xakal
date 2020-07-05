@@ -1,28 +1,19 @@
 const mongoose = require('mongoose');
 
-var WallPosts = mongoose.model('WallPosts', {
+var PostComments = mongoose.model('PostComments', {
     postID: {
         type: String
     },
     userID: {
         type: String
     },
-    fullName: {
-        type: String
-    },
-    likes: {
-        type: Number
-    },
-    likedUsers: [{
-        type: String
-    }],
     postedTime: {
         type: String
     },
-    caption: {
+    comments: {
         type: String
     },
 });
 module.exports = {
-    WallPosts: WallPosts
+    PostComments: PostComments
 };
