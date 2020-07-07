@@ -50,6 +50,16 @@ class Forum extends Component {
     }
 
     /**
+     * gets the comments based on the post selected
+     */
+    fetchComments(selectedPost) {
+        axios.get(`/xakal/comments/get/${selectedPost.postID}`)
+            .then((response) => {
+                this.setState({ commentsList: response.data });
+            });
+    }
+
+    /**
     * Triggers when the form is changed and stores the values in state
     * @param event form values 
     */
@@ -133,12 +143,37 @@ class Forum extends Component {
 
                             </div>
 
+                            {this.displayComments()}
                         </div>
                     </div>
 
                 </li>)
 
             });
+        }
+    }
+
+    displayComments() {
+        if (this.state.commentsList && this.state.commentsList.length) {
+            return this.state.commentsList.map((singleDetail, index) => {
+                return (<div key={index} className="col-md-12">
+                    <div className="panel p-r-10 p-b-10 p-t-10">
+                        <div className="col-md-2 block">
+                            <img
+                                src={require('../images/staffProfile.png')}
+                                className="img-responsive pull-right" height="45%" width="45%" alt="" />
+                        </div>
+                        <div className="col-md-8 block">
+                            <p>{singleDetail.comments}</p>
+                        </div>
+                        <div className="col-md-2 block">
+                            <p>{this.timeConverter(singleDetail.postedTime)}</p>
+                        </div>
+                    </div>
+
+                </div>)
+            });
+
         }
     }
 
@@ -180,6 +215,7 @@ class Forum extends Component {
     }
 
     visibleReplySection(singleDetail) {
+        this.fetchComments(singleDetail);
         this.setState(prevState => ({
             ...prevState,
             forumDetails: this.state.forumDetails.filter((element) => {
@@ -250,6 +286,7 @@ class Forum extends Component {
                         return element
                     })
                 }));
+                this.fetchComments();
             })
             .catch((err) => console.log(err));
     }
