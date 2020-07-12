@@ -9,7 +9,7 @@ class StaffDashboard extends Component {
         this.state = {
             staffDetails: [],
             isEdit: false,
-            profileView: false
+            isSameProfile: true
         };
         this.baseState = this.state;
     }
@@ -18,7 +18,10 @@ class StaffDashboard extends Component {
         if (this.props && this.props.location && this.props.location.userID) {
             this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
         } else if (this.props && this.props.location && this.props.location.state && this.props.location.state.userID) {
-            this.setState({ routerLink: this.props.location.state.pathname, userID: this.props.location.state.userID, profileView: true })
+            this.setState({
+                routerLink: this.props.location.state.pathname, userID: this.props.location.state.userID,
+                isSameProfile: this.props.location.state.isSameProfile === true
+            })
         }
         this.fetchStaffDetails();
     }
@@ -181,7 +184,7 @@ class StaffDashboard extends Component {
                                                 <li>{this.state.staffDetails.parentSpouse}</li>
                                             </ul>}
                                     </div>
-                                    <button hidden={this.state.profileView} type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
+                                    <button hidden={!this.state.isSameProfile} type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
                                     {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
                                     {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
 

@@ -19,7 +19,7 @@ class Dashboard extends Component {
             lastSemester: 0,
             counter: 0,
             cgpa: 0,
-            profileView: false
+            isSameProfile: true
         };
         this.baseState = this.state;
     }
@@ -28,7 +28,10 @@ class Dashboard extends Component {
         if (this.props && this.props.location && this.props.location.userID) {
             this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
         } else if (this.props && this.props.location.state && this.props.location.state.userID) {
-            this.setState({ routerLink: this.props.location.state.pathname, userID: this.props.location.state.userID, profileView: true })
+            this.setState({
+                routerLink: this.props.location.state.pathname, userID: this.props.location.state.userID,
+                isSameProfile: this.props.location.state.isSameProfile === true
+            })
         }
         this.fetchStudentDetails();
     }
@@ -244,7 +247,7 @@ class Dashboard extends Component {
                                                 <li>{this.state.studentDetails.parentName}</li>
                                             </ul>}
                                     </div>
-                                    <button hidden={this.state.profileView} type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
+                                    <button hidden={!this.state.isSameProfile} type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
                                     {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
                                     {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
                                 </div>
@@ -261,7 +264,7 @@ class Dashboard extends Component {
                                     <div className="chart-pie pt-4 pb-2">
                                         <img src={profileImage} alt="Girl in a jacket" width="80%" height="100%" />
                                     </div>
-                                    <button hidden={!this.state.profileView} type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-110">Follow</button>
+                                    <button hidden={this.state.isSameProfile} type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-110">Follow</button>
                                 </div>
                             </div>
                         </div>
