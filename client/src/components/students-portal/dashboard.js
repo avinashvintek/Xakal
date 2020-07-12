@@ -20,7 +20,10 @@ class Dashboard extends Component {
             counter: 0,
             cgpa: 0,
             isSameProfile: true,
-            followText: 'Follow'
+            followText: 'Follow',
+            alreadyFollowed: false,
+            followedElement: null,
+            followingElement: null
         };
         this.baseState = this.state;
     }
@@ -79,6 +82,7 @@ class Dashboard extends Component {
                     this.setState({ followingCount: response.data.length });
                 });
         }
+        this.checkFollower()
     }
 
     /**
@@ -87,8 +91,11 @@ class Dashboard extends Component {
     checkFollowing(followerCount) {
         if (followerCount.length) {
             followerCount.forEach(element => {
-                if (element.followerUserID.toUpperCase() === this.props.location.state.loginID.toUpperCase() && !element.isDeleted) {
-                    this.setState({ followText: 'UnFollow' })
+                if (element.followerUserID.toUpperCase() === this.props.location.state.loginID.toUpperCase()) {
+                    this.setState({ alreadyFollowed: true, followedElement: element })
+                    if (!element.isDeleted) {
+                        this.setState({ followText: 'UnFollow' })
+                    }
                 }
             });
         }
@@ -99,6 +106,27 @@ class Dashboard extends Component {
             .then((response) => {
                 this.calculateGPA(response.data);
             });
+    }
+
+    /**
+    * Sets the follow text if already followed
+    */
+    checkFollower() {
+        const userID = this.props.location && this.props.location.state;
+        if (userID) {
+            axios.get(`/xakal/following/${userID.loginID.toUpperCase()}`)
+                .then((response) => {
+                    let followingCount = response.data;
+                    if (followingCount.length) {
+                        followingCount.forEach(element => {
+                            if (element.followedUserID.toUpperCase() === this.props.location.state.userID.toUpperCase()) {
+                                console.log(element)
+                                this.setState({ alreadyFollowed: true, followingElement: element })
+                            }
+                        });
+                    }
+                });
+        }
     }
 
     /**
@@ -156,7 +184,16 @@ class Dashboard extends Component {
      * Triggers to insert follow details
      */
     handleFollowClick() {
-        if (this.state.followText === 'Follow') {
+        if (this.state.alreadyFollowed) {
+            // update
+            if (this.state.followText === 'Follow') {
+                this.updateFollowerDetails(false);
+                this.updateFollowingDetails(false);
+            } else {
+                this.updateFollowerDetails(true);
+                this.updateFollowingDetails(true);
+            }
+        } else if (this.state.followText === 'Follow') {
             this.insertFollowerDetails();
             this.insertFollowingDetails();
         }
@@ -199,6 +236,52 @@ class Dashboard extends Component {
                     alert('Updated Successfully');
                 }
                 this.setState({ followText: 'UnFollow' })
+                isUpdated = true;
+                this.fetchFollowersCount()
+            })
+            .catch((err) => console.log(err));
+    }
+
+    /**
+   * update the following user
+   */
+    updateFollowingDetails(isDeleted) {
+        console.log('aaf', this.state.followingElement)
+        let isUpdated = false;
+        const params = {
+            isDeleted: isDeleted,
+            updatedDate: new Date(Date.now()).toLocaleString(),
+        }
+        axios.put(`/xakal/following/update/${this.state.followingElement._id}`, params)
+            .then(() => {
+                if (!isUpdated) {
+                    alert('Updated Successfully');
+                }
+                isUpdated = true;
+                this.fetchFollowingCount()
+            })
+            .catch((err) => console.log(err));
+    }
+
+    /**
+     * update the follower user
+     */
+    updateFollowerDetails(isDeleted) {
+        let isUpdated = false;
+        const params = {
+            isDeleted: isDeleted,
+            updatedDate: new Date(Date.now()).toLocaleString(),
+        }
+        axios.put(`/xakal/follower/update/${this.state.followedElement._id}`, params)
+            .then(() => {
+                if (!isUpdated) {
+                    alert('Updated Successfully');
+                }
+                if (isDeleted) {
+                    this.setState({ followText: 'Follow' })
+                } else {
+                    this.setState({ followText: 'UnFollow' })
+                }
                 isUpdated = true;
                 this.fetchFollowersCount()
             })

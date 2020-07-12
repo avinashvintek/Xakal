@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     let userID = req.params.id;
-    Followings.find({ userID: userID }, { _id: 0 }).then((eachOne) => {
+    Followings.find({ userID: userID, isDeleted: false }, {}).then((eachOne) => {
         res.json(eachOne)
     })
     // User.find({}, { userID: req.params.id }).then((eachOne) => {
@@ -34,4 +34,15 @@ router.post('/', (req, res) => {
 
 });
 
+router.put('/update/:id', (req, res) => {
+    var id = req.params.id;
+    Followings.findOneAndUpdate({ _id: id }, { "isDeleted": req.body.isDeleted, "updatedDate": req.body.updatedDate }, { new: true, }, (err, doc) => {
+        if (!err) {
+            res.send(doc);
+        } else {
+            console.log('Error in controller', err)
+        }
+    })
+
+});
 module.exports = router;
