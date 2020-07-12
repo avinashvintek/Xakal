@@ -17,6 +17,7 @@ import StudentDetailsMaintain from './staff-portal/student-details-maintain';
 import Login from './login';
 import EditInternalDetails from './staff-portal/assessments/edit-internal-details';
 import Forum from './forum';
+import ManagementDashboard from './management-portal/dashboard';
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -193,6 +194,10 @@ class NavBar extends Component {
                                 <Route path="/students-portal/attendance" component={Attendance} />
                                 <Route path="/students-portal/payment" component={Payment} />
                                 <Route path="/students-portal/forum" component={Forum} />
+                                <Route path="/students-portal/student-profile" component={Dashboard} />
+                                <Route path="/students-portal/staff-profile" component={StaffDashboard} />
+                                <Route path="/students-portal/manangement-profile" component={ManagementDashboard} />
+                                <Route path="/students-portal/hod-profile" component={StaffDashboard} />
 
                                 {/* staff portal links */}
                                 <Route path="/staff-portal/class-notes" component={classNotes} />
@@ -204,7 +209,10 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/salary" component={SalaryDetails} />
                                 <Route path="/staff-portal/view-student-details" component={StudentDetailsMaintain} />
                                 <Route path="/staff-portal/forum" component={Forum} />
-
+                                <Route path="/staff-portal/student-profile" component={Dashboard} />
+                                <Route path="/staff-portal/staff-profile" component={StaffDashboard} />
+                                <Route path="/staff-portal/manangement-profile" component={ManagementDashboard} />
+                                <Route path="/staff-portal/hod-profile" component={StaffDashboard} />
                                 <Route exact path="/" component={Login} />
                             </Switch>
                         </div>

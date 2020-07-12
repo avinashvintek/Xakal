@@ -24,6 +24,7 @@ import ViewSemesterDetails from './staff-portal/assessments/view-semester-detail
 import AddStaffDetails from './management-portal/add-staff-details';
 import ManagementDashboard from './management-portal/dashboard';
 import StaffDashboard from './staff-portal/dashboard';
+import Dashboard from './students-portal/dashboard';
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -425,6 +426,11 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/add-staff-details" component={AddStaffDetails} />
                                 <Route path="/management-portal/dashboard" component={ManagementDashboard} />
 
+                                <Route path="/management-portal/student-profile" component={Dashboard} />
+                                <Route path="/management-portal/staff-profile" component={StaffDashboard} />
+                                <Route path="/management-portal/manangement-profile" component={ManagementDashboard} />
+                                <Route path="/management-portal/hod-profile" component={StaffDashboard} />
+
                                 {/* hod portal links */}
                                 <Route path="/hod-portal/view-student-details" component={StudentDetailsMaintain} />
                                 <Route path="/hod-portal/staff-details" component={StaffDetailsMaintain} />
@@ -448,6 +454,11 @@ class ManagementNavBar extends Component {
                                 <Route path="/hod-portal/question-papers" component={classNotes} />
                                 <Route path="/hod-portal/add-staff-details" component={AddStaffDetails} />
                                 <Route path="/hod-portal/dashboard" component={StaffDashboard} />
+
+                                <Route path="/hod-portal/student-profile" component={Dashboard} />
+                                <Route path="/hod-portal/staff-profile" component={StaffDashboard} />
+                                <Route path="/hod-portal/manangement-profile" component={ManagementDashboard} />
+                                <Route path="/hod-portal/hod-profile" component={StaffDashboard} />
 
                             </Switch>
                         </div>

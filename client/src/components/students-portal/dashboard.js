@@ -18,7 +18,8 @@ class Dashboard extends Component {
             semester8: 0,
             lastSemester: 0,
             counter: 0,
-            cgpa: 0
+            cgpa: 0,
+            profileView: false
         };
         this.baseState = this.state;
     }
@@ -26,12 +27,14 @@ class Dashboard extends Component {
     componentDidMount() {
         if (this.props && this.props.location && this.props.location.userID) {
             this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
+        } else if (this.props && this.props.location.state && this.props.location.state.userID) {
+            this.setState({ routerLink: this.props.location.state.pathname, userID: this.props.location.state.userID, profileView: true })
         }
         this.fetchStudentDetails();
     }
 
     fetchStudentDetails() {
-        const userID = this.props.location.userID;
+        const userID = this.props.location.userID || this.props.location.state;
         if (userID) {
             axios.get(`/xakal/studentdetail/${userID.userID}`)
                 .then((response) => {
@@ -241,7 +244,7 @@ class Dashboard extends Component {
                                                 <li>{this.state.studentDetails.parentName}</li>
                                             </ul>}
                                     </div>
-                                    <button type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
+                                    <button hidden={this.state.profileView} type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
                                     {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
                                     {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
                                 </div>
@@ -256,8 +259,9 @@ class Dashboard extends Component {
                             <div className="card-body">
                                 <div className="chart-area">
                                     <div className="chart-pie pt-4 pb-2">
-                                        <img src={profileImage} alt="Girl in a jacket" width="100%" height="120%" />
+                                        <img src={profileImage} alt="Girl in a jacket" width="80%" height="100%" />
                                     </div>
+                                    <button hidden={!this.state.profileView} type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-110">Follow</button>
                                 </div>
                             </div>
                         </div>
@@ -312,7 +316,7 @@ class Dashboard extends Component {
                             </div>
                             <div className="card-body">
                                 <div className="text-center">
-                                    <img className="img-fluid px-3 px-sm-4 mt-3 mb-4" style={{ width: 25 + 'rem' }} src="img/undraw_posting_photo.svg" alt="" />
+                                    {/* <img className="img-fluid px-3 px-sm-4 mt-3 mb-4" style={{ width: 25 + 'rem' }} src="img/undraw_posting_photo.svg" alt="" /> */}
                                 </div>
                             </div>
                         </div>
@@ -322,7 +326,7 @@ class Dashboard extends Component {
                             </div>
                             <div className="card-body">
                                 <div className="text-center">
-                                    <img className="img-fluid px-3 px-sm-4 mt-3 mb-4" style={{ width: 25 + 'rem' }} src="img/undraw_posting_photo.svg" alt="" />
+                                    {/* <img className="img-fluid px-3 px-sm-4 mt-3 mb-4" style={{ width: 25 + 'rem' }} src="img/undraw_posting_photo.svg" alt="" /> */}
                                 </div>
                             </div>
                         </div>

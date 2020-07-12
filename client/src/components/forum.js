@@ -13,13 +13,17 @@ class Forum extends Component {
     componentDidMount() {
         if (this.props && this.props.location && this.props.location.userID) {
             const userID = this.props.location.userID;
-            this.setState({ userID: userID.userID, userRole: userID.userRole });
+            this.setState({ userID: userID.userID, userRole: userID.userRole, routerLink: this.props.location.pathname });
             this.fetchWallPostDetails();
         }
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
             this.fetchWallPostDetails();
         });
+    }
+
+    componentWillUnmount() {
+        this.unlisten()
     }
 
     fetchUserDetails() {
@@ -71,10 +75,8 @@ class Forum extends Component {
 
 
     handleCommentsChange(singleDetail, event) {
-        console.log(singleDetail, event)
         if (event.target && event.target.value) {
             const value = event.target.value;
-            console.log(value);
             this.setState(prevState => ({
                 ...prevState,
                 forumDetails: this.state.forumDetails.filter((element) => {
@@ -85,6 +87,23 @@ class Forum extends Component {
                 })
             }));
         }
+    }
+
+    handleClick = (singleDetail) => {
+        axios.get(`/xakal/user/${singleDetail.userID.toUpperCase()}`)
+            .then((response) => {
+                if (response && response.data) {
+                    if (response.data.userRole === 'student') {
+                        this.props.history.push('student-profile', { userID: singleDetail.userID.toUpperCase() })
+                    } else if (response.data.userRole === 'staff') {
+                        this.props.history.push('staff-profile', { userID: singleDetail.userID.toUpperCase() })
+                    } else if (response.data.userRole === 'management') {
+                        this.props.history.push('management-profile', { userID: singleDetail.userID.toUpperCase() })
+                    } else if (response.data.userRole === 'hod') {
+                        this.props.history.push('hod-profile', { userID: singleDetail.userID.toUpperCase() })
+                    }
+                }
+            })
     }
 
     /**
@@ -112,7 +131,7 @@ class Forum extends Component {
                             src={require('../images/staffProfile.png')}
                             className="img-responsive" height="50%" width="50%" alt="" /></div>
                         <div className="p-l-15 p-b-15">
-                            <h4 className="">{singleDetail.fullName}</h4>
+                            <button type="button" onClick={this.handleClick.bind(this, singleDetail)}>{singleDetail.fullName}</button>
                             <p>{singleDetail.caption} </p>
                             <p> <button type="button" onClick={this.updateLikes.bind(this, singleDetail)}
                                 className={"btn btn-raised btn-sm " + singleDetail.isAlreadyLiked}><i
