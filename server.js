@@ -19,6 +19,8 @@ var courseController = require('./controllers/courseController.js');
 var collegeController = require('./controllers/collegeController.js');
 var forumController = require('./controllers/forumController.js');
 var commentsController = require('./controllers/commentsController.js');
+var followerController = require('./controllers/followerController.js');
+var followingController = require('./controllers/followingController.js');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -43,6 +45,8 @@ app.use('/xakal/coursedetail', courseController);
 app.use('/xakal/collegedetail', collegeController);
 app.use('/xakal/forumdetail', forumController);
 app.use('/xakal/comments', commentsController);
+app.use('/xakal/follower', followerController);
+app.use('/xakal/following', followingController);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"));

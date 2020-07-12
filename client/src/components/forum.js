@@ -95,13 +95,13 @@ class Forum extends Component {
                 if (response && response.data) {
                     const isSameProfile = this.state.userID.toUpperCase() === singleDetail.userID.toUpperCase();
                     if (response.data.userRole === 'student') {
-                        this.props.history.push('student-profile', { userID: singleDetail.userID.toUpperCase(), isSameProfile: isSameProfile })
+                        this.props.history.push('student-profile', { userID: singleDetail.userID.toUpperCase(), isSameProfile: isSameProfile, loginID: this.state.userID })
                     } else if (response.data.userRole === 'staff') {
-                        this.props.history.push('staff-profile', { userID: singleDetail.userID.toUpperCase(), isSameProfile: isSameProfile })
+                        this.props.history.push('staff-profile', { userID: singleDetail.userID.toUpperCase(), isSameProfile: isSameProfile, loginID: this.state.userID })
                     } else if (response.data.userRole === 'management') {
-                        this.props.history.push('management-profile', { userID: singleDetail.userID.toUpperCase(), isSameProfile: isSameProfile })
+                        this.props.history.push('management-profile', { userID: singleDetail.userID.toUpperCase(), isSameProfile: isSameProfile, loginID: this.state.userID })
                     } else if (response.data.userRole === 'hod') {
-                        this.props.history.push('hod-profile', { userID: singleDetail.userID.toUpperCase(), isSameProfile: isSameProfile })
+                        this.props.history.push('hod-profile', { userID: singleDetail.userID.toUpperCase(), isSameProfile: isSameProfile, loginID: this.state.userID })
                     }
                 }
             })
