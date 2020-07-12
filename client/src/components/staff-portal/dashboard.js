@@ -102,7 +102,6 @@ class StaffDashboard extends Component {
                     if (followingCount.length) {
                         followingCount.forEach(element => {
                             if (element.followedUserID.toUpperCase() === this.props.location.state.userID.toUpperCase()) {
-                                console.log(element)
                                 this.setState({ alreadyFollowed: true, followingElement: element })
                             }
                         });
@@ -229,7 +228,6 @@ class StaffDashboard extends Component {
     * Inserts the following user
     */
     updateFollowingDetails(isDeleted) {
-        console.log('aaf', this.state.followingElement)
         let isUpdated = false;
         const params = {
             isDeleted: isDeleted,
