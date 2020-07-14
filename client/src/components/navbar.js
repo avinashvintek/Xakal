@@ -181,7 +181,7 @@ class NavBar extends Component {
                     </ul>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
-                            <button class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</button>
+                            <button className="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i className="fa fa-power-off m-r-15"></i>Logout</button>
 
                             <Switch>
                                 {/* student portal links */}
