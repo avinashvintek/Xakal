@@ -128,9 +128,6 @@ class Forum extends Component {
                                 class="fa fa-clock-o"
                                 aria-hidden="true"></i>
                             {this.timeConverter(singleDetail.postedTime)}</span>
-                        <div className="post-img"><img
-                            src={require('../images/staffProfile.png')}
-                            className="img-responsive" height="50%" width="50%" alt="" /></div>
                         <div className="p-l-15 p-b-15">
                             <button type="button" onClick={this.handleClick.bind(this, singleDetail)}>{singleDetail.fullName}</button>
                             <p>{singleDetail.caption} </p>
@@ -302,11 +299,11 @@ class Forum extends Component {
                     forumDetails: this.state.forumDetails.filter((element) => {
                         if (element._id === singleDetail._id) {
                             element.comments = '';
+                            this.fetchComments(element);
                         }
                         return element
                     })
                 }));
-                this.fetchComments();
             })
             .catch((err) => console.log(err));
     }
