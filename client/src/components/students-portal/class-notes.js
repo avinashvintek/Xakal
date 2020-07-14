@@ -251,7 +251,7 @@ class ClassNotes extends Component {
     fileUpload(files) {
         const formData = new FormData();
         formData.append('file', files);
-        axios.post('https://file.io', formData, { reportProgress: true, observe: 'events' })
+        axios.post('https://file.io', formData, { reportProgress: true, observe: 'events', expiry: '1y' })
             .then(event => {
                 if (event.data && event.data.link) {
                     this.setState({ file: event.data.link });
