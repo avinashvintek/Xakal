@@ -180,7 +180,7 @@ class StaffDetailsMaintain extends Component {
                             </tbody>}
                     </table>
                 </div>
-                {this.state.routerLink === '/management-portal/staff-details' ? <div className="right p-t-20 m-r-100">
+                {this.state.routerLink === '/management-portal/staff-details' || this.state.routerLink === '/hod-portal/staff-details' ? <div className="right p-t-20 m-r-100">
                     <button type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
                     {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
                     {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
