@@ -22,6 +22,7 @@ class PaperDetailsMaintain extends Component {
     }
 
     fetchPaperDetails() {
+        this.deleteArray = [];
         axios.get(`/xakal/coursedetail`)
             .then((response) => {
                 this.setState({ paperDetails: response.data, values: response.data });
@@ -82,6 +83,7 @@ class PaperDetailsMaintain extends Component {
      * Reverts back to the original state
      */
     discardChanges() {
+        this.deleteArray = [];
         this.paperArray = [];
         this.paperID = [];
         this.setState({ isEdit: false, isDelete: false, paperDetails: this.state.values });

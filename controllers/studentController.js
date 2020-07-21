@@ -75,4 +75,17 @@ router.post('/', (req, res) => {
     });
 
 });
+
+router.delete('/:id', (req, res) => {
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(400).send('No record with id');
+    }
+    StudentDetails.findByIdAndRemove(req.params.id, (err, doc) => {
+        if (!err) {
+            res.send(doc);
+        } else {
+            console.log('Error in employee')
+        }
+    })
+});
 module.exports = router;
