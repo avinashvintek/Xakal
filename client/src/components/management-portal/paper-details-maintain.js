@@ -6,13 +6,14 @@ class PaperDetailsMaintain extends Component {
         this.state = {
             paperDetails: [],
             isEdit: false,
+            isDelete: false,
             userID: ''
         }
         this.baseState = this.state;
         this.paperArray = [];
         this.paperID = [];
     }
-
+    deleteArray = [];
     componentDidMount() {
         if (this.props && this.props.location && this.props.location.userID) {
             this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
@@ -23,7 +24,7 @@ class PaperDetailsMaintain extends Component {
     fetchPaperDetails() {
         axios.get(`/xakal/coursedetail`)
             .then((response) => {
-                this.setState({ paperDetails: response.data });
+                this.setState({ paperDetails: response.data, values: response.data });
             });
     }
 
@@ -43,12 +44,47 @@ class PaperDetailsMaintain extends Component {
     }
 
     /**
+     * Adds remove element in the end
+     */
+    deletePaperDetails() {
+        return this.state.paperDetails.map((singleData, index) => {
+            return (
+                <tr className="odd gradeX" key={index++}>
+                    <td className={"left"} key={index++}>{singleData.course}
+                    </td>
+                    <td className={"left"} key={index++}>{singleData.courseCode}
+                    </td>
+                    <td className={"left"} key={index++}>{singleData.courseCredits}
+                    </td>
+                    <td className={"left"} key={index++}>{singleData.semester}
+                    </td>
+                    <td className={"left"} key={index++}>{singleData.department}
+                    </td>
+                    <td>  <button type="button" onClick={i => this.removeClick(singleData, index -= 6)} className="btn btn-danger m-t-4 m-l-30">X</button>
+                    </td>
+                </tr>
+            )
+        })
+    }
+
+    /**
+    * Removes the selected row
+    * @param index selected row index
+    */
+    removeClick(singleData, i) {
+        this.deleteArray.push(singleData);
+        let paperDetails = [...this.state.paperDetails];
+        paperDetails.splice(i, 1);
+        this.setState({ paperDetails });
+    }
+
+    /**
      * Reverts back to the original state
      */
     discardChanges() {
         this.paperArray = [];
         this.paperID = [];
-        this.setState({ isEdit: false });
+        this.setState({ isEdit: false, isDelete: false, paperDetails: this.state.values });
         this.displayPaperDetails();
     }
 
@@ -85,12 +121,19 @@ class PaperDetailsMaintain extends Component {
      * sets the edit flag to true
      */
     redirect() {
-        this.setState({ isEdit: true });
+        this.setState({ isEdit: true, isDelete: false });
+    }
+
+    /**
+     * sets the delete flag to true
+     */
+    deleteRedirect() {
+        this.setState({ isDelete: true, isEdit: false });
     }
 
     updateDetails() {
         let isUpdated = false;
-        if (this.paperArray && this.paperArray.length) {
+        if (this.state.isEdit && this.paperArray && this.paperArray.length) {
             this.paperArray.forEach(element => {
                 const params = {
                     course: element.course,
@@ -113,6 +156,19 @@ class PaperDetailsMaintain extends Component {
             });
             this.discardChanges();
 
+        } else if (this.state.isDelete && this.deleteArray && this.deleteArray.length) {
+            this.deleteArray.forEach(element => {
+                axios.delete(`/xakal/coursedetail/${element._id}`)
+                    .then(() => {
+                        if (!isUpdated) {
+                            alert('Deleted Successfully');
+                        }
+                        isUpdated = true;
+                        this.setState({ isDelete: false, });
+                        this.fetchPaperDetails();
+                    })
+                    .catch((err) => console.log(err));
+            });
         }
     }
 
@@ -153,13 +209,23 @@ class PaperDetailsMaintain extends Component {
                             <tbody>
                                 {this.editPaperDetails()}
                             </tbody> :
-                            <tbody>
-                                {this.displayPaperDetails()}
-                            </tbody>}
+                            this.state.isDelete ?
+                                <tbody>{this.deletePaperDetails()}</tbody>
+                                :
+                                <tbody>
+                                    {this.displayPaperDetails()}
+                                </tbody>}
                     </table>
                 </div>
-                {this.state.routerLink === '/management-portal/paper-details' || this.state.routerLink === '/hod-portal/paper-details' ? <div className="right p-t-20 m-r-100">
-                    <button type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
+
+                {this.state.routerLink === '/management-portal/paper-details' || this.state.routerLink === '/hod-portal/paper-details' ? <div hidden={this.state.isEdit} className="right p-t-20">
+                    <button type="button" onClick={this.deleteRedirect.bind(this)} hidden={this.state.isDelete} className="btn btn-primary m-t-15 m-l-30">Delete Details</button>
+                    {this.state.isDelete ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
+                    {this.state.isDelete ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
+                </div> : <p></p>}
+
+                {this.state.routerLink === '/management-portal/paper-details' || this.state.routerLink === '/hod-portal/paper-details' ? <div hidden={this.state.isDelete} className="right p-t-20">
+                    <button type="button" onClick={this.redirect.bind(this)} hidden={this.state.isEdit} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
                     {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
                     {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
                 </div> : <p></p>}
