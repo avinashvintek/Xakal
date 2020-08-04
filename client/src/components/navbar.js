@@ -18,6 +18,9 @@ import Login from './login';
 import EditInternalDetails from './staff-portal/assessments/edit-internal-details';
 import Forum from './forum';
 import ManagementDashboard from './management-portal/dashboard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAddressBook, faLayerGroup, faBookReader, faGraduationCap, faLaptopCode, faHourglassHalf, faGem, faUsers } from '@fortawesome/free-solid-svg-icons'
+
 class NavBar extends Component {
     constructor(props) {
         super(props);
@@ -80,12 +83,14 @@ class NavBar extends Component {
                         <hr className="sidebar-divider my-0" />
                         <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/dashboard`, userID: this.props.userID }} className="nav-link">
+                                <FontAwesomeIcon className="fa-sm" icon={faAddressBook} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Dashboard</span>
                             </Link>
                         </li>
                         {this.state.routerLink === '/students-portal' || this.state.routerLink === '/staff-portal' ? <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/forum`, userID: this.props.userID }} className="nav-link">
+                                <FontAwesomeIcon className="fa-sm" icon={faLayerGroup} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Forum</span>
                             </Link>
@@ -93,6 +98,7 @@ class NavBar extends Component {
                         {this.state.routerLink === '/staff-portal' ?
                             <li className="nav-item">
                                 <Link to={`${this.state.routerLink}/view-student-details`} className="nav-link">
+                                    <FontAwesomeIcon className="fa-sm" icon={faUsers} />
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Student Details</span>
                                 </Link>
@@ -100,6 +106,7 @@ class NavBar extends Component {
                         <hr className="sidebar-divider" />
                         <li className="nav-item">
                             <button className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faBookReader} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>College Notes</span>
                                 {this.state.showClassNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
@@ -109,25 +116,29 @@ class NavBar extends Component {
                         {this.state.showClassNotes ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/class-notes`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Class Notes</span>
                                 </Link>
                             </li>
                             {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/xakal-notes`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Xakal Notes</span>
                                 </Link>
                             </li> : <p></p>}
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/question-papers`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Question Papers</span>
                                 </Link>
                             </li>
                         </div> : <div></div>}
                         <li className="nav-item">
                             <button className="nav-link collapsed" onClick={this.onAssessmentsClick.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faLaptopCode} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Assessments</span>
                                 {this.state.assessments ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
@@ -137,19 +148,22 @@ class NavBar extends Component {
                         {this.state.assessments ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Internals</span>
                                 </Link>
                             </li>
                             {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Semester</span>
                                 </Link>
                             </li> :
                                 <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>Semester</span>
                                     </Link>
                                 </li>}
@@ -157,23 +171,27 @@ class NavBar extends Component {
                         <hr className="sidebar-divider d-none d-md-block" />
                         <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/attendance`, userID: this.props.userID }} className="nav-link">
+                                <FontAwesomeIcon className="fa-sm" icon={faHourglassHalf} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Attendance</span>
                             </Link>
                         </li>
                         {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/payment`, userID: this.props.userID }} className="nav-link">
+                                <FontAwesomeIcon className="fa-sm" icon={faGem} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Payment</span>
                             </Link>
                         </li> : <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/salary`, userID: this.props.userID }} className="nav-link">
+                                    <FontAwesomeIcon className="fa-sm" icon={faGem} />
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Salary</span>
                                 </Link>
                             </li>}
                         {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                             <Link to={`${this.state.routerLink}/dashboard`} className="nav-link">
+                                <FontAwesomeIcon className="fa-sm" icon={faGraduationCap} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Placement</span>
                             </Link>

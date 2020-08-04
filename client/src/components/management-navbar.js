@@ -25,6 +25,9 @@ import AddStaffDetails from './management-portal/add-staff-details';
 import ManagementDashboard from './management-portal/dashboard';
 import StaffDashboard from './staff-portal/dashboard';
 import Dashboard from './students-portal/dashboard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAddressBook, faBookReader, faLaptopCode, faHourglassHalf, faReceipt, faDiagnoses, faJournalWhills, faSchool, faScroll, faUsers } from '@fortawesome/free-solid-svg-icons'
+
 class ManagementNavBar extends Component {
     constructor(props) {
         super(props);
@@ -171,6 +174,7 @@ class ManagementNavBar extends Component {
                         <hr className="sidebar-divider my-0" />
                         <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/dashboard`, userID: this.props.userID }} className="nav-link">
+                                <FontAwesomeIcon className="fa-sm" icon={faAddressBook} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Dashboard</span>
                             </Link>
@@ -178,6 +182,7 @@ class ManagementNavBar extends Component {
                         <hr className="sidebar-divider" />
                         <li className="nav-item">
                             <button className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faUsers} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Students &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 {this.state.showClassNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
@@ -187,19 +192,22 @@ class ManagementNavBar extends Component {
                         {this.state.showClassNotes ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/view-student-details`, userID: this.props.userID }} className="nav-link">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>All Students</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/add-student-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Add Students</span>
                                 </Link>
                             </li>
                         </div> : <div></div>}
                         <li className="nav-item">
                             <button className="nav-link collapsed" onClick={this.onProfessorsClick.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faDiagnoses} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Professors&nbsp;&nbsp;</span>
                                 {this.state.professors ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
@@ -209,19 +217,22 @@ class ManagementNavBar extends Component {
                         {this.state.professors ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/staff-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>All Professors</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/add-staff-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Add Professors</span>
                                 </Link>
                             </li>
                         </div> : <div></div>}
                         <li className="nav-item">
                             <button className="nav-link collapsed" onClick={this.onDepartmentsClick.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faSchool} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Department</span>
                                 {this.state.departments ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
@@ -231,13 +242,15 @@ class ManagementNavBar extends Component {
                         {this.state.departments ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/department-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>All Departments</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/add-department-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Add Department</span>
                                 </Link>
                             </li>
@@ -245,6 +258,7 @@ class ManagementNavBar extends Component {
                         {this.state.routerLink === '/management-portal' ? <div>
                             <li className="nav-item">
                                 <button className="nav-link collapsed" onClick={this.onCourseClick.bind(this)}>
+                                    <FontAwesomeIcon className="fa-sm" icon={faJournalWhills} />
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Courses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     {this.state.course ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
@@ -254,13 +268,15 @@ class ManagementNavBar extends Component {
                             {this.state.course ? <div>
                                 <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/course-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>All Courses</span>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/add-course-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>Add Course</span>
                                     </Link>
                                 </li>
@@ -268,6 +284,7 @@ class ManagementNavBar extends Component {
                         </div> : <span></span>}
                         <li className="nav-item">
                             <button className="nav-link collapsed" onClick={this.onPaperClick.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faScroll} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Papers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 {this.state.paper ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
@@ -277,13 +294,15 @@ class ManagementNavBar extends Component {
                         {this.state.paper ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/paper-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>All Papers</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/add-paper-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Add Paper</span>
                                 </Link>
                             </li>
@@ -293,6 +312,7 @@ class ManagementNavBar extends Component {
                         {this.state.routerLink === '/hod-portal' ? <div>
                             <li className="nav-item">
                                 <button className="nav-link" onClick={this.onNotesClick.bind(this)}>
+                                    <FontAwesomeIcon className="fa-sm" icon={faBookReader} />
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>College Notes</span>
                                     {this.state.showNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
@@ -302,13 +322,15 @@ class ManagementNavBar extends Component {
                             {this.state.showNotes ? <div>
                                 <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/class-notes`, userID: this.props.userID }} className="nav-link collapsed">
-                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>Class Notes</span>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/question-papers`, userID: this.props.userID }} className="nav-link collapsed">
-                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>Question Papers</span>
                                     </Link>
                                 </li>
@@ -318,6 +340,7 @@ class ManagementNavBar extends Component {
                         {this.state.routerLink === '/management-portal' ? <div>
                             <li className="nav-item">
                                 <button className="nav-link collapsed" onClick={this.onAccountsClick.bind(this)}>
+                                    <FontAwesomeIcon className="fa-sm" icon={faReceipt} />
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Accounts&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     {this.state.accounts ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
@@ -327,13 +350,15 @@ class ManagementNavBar extends Component {
                             {this.state.accounts ? <div>
                                 <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/add-salary-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>Salary</span>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/add-fees-receipt`, userID: this.props.userID }} className="nav-link collapsed">
-                                        <i className="fas fa-fw fa-wrench"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>Fees</span>
                                     </Link>
                                 </li>
@@ -343,6 +368,7 @@ class ManagementNavBar extends Component {
                         }
                         <li className="nav-item">
                             <button className="nav-link collapsed" onClick={this.onAttendanceClick.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faHourglassHalf} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Attendance&nbsp;</span>
                                 {this.state.attendance ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
@@ -352,13 +378,15 @@ class ManagementNavBar extends Component {
                         {this.state.attendance ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/student-attendance`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Student Attendance</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/staff-attendance`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Staff Attendance</span>
                                 </Link>
                             </li>
@@ -366,6 +394,7 @@ class ManagementNavBar extends Component {
 
                         <li className="nav-item">
                             <button className="nav-link collapsed" onClick={this.onAssessmentClick.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faLaptopCode} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Assessment</span>
                                 {this.state.assessment ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
@@ -375,25 +404,25 @@ class ManagementNavBar extends Component {
                         {this.state.assessment ? <div>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/add-internal-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Add Internal Assessments</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/edit-internal-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Edit Internal Assessments</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/add-semester-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Add Semester Results</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/view-semester-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-wrench"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Semester Results</span>
                                 </Link>
                             </li>
