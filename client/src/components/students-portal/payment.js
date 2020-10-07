@@ -126,6 +126,7 @@ class Payment extends Component {
      */
     displayTable() {
         return this.state.paymentList.map((singleData, index) => {
+            console.log(singleData)
             return (
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>

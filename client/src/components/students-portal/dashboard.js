@@ -46,12 +46,14 @@ class Dashboard extends Component {
     /**
      * Gets the selected student detail
      */
-    fetchStudentDetails() {
+    fetchStudentDetails(isUpdated = false) {
         const userID = this.props.location.userID || this.props.location.state;
         if (userID) {
             axios.get(`/xakal/studentdetail/${userID.userID}`)
                 .then((response) => {
-                    this.fetchGPA();
+                    if (!isUpdated) {
+                        this.fetchGPA();
+                    }
                     this.setState({ studentDetails: response.data });
                 });
         }
@@ -174,7 +176,7 @@ class Dashboard extends Component {
                 }
                 isUpdated = true;
                 this.setState({ isEdit: false });
-                this.fetchStudentDetails()
+                this.fetchStudentDetails(isUpdated)
             })
             .catch((err) => console.log(err));
     }

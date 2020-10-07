@@ -190,7 +190,7 @@ class NavBar extends Component {
                                 </Link>
                             </li>}
                         {this.state.routerLink === '/students-portal' ? <li className="nav-item">
-                            <Link to={`${this.state.routerLink}/dashboard`} className="nav-link">
+                            <Link className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faGraduationCap} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Placement</span>
