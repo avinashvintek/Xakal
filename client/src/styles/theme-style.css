@@ -11,7 +11,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: Raleway, sans-serif;
+    font-family: Kumbh Sans, sans-serif;
     font-weight: 300;
 }
 h1 {
@@ -1519,7 +1519,7 @@ label {
 .label {
     text-shadow: none!important;
     color: #fff;
-    font-family: Raleway, sans-serif;
+    font-family: Kumbh Sans, sans-serif;
     text-transform: uppercase;
     font-weight: 600;
     padding: 8px 15px;
@@ -1655,7 +1655,7 @@ h6 .label {
     text-shadow: none;
     padding: 0;
     background-color: #fff;
-    font-family: Raleway, sans-serif;
+    font-family: Kumbh Sans, sans-serif;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     -ms-border-radius: 2px;
@@ -1775,7 +1775,7 @@ h6 .label {
     font-size: 14px;
     right: 7px;
     top: 7px;
-    font-family: Raleway, sans-serif;
+    font-family: Kumbh Sans, sans-serif;
     height: auto;
     content: "\f105";
     font-weight: 300
