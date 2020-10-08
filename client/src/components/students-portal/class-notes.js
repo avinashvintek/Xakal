@@ -348,6 +348,9 @@ class ClassNotes extends Component {
     render() {
         return (
             <div>
+                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Notes</h1>
+                </div>
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="card-box">

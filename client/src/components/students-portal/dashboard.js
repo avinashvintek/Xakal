@@ -400,10 +400,16 @@ class Dashboard extends Component {
                                             <li><i className="fa fa-bookmark m-r-10"></i>Course:</li>
                                             <li><i className="fa fa-bookmark m-r-10"></i>Branch:</li>
                                             <li><i className="fa fa-bookmark m-r-10"></i>Blood group:</li>
-                                            <li><i className="fa fa-bookmark m-r-10"></i>Contact number:</li>
-                                            <li><i className="fa fa-bookmark m-r-10"></i>Emergency contact number:</li>
-                                            <li><i className="fa fa-bookmark m-r-10"></i>Email ID:</li>
-                                            <li><i className="fa fa-bookmark m-r-10"></i>Parents name:</li>
+                                            {this.state.isEdit === true ? <>
+                                                <li><i className="fa fa-bookmark m-r-10 m-t-11 m-b-11"></i>Contact number:</li>
+                                                <li><i className="fa fa-bookmark m-r-10 m-t-11 m-b-11"></i>Emergency contact number:</li>
+                                                <li><i className="fa fa-bookmark m-r-10 m-t-11 m-b-11"></i>Email ID:</li>
+                                                <li><i className="fa fa-bookmark m-r-10 m-t-11 m-b-11"></i>Parents name:</li></>
+                                                :
+                                                <><li><i className="fa fa-bookmark m-r-10"></i>Contact number:</li>
+                                                    <li><i className="fa fa-bookmark m-r-10"></i>Emergency contact number:</li>
+                                                    <li><i className="fa fa-bookmark m-r-10"></i>Email ID:</li>
+                                                    <li><i className="fa fa-bookmark m-r-10"></i>Parents name:</li></>}
                                         </ul>
                                         {this.state.isEdit === true ? <ul>
                                             <li>{this.state.studentDetails.name}</li>
@@ -430,7 +436,7 @@ class Dashboard extends Component {
                                                 <li>{this.state.studentDetails.parentName}</li>
                                             </ul>}
                                     </div>
-                                    <button hidden={!this.state.isSameProfile} type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
+                                    <button hidden={!this.state.isSameProfile || this.state.isEdit} type="button" onClick={this.redirect.bind(this)} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
                                     {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
                                     {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
                                 </div>
