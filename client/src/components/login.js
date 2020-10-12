@@ -22,6 +22,15 @@ class Login extends Component {
         }
     }
 
+    componentDidMount() {
+        if (this.state.loginID) {
+            this.setState({ idClassName: 'has-val' })
+        }
+        if (this.state.password) {
+            this.setState({ passwordClassName: 'has-val' })
+        }
+    }
+
     /**
      * Triggers when username is given
      * Adds has-val className if the value is given
@@ -114,12 +123,12 @@ class Login extends Component {
                             </span>
 
                             <div className={"wrap-input100 m-t-50 " + this.state.errorID}>
-                                <input autoComplete="off" className={"input100 " + this.state.idClassName} type="text" onChange={this.handleIDChange.bind(this)} name="loginID" />
+                                <input autoComplete="off" value={this.state.loginID} className={"input100 " + this.state.idClassName} type="text" onChange={this.handleIDChange.bind(this)} name="loginID" />
                                 <span className={"focus-input100"} data-placeholder="ID"></span>
                             </div>
 
                             <div className={"wrap-input100 m-t-35 m-b-50 " + this.state.errorPassword}>
-                                <input autoComplete="off" className={"input100 " + this.state.passwordClassName} onChange={this.handlePasswordChange.bind(this)} type="password" name="pass" />
+                                <input autoComplete="off" value={this.state.password} className={"input100 " + this.state.passwordClassName} onChange={this.handlePasswordChange.bind(this)} type="password" name="pass" />
                                 <span className="focus-input100" data-placeholder="Password"></span>
                             </div>
                             <div className="container-login100-form-btn">

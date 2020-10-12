@@ -150,7 +150,7 @@ class SemesterDetails extends Component {
                                 <div className="col-lg-4 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                        <input onFocus={this.onDropDownFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onDropDownFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedSemester} />
                                         <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
                                         {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">sdfsdf

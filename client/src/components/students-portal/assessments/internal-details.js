@@ -164,29 +164,6 @@ class InternalDetails extends Component {
         })
     }
 
-    focusChange() {
-        const selected = document.querySelector(".selected");
-        const optionsContainer = document.querySelector(".options-container");
-
-        const optionsList = document.querySelectorAll(".option");
-
-        selected.addEventListener("click", () => {
-            optionsContainer.classList.toggle("active");
-        });
-
-        optionsList.forEach(o => {
-            o.addEventListener("click", () => {
-                selected.innerHTML = o.querySelector("label").innerHTML;
-                this.setState({ selectedSemester: selected.innerHTML });
-                if (this.state.searchAllowed) {
-                    this.setState({ searchAllowed: false })
-                }
-                optionsContainer.classList.remove("active");
-            });
-        });
-
-    }
-
     render() {
         return (
             <div>
@@ -198,57 +175,12 @@ class InternalDetails extends Component {
                         <div className="card-box">
                             <div className="card-body row">
                                 <div className="col-lg-4 p-t-25">
-                                    <div className="select-box" onClick={this.focusChange.bind(this)}>
-                                        <div className="options-container">
-                                            <div className="option">
-                                                <input
-                                                    type="radio"
-                                                    className="radio"
-                                                    id="Semester 1"
-                                                    name="category"
-                                                    value={this.state.selectedSemester}
-                                                />
-                                                <label htmlFor="Semester 1">Semester 1</label>
-                                            </div>
-                                            <div className="option">
-                                                <input type="radio" className="radio" id="Semester 2" name="category" />
-                                                <label htmlFor="Semester 2">Semester 2</label>
-                                            </div>
-                                            <div className="option">
-                                                <input type="radio" className="radio" id="Semester 3" name="category" />
-                                                <label htmlFor="Semester 3">Semester 3</label>
-                                            </div>
-                                            <div className="option">
-                                                <input type="radio" className="radio" id="Semester 4" name="category" />
-                                                <label htmlFor="Semester 4">Semester 4</label>
-                                            </div>
-                                            <div className="option">
-                                                <input type="radio" className="radio" id="Semester 5" name="category" />
-                                                <label htmlFor="Semester 5">Semester 5</label>
-                                            </div>
-                                            <div className="option">
-                                                <input type="radio" className="radio" id="Semester 6" name="category" />
-                                                <label htmlFor="Semester 6">Semester 6</label>
-                                            </div>
-                                            <div className="option">
-                                                <input type="radio" className="radio" id="Semester 7" name="category" />
-                                                <label htmlFor="Semester 7">Semester 7</label>
-                                            </div>
-                                            <div className="option">
-                                                <input type="radio" className="radio" id="Semester 8" name="category" />
-                                                <label htmlFor="Semester 8">Semester 8</label>
-                                            </div>
-                                        </div>
-                                        <div className="selected">
-                                            Select Semester
-                                        </div>
-                                    </div>
-                                    {/* <div
+                                    <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                        <input autoComplete="off" onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedSemester} />
                                         <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
-                                        {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">sdfsdf
+                                        {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
                                             <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
                                                 <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
                                                     <li className="mdl-menu__item animation" id="Semester 1" onClick={this.onDropDownSelect.bind(this)} >Semester 1</li>
@@ -262,7 +194,7 @@ class InternalDetails extends Component {
                                                 </ul>
                                             </div>
                                         </div> : <p></p>}
-                                    </div> */}
+                                    </div>
                                 </div>
                                 <div className="col-sm-8 p-t-20">
                                     <button type="button" onClick={this.getResult.bind(this)} className="btn btn-primary m-t-15 m-l-30">Get Results!</button>

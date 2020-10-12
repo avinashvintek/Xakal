@@ -358,7 +358,7 @@ class ClassNotes extends Component {
                                 <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                        <input autoComplete="off" onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedSemester} />
                                         <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
                                         {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
@@ -380,7 +380,7 @@ class ClassNotes extends Component {
                                 <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isCourseFocussed}>
-                                        <input autoComplete="off" onFocus={this.onCourseDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onCourseDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedCourse} />
                                         <label className={"mdl-textfield__label " + this.state.backgroundCourse}>Course</label>
                                         {this.state.onCourseFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">

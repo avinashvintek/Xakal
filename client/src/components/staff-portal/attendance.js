@@ -322,7 +322,7 @@ class StaffAttendance extends Component {
                                 <div className="col-lg-3 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                        <input autoComplete="off" onFocus={this.onMonthFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onMonthFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedMonth} />
                                         <label className={"mdl-textfield__label " + this.state.background}>Month</label>
                                         {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
@@ -337,7 +337,7 @@ class StaffAttendance extends Component {
                                 <div className="col-lg-3 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isYearFocussed}>
-                                        <input autoComplete="off" onFocus={this.onYearFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input  onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onYearFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
                                             value={this.state.selectedYear} />
                                         <label className={"mdl-textfield__label " + this.state.yearBackground}>Year</label>
                                         {this.state.onYearFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
