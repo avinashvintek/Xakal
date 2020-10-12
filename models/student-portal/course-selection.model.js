@@ -22,7 +22,9 @@ var Course = mongoose.model('Course', {
     updatedDate: {
         type: String
     },
-
+    isElective: {
+        type: Boolean
+    }
 });
 module.exports = {
     Course: Course

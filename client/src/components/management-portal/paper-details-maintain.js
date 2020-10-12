@@ -38,7 +38,7 @@ class PaperDetailsMaintain extends Component {
                     <td className={"left"} key={index++}>{singleData.courseCredits}</td>
                     <td className={"left"} key={index++}>{singleData.semester}</td>
                     <td className={"left"} key={index++}>{singleData.department}</td>
-
+                    <td className={"left"} key={index++}>{singleData.isElective ? 'Yes' : 'No'}</td>
                 </tr>
             )
         })
@@ -60,6 +60,8 @@ class PaperDetailsMaintain extends Component {
                     <td className={"left"} key={index++}>{singleData.semester}
                     </td>
                     <td className={"left"} key={index++}>{singleData.department}
+                    </td>
+                    <td className={"left"} key={index++}>{singleData.isElective}
                     </td>
                     <td>  <button type="button" onClick={i => this.removeClick(singleData, index -= 6)} className="btn btn-danger m-t-4 m-l-30">X</button>
                     </td>
@@ -90,31 +92,42 @@ class PaperDetailsMaintain extends Component {
         this.displayPaperDetails();
     }
 
-    onEdit(singleElement, changedField, context) {
+    onEdit(singleElement, changedField, index, context) {
+        debugger;
         const userID = singleElement._id;
         if (this.paperArray.length) {
             this.paperArray.forEach(element => {
                 if (element._id === userID) {
-                    element[changedField] = context.target.value
+                    if (changedField === "isElective") {
+                        this.handleCheckClick(index, context.target.checked)
+                        element[changedField] = context.target.checked
+                    } else {
+                        element[changedField] = context.target.value
+                    }
                 } else {
                     if (!this.paperID.includes(userID)) {
-                        this.insertUpdatedDetails(userID, singleElement, changedField, context);
+                        this.insertUpdatedDetails(userID, singleElement, changedField, index, context);
                     }
                 }
             });
         } else {
             if (!this.paperID.includes(userID)) {
-                this.insertUpdatedDetails(userID, singleElement, changedField, context);
+                this.insertUpdatedDetails(userID, singleElement, changedField, index, context);
             }
         }
     }
 
-    insertUpdatedDetails(userID, singleElement, changedField, context) {
+    insertUpdatedDetails(userID, singleElement, changedField, index, context) {
         this.paperID.push(userID);
         this.paperArray.push(singleElement);
         this.paperArray.forEach(element => {
             if (element._id === userID) {
-                element[changedField] = context.target.value
+                if (changedField === "isElective") {
+                    this.handleCheckClick(index, context.target.checked)
+                    element[changedField] = context.target.checked
+                } else {
+                    element[changedField] = context.target.value
+                }
             }
         });
     }
@@ -145,6 +158,7 @@ class PaperDetailsMaintain extends Component {
                     department: element.department,
                     courseCode: element.courseCode,
                     courseCredits: element.courseCredits,
+                    isElective: element.isElective
                 }
                 axios.put(`/xakal/coursedetail/update/${element._id}`, params)
                     .then(() => {
@@ -175,17 +189,30 @@ class PaperDetailsMaintain extends Component {
     }
 
     editPaperDetails() {
+        let counter = 0;
         return this.state.paperDetails.map((singleData, index) => {
             return (
-                <tr className="odd gradeX" key={index++}>
-                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'course')} defaultValue={singleData.course}></input></td>
-                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'courseCode')} defaultValue={singleData.courseCode}></input></td>
-                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'courseCredits')} defaultValue={singleData.courseCredits}></input></td>
-                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'semester')} defaultValue={singleData.semester}></input></td>
-                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'department')} defaultValue={singleData.department}></input></td>
+                <tr className="odd gradeX" key={counter++}>
+                    <td className={"left"} key={counter++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'course', index)} defaultValue={singleData.course}></input></td>
+                    <td className={"left"} key={counter++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'courseCode', index)} defaultValue={singleData.courseCode}></input></td>
+                    <td className={"left"} key={counter++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'courseCredits', index)} defaultValue={singleData.courseCredits}></input></td>
+                    <td className={"left"} key={counter++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'semester', index)} defaultValue={singleData.semester}></input></td>
+                    <td className={"left"} key={counter++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'department', index)} defaultValue={singleData.department}></input></td>
+                    <td className={"left"} key={counter++}><input type="checkbox" className="add-border mdl-switch__input p-t-30" onChange={this.onEdit.bind(this, singleData, 'isElective', index)} checked={singleData.isElective}></input></td>
                 </tr>
             )
         })
+    }
+
+    /**
+    * Sets isElectivce based on check
+    * @param {} i contains the index of changed element
+    * @param {*} value contains the checked value
+    */
+    handleCheckClick(i, value) {
+        let paperDetails = [...this.state.paperDetails];
+        paperDetails[i]['isElective'] = value;
+        this.setState({ paperDetails });
     }
 
     render() {
@@ -205,6 +232,7 @@ class PaperDetailsMaintain extends Component {
                                 <th> Credits </th>
                                 <th> Semester </th>
                                 <th> Department </th>
+                                <th> Elective </th>
                             </tr>
                         </thead>
                         {this.state.isEdit ?

@@ -10,7 +10,7 @@ class AddPaperDetails extends Component {
             courseDetails: [],
             hasDepartmentValue: false,
             courseCode: [],
-            values: [{ paperName: '', courseCode: '', courseCredits: '', selectedDepartment: '', selectedSemester: '', }]
+            values: [{ paperName: '', courseCode: '', courseCredits: '', selectedDepartment: '', selectedSemester: '', isElective: false }]
         };
         this.baseState = this.state;
 
@@ -162,7 +162,7 @@ class AddPaperDetails extends Component {
      * Adds the empty form element
      */
     addClick() {
-        this.setState(prevState => ({ values: [...prevState.values, { paperName: '', courseCode: '', courseCredits: '', selectedDepartment: '', selectedSemester: '', }] }))
+        this.setState(prevState => ({ values: [...prevState.values, { paperName: '', courseCode: '', courseCredits: '', selectedDepartment: '', selectedSemester: '', isElective: false }] }))
     }
 
     /**
@@ -214,6 +214,7 @@ class AddPaperDetails extends Component {
                         department: element.selectedDepartment,
                         courseCode: element.courseCode,
                         courseCredits: element.courseCredits,
+                        isElective: element.isElective
                     }
                     axios.post(`/xakal/coursedetail`, params)
                         .then(() => {
@@ -235,10 +236,21 @@ class AddPaperDetails extends Component {
     }
 
     /**
+     * Sets isElectivce based on check
+     * @param {} i contains the index of changed element
+     * @param {*} event contains the event reference
+     */
+    handleCheckClick = (i, event) => {
+        let values = [...this.state.values];
+        values[i]['isElective'] = event.target.checked;
+        this.setState({ values });
+    }
+
+    /**
      * Resets to base state
      */
     resetForm() {
-        this.setState({ values: [{ paperName: '', courseCode: '', courseCredits: '', selectedDepartment: '', selectedSemester: '', }] })
+        this.setState({ values: [{ paperName: '', courseCode: '', courseCredits: '', selectedDepartment: '', selectedSemester: '', isElective: false }] })
     }
 
     render() {
@@ -313,9 +325,21 @@ class AddPaperDetails extends Component {
                                             </div> : <p></p>}
                                         </div>
                                     </div>
-                                    <div className="col-sm-2 p-t-20">
+                                    <div className="col-sm-1 p-t-30">
+                                        <div className="row p-t-20">
+                                            <div className="col-sm-6">
+                                                <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect"
+                                                    htmlFor="elective">Elective</label>
+                                            </div>
+                                            <div className="col-sm-6 p-l-5">
+                                                <input type="checkbox" checked={el.isElective || false} onChange={this.handleCheckClick.bind(this, i)} id="elective" className="mdl-switch__input p-t-30" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-1 p-t-20">
                                         <button type="button" onClick={this.removeClick.bind(this, i)} className="btn btn-primary m-t-15 m-l-30">X</button>
                                     </div>
+
                                 </div >)}
                             <div className="col-sm-8 p-t-20">
                                 <button type="button" onClick={this.addClick.bind(this)} className="btn btn-primary m-t-15 m-l-30">Add</button>

@@ -23,6 +23,7 @@ router.put('/update/:id', (req, res) => {
         department: req.body.department,
         courseCode: req.body.courseCode,
         courseCredits: req.body.courseCredits,
+        isElective: req.body.isElective
     };
     var id = req.params.id;
     Course.findByIdAndUpdate(id, { $set: details }, { new: true }, (err, doc) => {
@@ -43,6 +44,7 @@ router.post('/', (req, res) => {
         department: req.body.department,
         courseCode: req.body.courseCode,
         courseCredits: req.body.courseCredits,
+        isElective: req.body.isElective
     });
     prdt.save((err, docs) => {
         if (!err) {
