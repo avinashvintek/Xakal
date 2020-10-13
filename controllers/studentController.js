@@ -23,6 +23,13 @@ router.get('/', (req, res) => {
     })
 });
 
+router.get('/yearwise/:year', (req, res) => {
+    let admissionYear = req.params.year;
+    StudentDetails.find({ admissionYear: admissionYear }, {}).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
+
 router.put('/update/:id', (req, res) => {
     var details;
     if (!ObjectId.isValid(req.params.id)) {
@@ -39,7 +46,8 @@ router.put('/update/:id', (req, res) => {
         contact: req.body.contact,
         emergencyContact: req.body.emergencyContact,
         parentName: req.body.parentName,
-        admissionDate: req.body.admissionDate
+        admissionDate: req.body.admissionDate,
+        admissionYear: req.body.admissionYear
     };
     var id = req.params.id;
     StudentDetails.findByIdAndUpdate(id, { $set: details }, { new: true }, (err, doc) => {
@@ -64,7 +72,8 @@ router.post('/', (req, res) => {
         emergencyContact: req.body.emergencyContact,
         parentName: req.body.parentName,
         admissionDate: req.body.admissionDate,
-        userID: '13IT001'
+        userID: '13IT001',
+        admissionYear: req.body.admissionYear
     });
     prdt.save((err, docs) => {
         if (!err) {

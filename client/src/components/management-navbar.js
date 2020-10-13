@@ -63,6 +63,7 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of college notes
      */
     onClassNotesClick() {
+        this.resetNavBarClick();
         if (this.state.showClassNotes) {
             this.setState({ showClassNotes: false })
         } else {
@@ -74,6 +75,7 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of college notes
      */
     onNotesClick() {
+        this.resetNavBarClick();
         if (this.state.showNotes) {
             this.setState({ showNotes: false })
         } else {
@@ -85,6 +87,7 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of professors
      */
     onProfessorsClick() {
+        this.resetNavBarClick();
         if (this.state.professors) {
             this.setState({ professors: false })
         } else {
@@ -96,6 +99,7 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of departments
      */
     onDepartmentsClick() {
+        this.resetNavBarClick();
         if (this.state.departments) {
             this.setState({ departments: false })
         } else {
@@ -107,6 +111,7 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of course
      */
     onCourseClick() {
+        this.resetNavBarClick();
         if (this.state.course) {
             this.setState({ course: false })
         } else {
@@ -118,6 +123,7 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of attendance
      */
     onAttendanceClick() {
+        this.resetNavBarClick();
         if (this.state.attendance) {
             this.setState({ attendance: false })
         } else {
@@ -130,6 +136,7 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of assessment
      */
     onAssessmentClick() {
+        this.resetNavBarClick();
         if (this.state.assessment) {
             this.setState({ assessment: false })
         } else {
@@ -141,6 +148,7 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of accounts
      */
     onAccountsClick() {
+        this.resetNavBarClick();
         if (this.state.accounts) {
             this.setState({ accounts: false })
         } else {
@@ -153,11 +161,29 @@ class ManagementNavBar extends Component {
      * Handles the sub menu of paper
      */
     onPaperClick() {
+        this.resetNavBarClick();
         if (this.state.paper) {
             this.setState({ paper: false })
         } else {
             this.setState({ paper: true })
         }
+    }
+
+    /**
+     * Resets the nav bar to collapse state
+     */
+    resetNavBarClick() {
+        this.setState({
+            paper: false,
+            accounts: false,
+            assessment: false,
+            attendance: false,
+            course: false,
+            departments: false,
+            professors: false,
+            showNotes: false,
+            showClassNotes: false
+        })
     }
 
     render() {

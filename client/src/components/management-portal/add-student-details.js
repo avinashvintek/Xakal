@@ -35,7 +35,11 @@ class AddStudentDetails extends Component {
      */
     handleFormChange(event) {
         if (event.target.value) {
-            this.setState({ [event.target.name]: event.target.value })
+            this.setState({ [event.target.name]: event.target.value });
+            if (event.target.name === "admissionDate") {
+                const admissionYear = (new Date(event.target.value)).getFullYear();
+                this.setState({ admissionYear: admissionYear })
+            }
         }
     }
 
@@ -57,6 +61,7 @@ class AddStudentDetails extends Component {
                 emergencyContact: this.state.emergencyContact,
                 parentName: this.state.parentName,
                 admissionDate: this.state.admissionDate,
+                admissionYear: this.state.admissionYear
             }
             axios.post(`/xakal/studentdetail`, params)
                 .then(() => {

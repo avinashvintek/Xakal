@@ -30,6 +30,9 @@ var StudentDetails = mongoose.model('StudentDetails', {
     },
     admissionDate: {
         type: String
+    },
+    admissionYear: {
+        type: Number
     }
 });
 
