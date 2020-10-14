@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from '../logo.svg';
+import logo from '../images/xakal-logo.png';
 import '../styles/login.css';
 import '../styles/utils.css';
 import axios from 'axios';
@@ -119,7 +119,7 @@ class Login extends Component {
                                 XAKAL
                         </span>
                             <span className="login100-form-avatar">
-                                <img src={logo} alt="XAKAL" />
+                                <img src={logo} className="logo" alt="XAKAL" />
                             </span>
 
                             <div className={"wrap-input100 m-t-50 " + this.state.errorID}>

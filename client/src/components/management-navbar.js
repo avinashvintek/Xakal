@@ -27,6 +27,7 @@ import StaffDashboard from './staff-portal/dashboard';
 import Dashboard from './students-portal/dashboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAddressBook, faBookReader, faLaptopCode, faHourglassHalf, faReceipt, faDiagnoses, faJournalWhills, faSchool, faScroll, faUsers } from '@fortawesome/free-solid-svg-icons'
+import logo from '../images/xakal-logo.png';
 
 class ManagementNavBar extends Component {
     constructor(props) {
@@ -192,8 +193,8 @@ class ManagementNavBar extends Component {
                 <div id="wrapper">
                     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
                         <button className="sidebar-brand d-flex align-items-center justify-content-center">
-                            <div className="sidebar-brand-icon rotate-n-15">
-                                <i className="fas fa-laugh-wink"></i>
+                            <div className="logo-container">
+                                <img src={logo} className="logo" alt="XAKAL" />
                             </div>
                             <div className="sidebar-brand-text mx-3 logo-color">Xakal</div>
                         </button>
