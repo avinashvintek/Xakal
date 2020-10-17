@@ -167,12 +167,13 @@ class SalaryDetails extends Component {
      */
     displayTable() {
         return this.state.salaryDetails.map((singleData, index) => {
+            var hrefValue = `../../../` + singleData.userID + '/' + singleData.salaryYear + '/' + singleData.salaryMonth + '/' + singleData.salaryReceipt;
             return (
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>
-                    <td className={"column100 column2 "} onMouseEnter={this.creditedstatusHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.creditedDate}</td>
+                    <td className={"column100 column2 "} onMouseEnter={this.creditedstatusHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{moment(new Date(singleData.creditedDate)).format('DD/MM/YYYY')}</td>
                     <td className={"column100 column3 "} onMouseEnter={this.statusHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.salaryStatus}</td>
-                    <td className={"column100 column4 "} onMouseEnter={this.receiptHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a rel="noopener noreferrer" target="_blank" href={singleData.salaryReceipt}>Download File</a></td>
+                    <td className={"column100 column4 "} onMouseEnter={this.receiptHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a rel="noopener noreferrer" target="_blank" href={hrefValue}>Download File</a></td>
                 </tr>
             )
         })

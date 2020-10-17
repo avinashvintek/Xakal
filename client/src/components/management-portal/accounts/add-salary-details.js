@@ -215,24 +215,21 @@ class AddSalaryDetails extends Component {
      * Uploads the file to online URL
      */
     fileUpload(files, element) {
+        let firstTime = true;
         const formData = new FormData();
-        formData.append('file', files);
-        axios.post('https://file.io', formData, { reportProgress: true, observe: 'events' })
-            .then(event => {
-                if (event.data && event.data.link) {
-                    this.setState({ file: event.data.link });
-                    const reqBody = {
-                        salaryStatus: 'Salary credited',
-                        creditedDate: new Date(),
-                        userID: element.selectedStaff,
-                        salaryReceipt: this.state.file,
-                        salaryMonth: element.selectedMonth,
-                        salaryYear: element.selectedYear,
-                    }
-                    axios.post('/xakal/salary', reqBody)
-                        .then(() => {
-                            alert('File uploaded successfully');
-                        });
+        formData.append('salaryStatus', 'Salary credited');
+        formData.append('creditedDate', new Date());
+        formData.append('userID', element.selectedStaff);
+        formData.append('salaryReceipt', files);
+        formData.append('salaryMonth', element.selectedMonth);
+        formData.append('salaryYear', element.selectedYear);
+        axios.post('/xakal/salary/upload', formData, {})
+        axios.post('/xakal/salary', formData)
+            .then(() => {
+                if (firstTime) {
+                    firstTime = false;
+                    alert('File uploaded successfully');
+                    this.setState(this.baseState);
                 }
             });
     }

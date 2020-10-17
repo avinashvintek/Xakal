@@ -8,7 +8,6 @@ var SalaryDetails = mongoose.model('SalaryDetails', {
         type: String
     },
     salaryReceipt: {
-        type: String
     },
     userID: {
         type: String
