@@ -66,8 +66,9 @@ class Login extends Component {
      * Triggers when the form is submitted
      * Checks whether the values are entered properly
      */
-    formSubmit() {
-        if (this.state.loginID && this.state.password) {
+    formSubmit = (event) => {
+        event.preventDefault();
+        if (this.state.loginID !== '' && this.state.password !== '') {
             axios.get(`/xakal/user/${this.state.loginID}`)
                 .then((response) => {
                     if (response && response.data) {
@@ -114,7 +115,7 @@ class Login extends Component {
 
                 <div className="container-login100">
                     <div className="wrap-login100 p-b-20">
-                        <form className="login100-form">
+                        <form className="login100-form" onSubmit={this.formSubmit.bind(this)}>
                             <span className="login100-form-title p-b-40">
                                 XAKAL
                         </span>
@@ -132,7 +133,7 @@ class Login extends Component {
                                 <span className="focus-input100" data-placeholder="Password"></span>
                             </div>
                             <div className="container-login100-form-btn">
-                                <button onClick={this.formSubmit.bind(this)} type="button" className="login100-form-btn">
+                                <button type="submit" className="login100-form-btn">
                                     Login
                                 </button>
                             </div>
