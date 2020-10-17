@@ -31,9 +31,7 @@ router.post('/', (req, res) => {
 });
 
 router.post('/upload', (req, res) => {
-    const url = req.protocol + '://' + req.get('host')
     var files = req.files.salaryReceipt;
-    console.log(req.body);
     const userIDDirectory = 'client/public/' + req.body.userID;
     const yearDirectory = 'client/public/' + req.body.userID + '/' + req.body.salaryYear;
     const monthDirectory = 'client/public/' + req.body.userID + '/' + req.body.salaryYear + '/' + req.body.salaryMonth
