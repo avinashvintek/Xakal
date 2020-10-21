@@ -219,12 +219,20 @@
   }
 
   .add-border {
-    border: 1px solid #000 !important;
+    border: 0.1px solid #666666 !important;
     padding: 5px;
+  }
+
+  .input-comments {
+    border-radius: 2%;
   }
 
   .right {
     float: right;
+  }
+
+  .btn-post {
+    padding-bottom: 0 !important;
   }
   
   
