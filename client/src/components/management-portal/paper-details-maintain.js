@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import '../../styles/table.css';
+import '../../styles/theme-style.css';
+import '../../styles/dropdowns.css'
 class PaperDetailsMaintain extends Component {
     constructor(props) {
         super(props);
@@ -7,7 +10,9 @@ class PaperDetailsMaintain extends Component {
             paperDetails: [],
             isEdit: false,
             isDelete: false,
-            userID: ''
+            userID: '',
+            searchAllowed: false,
+            selectedSemester: ''
         }
         this.baseState = this.state;
         this.paperArray = [];
@@ -18,12 +23,21 @@ class PaperDetailsMaintain extends Component {
         if (this.props && this.props.location && this.props.location.userID) {
             this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
         }
-        this.fetchPaperDetails();
     }
 
     fetchPaperDetails() {
+        this.setState({ searchAllowed: true });
         this.deleteArray = [];
         axios.get(`/xakal/coursedetail`)
+            .then((response) => {
+                this.setState({ paperDetails: response.data, values: response.data });
+            });
+    }
+
+    fetchPaperDetailsSemesterwise() {
+        this.setState({ searchAllowed: true });
+        this.deleteArray = [];
+        axios.get(`/xakal/coursedetail/${this.state.selectedSemester}`)
             .then((response) => {
                 this.setState({ paperDetails: response.data, values: response.data });
             });
@@ -215,50 +229,111 @@ class PaperDetailsMaintain extends Component {
         this.setState({ paperDetails });
     }
 
+    /**
+    * Sets the semester selected
+    */
+    onDropDownSelect(event) {
+        this.setState({ selectedSemester: event.target.id, onFocus: false, background: 'is-hidden', backgroundStudent: 'is-hidden' });
+        if (this.state.searchAllowed) {
+            this.setState({ searchAllowed: false })
+        }
+    }
+
+    onDropDownFocus() {
+        this.setState({ isFocussed: 'is-focused', onFocus: true, background: 'is-shown', backgroundStudent: 'is-hidden' });
+    }
+
+    /**
+     * Allows the grid to display the values
+     */
+    getResult() {
+        if (this.state.selectedSemester === '') {
+            this.fetchPaperDetails();
+        } else {
+            this.fetchPaperDetailsSemesterwise()
+        }
+
+    }
+
     render() {
         return (
             <div className="container-fluid">
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 className="h3 mb-0 text-gray-800 m-t-20">All Courses</h1>
                 </div>
-                <div className="table-scrollable">
-                    <table
-                        className="table table-striped table-hover table-responsive table-checkable order-column"
-                        id="example4">
-                        <thead>
-                            <tr>
-                                <th> Name </th>
-                                <th> Code </th>
-                                <th> Credits </th>
-                                <th> Semester </th>
-                                <th> Department </th>
-                                <th> Elective </th>
-                            </tr>
-                        </thead>
-                        {this.state.isEdit ?
-                            <tbody>
-                                {this.editPaperDetails()}
-                            </tbody> :
-                            this.state.isDelete ?
-                                <tbody>{this.deletePaperDetails()}</tbody>
-                                :
-                                <tbody>
-                                    {this.displayPaperDetails()}
-                                </tbody>}
-                    </table>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div className="card-box">
+                            <div className="card-body row">
+                                <div className="col-lg-4 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
+                                        <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onDropDownFocus.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="sample2"
+                                            value={this.state.selectedSemester} />
+                                        <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
+                                        {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">sdfsdf
+                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    <li className="mdl-menu__item animation" id="Semester 1" onClick={this.onDropDownSelect.bind(this)} >Semester 1</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 2" onClick={this.onDropDownSelect.bind(this)} >Semester 2</li>
+                                                    <li className="mdl-menu__item animation2" id="Semester 3" onClick={this.onDropDownSelect.bind(this)} >Semester 3</li>
+                                                    <li className="mdl-menu__item animation" id="Semester 4" onClick={this.onDropDownSelect.bind(this)} >Semester 4</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 5" onClick={this.onDropDownSelect.bind(this)} >Semester 5</li>
+                                                    <li className="mdl-menu__item animation2" id="Semester 6" onClick={this.onDropDownSelect.bind(this)} >Semester 6</li>
+                                                    <li className="mdl-menu__item animation" id="Semester 7" onClick={this.onDropDownSelect.bind(this)} >Semester 7</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 8" onClick={this.onDropDownSelect.bind(this)} >Semester 8</li>
+                                                </ul>
+                                            </div>
+                                        </div> : <p></p>}
+                                    </div>
+                                </div>
+                                <div className="col-sm-4 p-t-20">
+                                    <button type="button" onClick={this.getResult.bind(this)} className="btn btn-primary m-t-15 m-l-30">Get Results!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                {this.state.searchAllowed ? <>
+                    <div className="table-scrollable">
+                        <table
+                            className="table table-striped table-hover table-responsive table-checkable order-column"
+                            id="example4">
+                            <thead>
+                                <tr>
+                                    <th> Name </th>
+                                    <th> Code </th>
+                                    <th> Credits </th>
+                                    <th> Semester </th>
+                                    <th> Department </th>
+                                    <th> Elective </th>
+                                </tr>
+                            </thead>
+                            {this.state.isEdit ?
+                                <tbody>
+                                    {this.editPaperDetails()}
+                                </tbody> :
+                                this.state.isDelete ?
+                                    <tbody>{this.deletePaperDetails()}</tbody>
+                                    :
+                                    <tbody>
+                                        {this.displayPaperDetails()}
+                                    </tbody>}
+                        </table>
+                    </div>
+                    {this.state.routerLink === '/management-portal/paper-details' || this.state.routerLink === '/hod-portal/paper-details' ? <div hidden={this.state.isEdit} className="right p-t-20">
+                        <button type="button" onClick={this.deleteRedirect.bind(this)} hidden={this.state.isDelete} className="btn btn-primary m-t-15 m-l-30">Delete Details</button>
+                        {this.state.isDelete ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
+                        {this.state.isDelete ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
+                    </div> : <p></p>}
 
-                {this.state.routerLink === '/management-portal/paper-details' || this.state.routerLink === '/hod-portal/paper-details' ? <div hidden={this.state.isEdit} className="right p-t-20">
-                    <button type="button" onClick={this.deleteRedirect.bind(this)} hidden={this.state.isDelete} className="btn btn-primary m-t-15 m-l-30">Delete Details</button>
-                    {this.state.isDelete ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
-                    {this.state.isDelete ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
-                </div> : <p></p>}
+                    {this.state.routerLink === '/management-portal/paper-details' || this.state.routerLink === '/hod-portal/paper-details' ? <div hidden={this.state.isDelete} className="right p-t-20">
+                        <button type="button" onClick={this.redirect.bind(this)} hidden={this.state.isEdit} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
+                        {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
+                        {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
+                    </div> : <p></p>}</>
+                    : <></>}
 
-                {this.state.routerLink === '/management-portal/paper-details' || this.state.routerLink === '/hod-portal/paper-details' ? <div hidden={this.state.isDelete} className="right p-t-20">
-                    <button type="button" onClick={this.redirect.bind(this)} hidden={this.state.isEdit} className="btn btn-primary m-t-15 m-l-30">Edit Details</button>
-                    {this.state.isEdit ? <button type="button" onClick={this.updateDetails.bind(this)} className="btn btn-primary m-t-15 m-l-30">Save</button> : <p></p>}
-                    {this.state.isEdit ? <button type="button" onClick={this.discardChanges.bind(this)} className="btn btn-primary m-t-15 m-l-30">Cancel</button> : <p></p>}
-                </div> : <p></p>}
             </div>
         )
     }

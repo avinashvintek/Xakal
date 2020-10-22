@@ -9,6 +9,12 @@ router.get('/', (req, res) => {
     })
 });
 
+router.get('/:semester', (req, res) => {
+    let semester = req.params.semester.toLocaleLowerCase();
+    Course.find({ semester: semester }, {}).then((eachOne) => {
+        res.json(eachOne)
+    })
+});
 
 router.put('/update/:id', (req, res) => {
     var details;
