@@ -3,6 +3,11 @@
 background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(32,32,147,1) 1%, rgba(5,89,174,1) 13%, rgba(0,212,255,1) 100%); */
   background:#74a5f2;
 }
+
+.sidebar .nav-item {
+  line-height: 30px;
+}
+
 .notes-margin {
   margin-left: 10%;
 }
