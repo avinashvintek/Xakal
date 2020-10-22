@@ -76,7 +76,7 @@ class Login extends Component {
                         this.resetLogin();
                         if (this.state.password === response.data.password) {
                             if (response.data.userRole === 'student') {
-                                this.setState({ studentRedirect: true });
+                                this.setState({ studentRedirect: true, loginID: response.data.userID });
                             } else if (response.data.userRole === 'staff') {
                                 this.setState({ staffRedirect: true })
                             } else if (response.data.userRole === 'management') {

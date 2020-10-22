@@ -9,6 +9,15 @@ var User = mongoose.model('User', {
     },
     password: {
         type: String
+    },
+    collegeCode: {
+        type: String
+    },
+    collegeName: {
+        type: String
+    },
+    registerNr: {
+        type: Number | null
     }
 });
 module.exports = {

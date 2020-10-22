@@ -14,8 +14,14 @@ var { User } = require('../models/user.model.js');
 
 router.get('/user/:userID', (req, res) => {
     let userID = req.params.userID.toUpperCase();
-    User.findOne({userID: userID}, { userRole: userID, _id:0, password: 1 }).then((eachOne) => {
-        res.json(eachOne)
+    User.findOne({ userID: userID }, { userRole: userID, _id: 0, password: 1, collegeName: 1, registerNr: 1, userID: 1 }).then((eachOne) => {
+        if (eachOne) {
+            res.json(eachOne)
+        } else {
+            User.findOne({ registerNr: parseInt(userID) }, { userRole: userID, _id: 0, password: 1, collegeName: 1, userID: 1 }).then((element) => {
+                res.json(element)
+            });
+        }
     })
     // User.find({}, { userID: req.params.id }).then((eachOne) => {
     //     res.json(eachOne)
