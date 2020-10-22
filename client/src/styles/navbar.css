@@ -25,3 +25,16 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(32,32,147,1) 1%, rgba
 .logo-container {
   width: 40%;
 }
+
+/* .sidebar {
+  position: fixed;
+  z-index: 999;
+}
+
+.wrapper {
+  background-color: #eaeef3 !important;
+} */
+
+#content {
+  background-color: white;
+}
