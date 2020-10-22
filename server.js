@@ -23,12 +23,11 @@ var commentsController = require('./controllers/commentsController.js');
 var followerController = require('./controllers/followerController.js');
 var followingController = require('./controllers/followingController.js');
 
-app.use(fileUpload());
+// app.use(fileUpload());
 app.use(cors());
 app.use(bodyParser.json());
 // app.use(express.static('client/public'));
-app.use('/static', express.static(path.join(__dirname, 'client/public')));
-app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.urlencoded({ extended: false }))
 const url = process.env.MONGOLAB_URI || 'mongodb+srv://xakal:xakal@xakal1-bosb0.azure.mongodb.net/xakal?retryWrites=true&w=majority';
 mongoose.connect(url, { useNewUrlParser: true })
 const connection = mongoose.connection;
