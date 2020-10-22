@@ -100,7 +100,7 @@ class NavBar extends Component {
                         </li> : <span></span>}
                         {this.state.routerLink === '/staff-portal' ?
                             <li className="nav-item">
-                                <Link to={`${this.state.routerLink}/view-student-details`} className="nav-link">
+                                <Link to={{ pathname: `${this.state.routerLink}/view-student-details`, userID: this.props.userID }} className="nav-link">
                                     <FontAwesomeIcon className="fa-sm" icon={faUsers} />
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Student Details</span>
