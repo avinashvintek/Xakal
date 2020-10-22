@@ -8,7 +8,11 @@ class StudentDetailsMaintain extends Component {
             isEdit: false,
             isDelete: false,
             userID: '',
-            selectedYear: ''
+            selectedYear: '',
+            departmentDetails: [],
+            hasDepartmentValue: false,
+            selectedDepartment: '',
+            managementPortal: false
         }
         this.baseState = this.state;
         this.studentsArray = [];
@@ -17,13 +21,29 @@ class StudentDetailsMaintain extends Component {
     deleteArray = [];
     componentDidMount() {
         if (this.props && this.props.location && this.props.location.userID) {
-            this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
+            this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID });
+        }
+        if (this.props.location.pathname === '/hod-portal/view-student-details' ||
+            this.props.location.pathname === '/staff-portal/view-student-details') {
+            this.fetchStaffDetails();
+        } else {
+            this.setState({ managementPortal: true })
+            this.fetchDepartmentDetails();
+        }
+    }
+
+    fetchStaffDetails() {
+        if (this.props.location && this.props.location.userID && this.props.location.userID.userID) {
+            axios.get(`/xakal/staffdetail/${this.props.location.userID.userID}`)
+                .then((response) => {
+                    this.setState({ staffDetails: response.data, values: response.data, selectedDepartment: response.data.departmentName });
+                });
         }
     }
 
     fetchStudentDetails() {
         this.deleteArray = [];
-        axios.get(`/xakal/studentdetail`)
+        axios.get(`/xakal/studentdetail/department/${this.state.selectedDepartment}`)
             .then((response) => {
                 this.setState({ studentDetails: response.data, values: response.data });
             });
@@ -31,7 +51,7 @@ class StudentDetailsMaintain extends Component {
 
     fetchYearwiseStudentDetails() {
         this.deleteArray = [];
-        axios.get(`/xakal/studentdetail/yearwise/${this.state.selectedYear}`)
+        axios.get(`/xakal/studentdetail/yearwise/${this.state.selectedYear}/${this.state.selectedDepartment}`)
             .then((response) => {
                 this.setState({ studentDetails: response.data, values: response.data });
             });
@@ -43,7 +63,8 @@ class StudentDetailsMaintain extends Component {
                 <tr className="odd gradeX" key={index++}>
                     <td className={"left"} key={index++}>{singleData.userID}</td>
                     <td className={"left"} key={index++}>{singleData.name}</td>
-                    <td className={"left"} key={index++}>{singleData.course} - {singleData.branch}</td>
+                    <td className={"left"} key={index++}>{singleData.course}</td>
+                    <td className={"left"} key={index++}>{singleData.branch}</td>
                     <td className={"left"} key={index++}>{singleData.email}</td>
                     <td className={"left"} key={index++}>{singleData.contact}</td>
                     <td className={"left"} key={index++}>{singleData.emergencyContact}</td>
@@ -64,7 +85,8 @@ class StudentDetailsMaintain extends Component {
                 <tr className="odd gradeX" key={index++}>
                     <td className={"left"} key={index++}>{singleData.userID}</td>
                     <td className={"left"} key={index++}>{singleData.name}</td>
-                    <td className={"left"} key={index++}>{singleData.course} - {singleData.branch}</td>
+                    <td className={"left"} key={index++}>{singleData.course}</td>
+                    <td className={"left"} key={index++}>{singleData.branch}</td>
                     <td className={"left"} key={index++}>{singleData.email}</td>
                     <td className={"left"} key={index++}>{singleData.contact}</td>
                     <td className={"left"} key={index++}>{singleData.emergencyContact}</td>
@@ -176,6 +198,7 @@ class StudentDetailsMaintain extends Component {
                 const params = {
                     name: element.name,
                     course: element.course,
+                    branch: element.branch,
                     email: element.email.toLowerCase(),
                     uploadedBy: this.state.userID.toUpperCase(),
                     uploadedDate: new Date(Date.now()).toLocaleString(),
@@ -215,12 +238,12 @@ class StudentDetailsMaintain extends Component {
 
     editStudentDetails() {
         return this.state.studentDetails.map((singleData, index) => {
-            const courseBranch = singleData.course + ' - ' + singleData.branch
             return (
                 <tr className="odd gradeX" key={index++}>
                     <td className={"left"} key={index++}>{singleData.userID}</td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'name')} defaultValue={singleData.name}></input></td>
-                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'branchCourse')} defaultValue={courseBranch}></input></td>
+                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'course')} defaultValue={singleData.course}></input></td>
+                    <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'branch')} defaultValue={singleData.branch}></input></td>
                     <td className={"left"} key={index++}><input type="text" className="add-border" onChange={this.onEdit.bind(this, singleData, 'email')} defaultValue={singleData.email}></input></td>
                     <td className={"left"} key={index++}><input type="number" className="add-border" onChange={this.onEdit.bind(this, singleData, 'contact')} defaultValue={singleData.contact}></input></td>
                     <td className={"left"} key={index++}><input type="number" className="add-border" onChange={this.onEdit.bind(this, singleData, 'emergencyContact')} defaultValue={singleData.emergencyContact}></input></td>
@@ -233,7 +256,7 @@ class StudentDetailsMaintain extends Component {
     }
 
     onYearFocus() {
-        this.setState({ isYearFocussed: 'is-focused', onFocus: false, onYearFocus: true, yearBackground: 'is-shown', background: 'is-hidden' });
+        this.setState({ isYearFocussed: 'is-focused', onFocus: false, onYearFocus: true, yearBackground: 'is-shown', background: 'is-hidden', onDepartmentFocus: false, backgroundDepartment: 'is-hidden' });
     }
 
     /**
@@ -263,12 +286,72 @@ class StudentDetailsMaintain extends Component {
      * Allows the grid to display the values
      */
     getResult() {
-        if (this.state.selectedYear === '') {
-            this.fetchStudentDetails();
-            this.setState({ searchAllowed: true })
+        if (this.state.managementPortal === false) {
+            if (this.state.selectedYear === '') {
+                this.fetchStudentDetails();
+                this.setState({ searchAllowed: true })
+            } else {
+                this.fetchYearwiseStudentDetails();
+                this.setState({ searchAllowed: true })
+            }
         } else {
-            this.fetchYearwiseStudentDetails();
-            this.setState({ searchAllowed: true })
+            if (this.state.selectedYear !== '' && this.state.selectedDepartment !== '') {
+                this.fetchStudentDetails();
+                this.setState({ searchAllowed: true })
+            } else {
+                alert('Please select year and department')
+            }
+        }
+    }
+
+    /**
+     * Fetches all department
+     */
+    fetchDepartmentDetails() {
+        axios.get(`/xakal/departmentdetail`)
+            .then((response) => {
+                this.setState({ departmentDetails: response.data });
+            });
+    }
+
+
+    /**
+     * Displays the list of department based on the API response
+     */
+    displayDepartment(i) {
+        if (this.state && this.state.departmentDetails && this.state.departmentDetails.length) {
+            return this.state.departmentDetails.map((singleDepartment, index) => {
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this, i)}>{singleDepartment.name}</button></li>)
+            });
+        }
+    }
+
+    /**
+     * Triggers when department dropdown is focused
+     */
+    onDeptDropDownFocus() {
+        this.setState({ isDepartmentFocussed: 'is-focused', onDepartmentFocus: true, backgroundDepartment: 'is-shown', onYearFocus: false, yearBackground: 'is-hidden' });
+    }
+
+    /**
+     * Resets the department focus based on the value selected
+     */
+    handleDepartmentFocus() {
+        if (this.state.hasDepartmentValue === true) {
+            this.setState({ isDepartmentFocussed: 'is-focused', onDepartmentFocus: false, backgroundDepartment: 'is-hidden' });
+        } else {
+            this.setState({ onDepartmentFocus: false, backgroundDepartment: 'is-hidden' });
+        }
+    }
+
+    /**
+     * Triggers when the department is changed and stores the values in state
+     * @param event form values 
+     */
+    handleDepartmentChange(i, event) {
+        this.setState({ selectedDepartment: event.target.id, onDepartmentFocus: false, backgroundDepartment: 'is-hidden', background: 'is-hidden', hasDepartmentValue: true });
+        if (this.state.searchAllowed) {
+            this.setState({ searchAllowed: false })
         }
     }
 
@@ -295,6 +378,21 @@ class StudentDetailsMaintain extends Component {
                         </div>
 
                     </div>
+                    {this.state.routerLink === '/management-portal/view-student-details' ?
+                        <div className="col-lg-3 p-t-20">
+                            <div
+                                className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isDepartmentFocussed}>
+                                <input name="selectedDepartment" onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onDeptDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id={`department`}
+                                    value={this.state.selectedDepartment} />
+                                <label className={"mdl-textfield__label " + this.state.backgroundDepartment}>Department</label>
+                                {this.state.onDepartmentFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                    <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                        <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                            {this.displayDepartment()}
+                                        </ul>
+                                    </div>
+                                </div> : <p></p>}
+                            </div></div> : <></>}
                     <div className="col-sm-4 p-t-20">
                         <button type="button" onClick={this.getResult.bind(this)} className="btn btn-primary m-t-15 m-l-30">Get Results!</button>
                     </div></div>
@@ -308,6 +406,7 @@ class StudentDetailsMaintain extends Component {
                                     <tr>
                                         <th> Roll No </th>
                                         <th> Name </th>
+                                        <th> Degree </th>
                                         <th> Department </th>
                                         <th> Email </th>
                                         <th> Mobile </th>
@@ -325,7 +424,8 @@ class StudentDetailsMaintain extends Component {
                                         <tbody>{this.deleteStudentDetails()}</tbody>
                                         :
                                         <tbody>
-                                            {this.displayStudentDetails()}
+                                            {this.state.studentDetails && this.state.studentDetails.length ?
+                                                this.displayStudentDetails() : <></>}
                                         </tbody>}
                             </table>
                         </div>
