@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import '../styles/table.css'
-import '../styles/responsive.css'
+
 class Forum extends Component {
     constructor(props) {
         super(props);
@@ -118,21 +117,19 @@ class Forum extends Component {
                     singleDetail.isVisible = 'isHidden';
                 }
                 if (this.props.location && this.props.location.userID && singleDetail.likedUsers.includes(this.props.location.userID.userID.toUpperCase())) {
-                    singleDetail.isAlreadyLiked = "btn-primary"
+                    singleDetail.isAlreadyLiked = "btn-success"
                 } else {
-                    singleDetail.isAlreadyLiked = "btn-default"
+                    singleDetail.isAlreadyLiked = "btn-info"
                 }
                 return (<li className="m-t-20" key={index}>
                     <div className="post-box panel">
                         <span
-                            class="text-muted text-xs"><i
+                            class="text-muted text-small"><i
                                 class="fa fa-clock-o"
                                 aria-hidden="true"></i>
                             {this.timeConverter(singleDetail.postedTime)}</span>
                         <div className="p-l-15 p-b-15">
-                            <button type="button" onClick={this.handleClick.bind(this, singleDetail)}><p>{singleDetail.fullName}</p></button>
-                            {/* <p>scdasdas</p> */}
-                            <hr />
+                            <button type="button" onClick={this.handleClick.bind(this, singleDetail)}>{singleDetail.fullName}</button>
                             <p>{singleDetail.caption} </p>
                             <p> <button type="button" onClick={this.updateLikes.bind(this, singleDetail)}
                                 className={"btn btn-raised btn-sm " + singleDetail.isAlreadyLiked}><i
@@ -142,32 +139,28 @@ class Forum extends Component {
                                     onClick={this.visibleReplySection.bind(this, singleDetail)}
                                     className="btn btn-raised bg-soundcloud btn-sm"><i
                                         className="zmdi zmdi-long-arrow-return"></i>
-                            View comments</button> </p>
+                            Reply</button> </p>
                         </div>
-                        <div className="row">
+                        <div hidden={singleDetail.isVisible === 'isHidden'} className="row">
                             <div className="col-md-12">
                                 <div className="panel p-r-10 p-b-10 p-t-10">
                                     <div className="col-md-2 block">
                                         <img
                                             src={require('../images/staffProfile.png')}
-                                            className="img-responsive" height="45%" width="45%" alt="" />
+                                            className="img-responsive pull-right" height="45%" width="45%" alt="" />
                                     </div>
-                                    <div className="col-md-10 block add-border input-comments ">
-                                        <input type="text" onKeyDown={event => {
-                                            if (event.key === 'Enter') {
-                                                this.insertComments(singleDetail)
-                                            }
-                                        }} value={singleDetail.comments} onChange={this.handleCommentsChange.bind(this, singleDetail)} name="comments" placeholder="Your comments..." className="col-md-12"></input>
+                                    <div className="col-md-8 block">
+                                        <input type="text" value={singleDetail.comments} onChange={this.handleCommentsChange.bind(this, singleDetail)} name="comments" placeholder="Your comments..." className="add-border col-md-12"></input>
                                     </div>
-                                    {/* <button
+                                    <button
                                         onClick={this.insertComments.bind(this, singleDetail)}
-                                        className="col-md-2 block btn btn-primary bg-soundcloud btn-sm">
-                                        Comment</button> */}
+                                        className="col-md-2 block btn btn-info bg-soundcloud btn-sm">
+                                        Comment</button>
                                 </div>
 
                             </div>
-                            <div hidden={singleDetail.isVisible === 'isHidden'} >
-                                {this.displayComments()}</div>
+
+                            {this.displayComments()}
                         </div>
                     </div>
 
@@ -185,13 +178,13 @@ class Forum extends Component {
                         <div className="col-md-2 block">
                             <img
                                 src={require('../images/staffProfile.png')}
-                                className="img-responsive" height="45%" width="45%" alt="" />
+                                className="img-responsive pull-right" height="45%" width="45%" alt="" />
                         </div>
-                        <div className="col-md-7 block">
+                        <div className="col-md-8 block">
                             <p>{singleDetail.comments}</p>
                         </div>
-                        <div className="col-md-3 block">
-                            <p className="text-xs">{this.timeConverter(singleDetail.postedTime)}</p>
+                        <div className="col-md-2 block">
+                            <p>{this.timeConverter(singleDetail.postedTime)}</p>
                         </div>
                     </div>
 
@@ -257,47 +250,41 @@ class Forum extends Component {
      */
     updateLikes(singleDetail) {
         let params;
-        if (singleDetail.isAlreadyLiked === 'btn-default') {
+        if (singleDetail.isAlreadyLiked === 'btn-info') {
             singleDetail.likedUsers.push(this.state.userID.toUpperCase())
             params = {
                 "likes": singleDetail.likes + 1,
                 "likedUsers": singleDetail.likedUsers
             }
-            this.setState(prevState => ({
-                ...prevState,
-                forumDetails: this.state.forumDetails.filter((element) => {
-                    if (element._id === singleDetail._id) {
-                        element.likes = element.likes + 1;
-                        element.isAlreadyLiked = 'btn-primary'
-                    }
-                    return element
-                })
-            }))
-        } else if (singleDetail.isAlreadyLiked === 'btn-primary') {
+        } else if (singleDetail.isAlreadyLiked === 'btn-success') {
             singleDetail.likedUsers = singleDetail.likedUsers.filter((response) => response !== this.state.userID.toUpperCase())
             params = {
                 "likes": singleDetail.likes - 1,
                 "likedUsers": singleDetail.likedUsers
             }
-            this.setState(prevState => ({
-                ...prevState,
-                forumDetails: this.state.forumDetails.filter((element) => {
-                    if (element._id === singleDetail._id) {
-                        element.likes = element.likes - 1;
-                        element.isAlreadyLiked = 'btn-default'
-                    }
-                    return element
-                })
-            }))
         }
         axios.put(`/xakal/forumdetail/updatelikes/${singleDetail._id}`, params)
             .then(() => {
-
+                this.setState(prevState => ({
+                    ...prevState,
+                    forumDetails: this.state.forumDetails.filter((element) => {
+                        if (element._id === singleDetail._id) {
+                            if (singleDetail.isAlreadyLiked === 'btn-info') {
+                                element.likes = element.likes + 1;
+                                element.isAlreadyLiked = 'btn-success'
+                            } else if (singleDetail.isAlreadyLiked === 'btn-success') {
+                                element.likes = element.likes - 1;
+                                element.isAlreadyLiked = 'btn-info'
+                            }
+                        }
+                        return element
+                    })
+                }))
             })
             .catch((err) => console.log(err));
     }
 
-    insertComments = (singleDetail) => {
+    insertComments(singleDetail) {
         let params;
         params = {
             postID: singleDetail.postID,
@@ -307,7 +294,6 @@ class Forum extends Component {
         }
         axios.post(`/xakal/comments`, params)
             .then(() => {
-                this.visibleReplySection(singleDetail)
                 this.setState(prevState => ({
                     ...prevState,
                     forumDetails: this.state.forumDetails.filter((element) => {
@@ -372,7 +358,7 @@ class Forum extends Component {
                         <div className="col-md-12">
                             <div className="profile-content">
                                 <div className="row">
-                                    <div className="col-md-6">
+                                    <div className="col-md-10">
                                         <div className="card">
                                             <div className="card-head card-topline-lightblue">
                                                 <header>User Activity</header>

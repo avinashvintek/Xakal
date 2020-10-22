@@ -655,7 +655,7 @@ li [class^=icon-].icon-large {
 }
 .page-container-bg-solid .page-bar,
 .page-content-white .page-bar {
-    background-color: #fff;
+    background-color: #eaeef3;
     position: relative;
     padding: 0 20px;
     margin: 50px -20px 15px;
@@ -709,7 +709,7 @@ li [class^=icon-].icon-large {
 .page-content {
     margin-top: 0;
     padding: 0;
-    background-color: #fff;
+    background-color: #eaeef3;
 }
 .page-full-width .page-content {
     margin-left: 0 !important
