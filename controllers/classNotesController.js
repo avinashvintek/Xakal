@@ -4,6 +4,7 @@ var { Course } = require('../models/student-portal/course-selection.model.js');
 var { ClassNote } = require('../models/student-portal/class-notes.model.js');
 var { QuestionPaper } = require('../models/student-portal/question-paper.model.js');
 var { XakalNote } = require('../models/student-portal/xakal-notes.model.js');
+var fs = require('fs');
 
 router.get('/course/:semester', (req, res) => {
     let semester = req.params.semester.toLowerCase();
@@ -45,7 +46,7 @@ router.post('/questionpaper', function (req, res) {
         course: req.body.course.toLowerCase(),
         description: req.body.description,
         uploadedBy: req.body.uploadedBy,
-        uploadedFile: req.body.uploadedFile,
+        uploadedFile: req.files.uploadedFile.name,
         uploadedDate: req.body.uploadedDate,
     });
     questionPaper.save((err, docs) => {
@@ -64,7 +65,7 @@ router.post('/classnote', function (req, res) {
         course: req.body.course.toLowerCase(),
         description: req.body.description,
         uploadedBy: req.body.uploadedBy,
-        uploadedFile: req.body.uploadedFile,
+        uploadedFile: req.files.uploadedFile.name,
         uploadedDate: req.body.uploadedDate,
     });
     classNote.save((err, docs) => {
@@ -76,4 +77,28 @@ router.post('/classnote', function (req, res) {
     });
 
 });
+
+router.post('/upload', (req, res) => {
+    var files = req.files.uploadedFile;
+    const typeDirectory = 'client/public/' + req.body.type;
+    const semesterDirectory = 'client/public/' + req.body.type + '/' + req.body.semester;
+    const courseDirectory = 'client/public/' + req.body.type + '/' + req.body.semester + '/' + req.body.course;
+    if (!fs.existsSync(typeDirectory)) {
+        fs.mkdirSync(typeDirectory);
+        fs.mkdirSync(semesterDirectory);
+        fs.mkdirSync(courseDirectory)
+    } else if (!fs.existsSync(semesterDirectory)) {
+        fs.mkdirSync(semesterDirectory);
+        fs.mkdirSync(courseDirectory);
+    } else if (!fs.existsSync(courseDirectory)) {
+        fs.mkdirSync(courseDirectory);
+    }
+    files.mv(courseDirectory + '/' + files.name), function (err) {
+        if (err) {
+            res.json("File not uploaded")
+        } else {
+            res.json = ("Inserted successfully")
+        }
+    }
+})
 module.exports = router;

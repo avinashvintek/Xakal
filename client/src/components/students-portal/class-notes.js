@@ -3,6 +3,7 @@ import '../../styles/table.css';
 import '../../styles/dropdown.css';
 import '../../styles/course-dropdown.css';
 import axios from 'axios';
+import moment from 'moment';
 
 class ClassNotes extends Component {
     constructor(props) {
@@ -250,29 +251,29 @@ class ClassNotes extends Component {
      */
     fileUpload(files) {
         const formData = new FormData();
-        formData.append('file', files);
-        axios.post('https://file.io', formData, { reportProgress: true, observe: 'events', expiry: '1y' })
-            .then(event => {
-                if (event.data && event.data.link) {
-                    this.setState({ file: event.data.link });
-                    this.currentSite();
-                }
-            });
+        formData.append('semester', this.state.selectedSemester);
+        formData.append('course', this.state.selectedCourse);
+        formData.append('description', this.state.description);
+        formData.append('uploadedBy', this.state.userID.toUpperCase());
+        formData.append('uploadedFile', files);
+        formData.append('uploadedDate', new Date());
+        axios.post('/xakal/class-notes/upload', formData, {})
+        this.currentSite(formData);
     }
 
     /**
      * Uploads document based on the router location
      */
-    currentSite() {
+    currentSite(formData) {
         if (this.props.location) {
             switch (this.props.location.pathname) {
                 case '/staff-portal/question-papers':
                 case '/hod-portal/question-papers':
-                    this.uploadQuestionPapers();
+                    this.uploadQuestionPapers(formData);
                     break;
                 case '/staff-portal/class-notes':
                 case '/hod-portal/class-notes':
-                    this.uploadClassNotes();
+                    this.uploadClassNotes(formData);
                     break;
                 default: break
             }
@@ -282,16 +283,9 @@ class ClassNotes extends Component {
     /**
      * Uploads the file URL to DB
      */
-    uploadQuestionPapers() {
-        const reqBody = {
-            semester: this.state.selectedSemester,
-            course: this.state.selectedCourse,
-            description: this.state.description,
-            uploadedBy: this.state.userID.toUpperCase(),
-            uploadedFile: this.state.file,
-            uploadedDate: new Date(),
-        }
-        axios.post('/xakal/class-notes/questionpaper', reqBody)
+    uploadQuestionPapers(formData) {
+        formData.append('type', 'questionPaper');
+        axios.post('/xakal/class-notes/questionpaper', formData)
             .then(() => {
                 alert('File uploaded successfully');
                 this.setState(this.baseState);
@@ -301,16 +295,9 @@ class ClassNotes extends Component {
     /**
      * Uploads the class file URL to DB
      */
-    uploadClassNotes() {
-        const reqBody = {
-            semester: this.state.selectedSemester,
-            course: this.state.selectedCourse,
-            description: this.state.description,
-            uploadedBy: this.state.userID.toUpperCase(),
-            uploadedFile: this.state.file,
-            uploadedDate: new Date(),
-        }
-        axios.post('/xakal/class-notes/classnote', reqBody)
+    uploadClassNotes(formData) {
+        formData.append('type', 'classNote');
+        axios.post('/xakal/class-notes/classnote', formData)
             .then(() => {
                 alert('File uploaded successfully');
                 this.setState(this.baseState);
@@ -321,14 +308,16 @@ class ClassNotes extends Component {
      * Displays the list of notes based on the API response
      */
     displayTable() {
+        const type = this.props.location.pathname === "/students-portal/question-papers" ? "questionPaper" : "classNote"
         return this.state.notesList.map((singleData, index) => {
+            var hrefValue = `../../../` + type + '/' + singleData.semester + '/' + singleData.course + '/' + singleData.uploadedFile;
             return (
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>
                     <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.description}</td>
-                    <td className={"column100 column3 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedDate}</td>
+                    <td className={"column100 column3 "} onMouseEnter={this.uploadDateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{moment(new Date(singleData.uploadedDate)).format('DD/MM/YYYY')}</td>
                     <td className={"column100 column4 "} onMouseEnter={this.uploadByHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.uploadedBy}</td>
-                    <td className={"column100 column5 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" rel="noopener noreferrer" href={singleData.uploadedFile}>Download File</a></td>
+                    <td className={"column100 column5 "} onMouseEnter={this.downloadHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" rel="noopener noreferrer" href={hrefValue}>Download File</a></td>
                 </tr>
             )
         })

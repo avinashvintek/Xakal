@@ -4,6 +4,7 @@ import '../../minified-css/material-min.css';
 import '../../styles/dropdowns.css';
 import '../../styles/theme-style.css';
 import axios from 'axios';
+import moment from 'moment';
 
 class Payment extends Component {
     constructor(props) {
@@ -126,13 +127,13 @@ class Payment extends Component {
      */
     displayTable() {
         return this.state.paymentList.map((singleData, index) => {
-            console.log(singleData)
+            var hrefValue = `../../../` + singleData.userID + '/' + singleData.semester + '/' + singleData.uploadedReceipt;
             return (
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>
                     <td className={"column100 column2 "} onMouseEnter={this.descriptionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.description}</td>
-                    <td className={"column100 column3 "} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.paymentDate}</td>
-                    <td className={"column100 column4 "} onMouseEnter={this.receiptHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" rel="noopener noreferrer" href={singleData.uploadedReceipt}>Download Receipt</a></td>
+                    <td className={"column100 column3 "} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{moment(new Date(singleData.paymentDate)).format('DD/MM/YYYY')}</td>
+                    <td className={"column100 column4 "} onMouseEnter={this.receiptHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}><a target="_blank" rel="noopener noreferrer" href={hrefValue}>Download Receipt</a></td>
                 </tr>
             )
         })
@@ -141,7 +142,7 @@ class Payment extends Component {
     render() {
         return (
             <div>
-                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <div className="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Payment</h1>
                 </div>
                 <div className="row">

@@ -169,27 +169,33 @@ class AddFeesReceipt extends Component {
     fileUpload(files, element) {
         var isUpdated = false
         const formData = new FormData();
-        formData.append('file', files);
-        axios.post('https://file.io', formData, { reportProgress: true, observe: 'events' })
-            .then(event => {
-                if (event.data && event.data.link) {
-                    this.setState({ file: event.data.link });
-                    const reqBody = {
-                        userID: element.selectedStudent,
-                        semester: element.selectedSemester,
-                        description: 'Paid',
-                        uploadedReceipt: this.state.file,
-                        paymentDate: new Date(),
-                    }
-                    axios.post('/xakal/payment', reqBody)
-                        .then(() => {
-                            if (isUpdated === false) {
-                                isUpdated = true
-                                alert('File uploaded successfully');
-                            }
-                        });
+        formData.append('userID', element.selectedStudent);
+        formData.append('semester', element.selectedSemester);
+        formData.append('description', 'Paid');
+        formData.append('uploadedReceipt', files);
+        formData.append('paymentDate', new Date());
+        axios.post('/xakal/payment/upload', formData, {});
+        axios.post('/xakal/payment', formData)
+            .then(() => {
+                if (isUpdated === false) {
+                    isUpdated = true
+                    alert('File uploaded successfully');
                 }
             });
+        // axios.post('https://file.io', formData, { reportProgress: true, observe: 'events' })
+        //     .then(event => {
+        //         if (event.data && event.data.link) {
+        //             this.setState({ file: event.data.link });
+        //             const reqBody = {
+        //                 userID: element.selectedStudent,
+        //                 semester: element.selectedSemester,
+        //                 description: 'Paid',
+        //                 uploadedReceipt: this.state.file,
+        //                 paymentDate: new Date(),
+        //             }
+
+        //         }
+        //     });
     }
 
     /**
