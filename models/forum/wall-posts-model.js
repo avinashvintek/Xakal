@@ -22,6 +22,12 @@ var WallPosts = mongoose.model('WallPosts', {
     caption: {
         type: String
     },
+    collegeName: {
+        type: String
+    },
+    commentsCount: {
+        type: Number
+    }
 });
 module.exports = {
     WallPosts: WallPosts

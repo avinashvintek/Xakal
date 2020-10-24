@@ -1,0 +1,54 @@
+.btn-post {
+    padding-bottom: 0 !important;
+  }
+  
+  .bold {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 16px;
+  }
+
+  .btn-xl {
+    width: 48%;
+  }
+
+  .border {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .header {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #666666;
+  }
+
+  .page-content {
+    padding-top: 0 !important;
+  }
+
+  .font-size-16{
+    font-size: 16px;
+  }
+
+  .panel-footer {
+    padding-bottom: 3% !important;
+  }
+
+  .block {
+      display: inline-block;
+  }
+
+  .name {
+      text-align: initial;
+  }
+
+  .padding-left {
+      padding-left: 3px!important;
+      padding-right: 0 !important;
+  }
+
+  .bottom {
+      bottom: 20%;
+  }

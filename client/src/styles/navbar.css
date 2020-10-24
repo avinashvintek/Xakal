@@ -21,6 +21,7 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(32,32,147,1) 1%, rgba
 
 .logout {
   float: right;
+  display: block;
 }
 
 .logo {

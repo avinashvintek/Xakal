@@ -15,7 +15,9 @@ router.post('/', (req, res) => {
         likes: req.body.likes,
         postedTime: req.body.postedTime,
         caption: req.body.caption,
-        likedUsers: []
+        likedUsers: [],
+        commentsCount: 0,
+        collegeName: req.body.collegeName
     });
     prdt.save((err, docs) => {
         if (!err) {
@@ -36,7 +38,17 @@ router.put('/updatelikes/:id', (req, res) => {
             console.log('Error in controller', err)
         }
     })
+});
 
+router.put('/updatecomments/:id', (req, res) => {
+    var id = req.params.id;
+    WallPosts.findOneAndUpdate({ _id: id }, { "commentsCount": req.body.commentsCount, }, { new: true, }, (err, doc) => {
+        if (!err) {
+            res.send(doc);
+        } else {
+            console.log('Error in controller', err)
+        }
+    })
 });
 
 module.exports = router;

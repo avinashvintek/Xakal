@@ -2,19 +2,22 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import '../styles/table.css'
 import '../styles/responsive.css'
+import '../styles/forum.css'
 class Forum extends Component {
     constructor(props) {
         super(props);
         this.state = {
             forumDetails: [],
+            commentsList: []
         }
+        console.log(props)
         this.baseState = this.state;
     }
 
     componentDidMount() {
         if (this.props && this.props.location && this.props.location.userID) {
             const userID = this.props.location.userID;
-            this.setState({ userID: userID.userID, userRole: userID.userRole, routerLink: this.props.location.pathname });
+            this.setState({ userID: userID.userID, userRole: userID.userRole, loggedInUser: userID.userDetails, routerLink: this.props.location.pathname });
             this.fetchWallPostDetails();
         }
         this.unlisten = this.props.history.listen((location, action) => {
@@ -130,19 +133,47 @@ class Forum extends Component {
                                 aria-hidden="true"></i>
                             {this.timeConverter(singleDetail.postedTime)}</span>
                         <div className="p-l-15 p-b-15">
-                            <button type="button" onClick={this.handleClick.bind(this, singleDetail)}><p>{singleDetail.fullName}</p></button>
-                            {/* <p>scdasdas</p> */}
+                            <div className="row">
+                                <div className="col-md-12 padding-left" >
+                                    <div className="col-md-2 block padding-left bottom">
+                                        <img
+                                            src={require('../images/staffProfile.png')}
+                                            className="img-responsive" height="65%" width="65%" alt="" />
+                                    </div>
+                                    <div className="col-md-10 block">
+                                        <button type="button" onClick={this.handleClick.bind(this, singleDetail)}>
+                                            <p className="bold block">{singleDetail.fullName}</p></button>
+                                        <br></br>
+                                        <p className="block name">{singleDetail.collegeName}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* <div className="row">
+                                <div className="col-md-12 padding-left" >
+                                    <div className="col-md-2 block padding-left">
+                                    </div>
+                                    <div className="col-md-10 block name">
+                                        <p>{singleDetail.collegeName}</p>
+                                    </div>
+                                </div>
+                            </div> */}
+
                             <hr />
-                            <p>{singleDetail.caption} </p>
+                            <p className="font-size-16">{singleDetail.caption} </p>
                             <p> <button type="button" onClick={this.updateLikes.bind(this, singleDetail)}
-                                className={"btn btn-raised btn-sm " + singleDetail.isAlreadyLiked}><i
-                                    className="fa fa-heart-o"
-                                ></i>
-                            Like ({singleDetail.likes}) </button> <button
+                                className={"btn btn-raised btn-sm btn-xl " + singleDetail.isAlreadyLiked}>
+                                Like </button> <button
                                     onClick={this.visibleReplySection.bind(this, singleDetail)}
-                                    className="btn btn-raised bg-soundcloud btn-sm"><i
+                                    className="btn btn-raised bg-soundcloud btn-sm btn-xl"><i
                                         className="zmdi zmdi-long-arrow-return"></i>
-                            View comments</button> </p>
+                            Comments</button> </p>
+                            <i
+                                className="fa fa-heart-o"
+                            ></i> &nbsp;{singleDetail.likes}
+                            <i
+                                className="m-l-10 fa fa-comment"
+                            ></i> &nbsp;{singleDetail.commentsCount}
                         </div>
                         <div className="row">
                             <div className="col-md-12">
@@ -150,7 +181,7 @@ class Forum extends Component {
                                     <div className="col-md-2 block">
                                         <img
                                             src={require('../images/staffProfile.png')}
-                                            className="img-responsive" height="45%" width="45%" alt="" />
+                                            className="img-responsive" height="95%" width="95%" alt="" />
                                     </div>
                                     <div className="col-md-10 block add-border input-comments ">
                                         <input type="text" onKeyDown={event => {
@@ -182,22 +213,21 @@ class Forum extends Component {
             return this.state.commentsList.map((singleDetail, index) => {
                 return (<div key={index} className="col-md-12">
                     <div className="panel p-r-10 p-b-10 p-t-10">
-                        <div className="col-md-2 block">
+                        <div className="col-md-2 block bottom">
                             <img
                                 src={require('../images/staffProfile.png')}
-                                className="img-responsive" height="45%" width="45%" alt="" />
+                                className="img-responsive" height="95%" width="95%" alt="" />
                         </div>
-                        <div className="col-md-7 block">
-                            <p>{singleDetail.comments}</p>
+                        <div className="col-md-7 block p-l-1">
+                            <p className="block  name">{singleDetail.comments}</p>
                         </div>
                         <div className="col-md-3 block">
-                            <p className="text-xs">{this.timeConverter(singleDetail.postedTime)}</p>
+                            <p className="block text-xs">{this.timeConverter(singleDetail.postedTime)}</p>
                         </div>
                     </div>
-
-                </div>)
+                </div>
+                )
             });
-
         }
     }
 
@@ -210,6 +240,7 @@ class Forum extends Component {
         if (this.state.caption) {
             const params = {
                 userID: this.state.userID.toUpperCase(),
+                collegeName: this.state.loggedInUser.collegeName,
                 fullName: this.state.userDetails.name,
                 likes: 0,
                 postedTime: Math.floor(Date.now() / 1000),
@@ -305,8 +336,24 @@ class Forum extends Component {
             comments: singleDetail.comments,
             postedTime: Math.floor(Date.now() / 1000),
         }
+        const commentParams = {
+            commentsCount: this.state.commentsList.length + 1
+        }
         axios.post(`/xakal/comments`, params)
             .then(() => {
+                axios.put(`/xakal/forumdetail/updatecomments/${singleDetail._id}`, commentParams)
+                    .then(() => {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            forumDetails: this.state.forumDetails.filter((element) => {
+                                if (element._id === singleDetail._id) {
+                                    element.commentsCount = element.commentsCount + 1;
+                                }
+                                return element
+                            })
+                        }))
+                    })
+                    .catch((err) => console.log(err));
                 this.visibleReplySection(singleDetail)
                 this.setState(prevState => ({
                     ...prevState,
@@ -373,9 +420,9 @@ class Forum extends Component {
                             <div className="profile-content">
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <div className="card">
-                                            <div className="card-head card-topline-lightblue">
-                                                <header>User Activity</header>
+                                        <div className="card border">
+                                            <div className="header">
+                                                <header>White Board</header>
                                             </div>
                                             <div className="card-body no-padding height-9">
                                                 <div className="container-fluid">
@@ -384,24 +431,23 @@ class Forum extends Component {
                                                             <div className="panel">
                                                                 <form>
                                                                     <textarea className="form-control p-text-area" rows="4"
-                                                                        value={this.state.caption} onChange={this.handleFormChange.bind(this)} name="caption" placeholder="Whats in your mind today?"></textarea>
+                                                                        value={this.state.caption} onChange={this.handleFormChange.bind(this)} name="caption" placeholder="Scribble anything in your mind"></textarea>
                                                                 </form>
                                                                 <footer className="panel-footer" style={{ padding: '1.5%' }}>
                                                                     <button type="button"
                                                                         onClick={this.formSubmit.bind(this)} className="btn btn-post pull-right">Post</button>
                                                                     <ul className="nav nav-pills p-option">
                                                                         <li>
-                                                                            <button><i className="fa fa-user"></i></button>
+                                                                            <button></button>
                                                                         </li>
                                                                         <li>
-                                                                            <button><i className="fa fa-camera"></i></button>
+                                                                            <button></button>
                                                                         </li>
                                                                         <li>
-                                                                            <button><i
-                                                                                className="fa  fa-location-arrow"></i></button>
+                                                                            <button></button>
                                                                         </li>
                                                                         <li>
-                                                                            <button><i className="fa fa-meh-o"></i></button>
+                                                                            <button></button>
                                                                         </li>
                                                                     </ul>
                                                                 </footer>

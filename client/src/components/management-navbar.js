@@ -463,6 +463,9 @@ class ManagementNavBar extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <button class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</button>
+                            <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userRole.charAt(0).toUpperCase() + this.props.userID.userDetails.userRole.slice(1)} Dashboard</p>
+                            <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userID}</p>
+
                             <Switch>
                                 {/* management portal links */}
                                 <Route path="/management-portal/view-student-details" component={StudentDetailsMaintain} />

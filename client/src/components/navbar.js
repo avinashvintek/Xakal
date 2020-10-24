@@ -44,7 +44,7 @@ class NavBar extends Component {
             this.logout()
         } else {
             if (this.props && this.props.state && this.props.state.location) {
-                this.setState({ routerLink: this.props.state.location.pathname })
+                this.setState({ routerLink: this.props.state.location.pathname });
             }
         }
     }
@@ -97,10 +97,10 @@ class NavBar extends Component {
                             </Link>
                         </li>
                         {this.state.routerLink === '/students-portal' || this.state.routerLink === '/staff-portal' ? <li className="nav-item">
-                            <Link to={{ pathname: `${this.state.routerLink}/forum`, userID: this.props.userID }} className="nav-link">
+                            <Link to={{ pathname: `${this.state.routerLink}/whiteboard`, userID: this.props.userID }} className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faLayerGroup} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>Forum</span>
+                                <span>White Board</span>
                             </Link>
                         </li> : <span></span>}
                         {this.state.routerLink === '/staff-portal' ?
@@ -208,8 +208,10 @@ class NavBar extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <button className="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i className="fa fa-power-off m-r-15"></i>Logout</button>
-
-                            <Switch>
+                            {this.props && this.props.userID && this.props.userID.userDetails ?
+                                <><p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userRole.charAt(0).toUpperCase() + this.props.userID.userDetails.userRole.slice(1)} Dashboard</p>
+                                    <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userID}</p>
+                                </> : <></>}<Switch>
                                 {/* student portal links */}
                                 <Route path="/students-portal/class-notes" component={classNotes} />
                                 <Route path="/students-portal/xakal-notes" component={classNotes} />
@@ -219,7 +221,7 @@ class NavBar extends Component {
                                 <Route path="/students-portal/internal-details" component={InternalDetails} />
                                 <Route path="/students-portal/attendance" component={Attendance} />
                                 <Route path="/students-portal/payment" component={Payment} />
-                                <Route path="/students-portal/forum" component={Forum} />
+                                <Route path="/students-portal/whiteboard" component={Forum} />
                                 <Route path="/students-portal/student-profile" component={Dashboard} />
                                 <Route path="/students-portal/staff-profile" component={StaffDashboard} />
                                 <Route path="/students-portal/manangement-profile" component={ManagementDashboard} />
@@ -234,7 +236,7 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/attendance" component={StaffAttendance} />
                                 <Route path="/staff-portal/salary" component={SalaryDetails} />
                                 <Route path="/staff-portal/view-student-details" component={StudentDetailsMaintain} />
-                                <Route path="/staff-portal/forum" component={Forum} />
+                                <Route path="/staff-portal/whiteboard" component={Forum} />
                                 <Route path="/staff-portal/student-profile" component={Dashboard} />
                                 <Route path="/staff-portal/staff-profile" component={StaffDashboard} />
                                 <Route path="/staff-portal/manangement-profile" component={ManagementDashboard} />
