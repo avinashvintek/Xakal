@@ -79,7 +79,7 @@ class Forum extends Component {
 
 
     handleCommentsChange(singleDetail, event) {
-        if (event.target && event.target.value) {
+        if (event.target && event.target.value !== undefined) {
             const value = event.target.value;
             this.setState(prevState => ({
                 ...prevState,
