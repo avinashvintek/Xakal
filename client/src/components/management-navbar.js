@@ -46,8 +46,13 @@ class ManagementNavBar extends Component {
     }
 
     componentDidMount() {
-        if (this.props && this.props.state && this.props.state.location) {
-            this.setState({ routerLink: this.props.state.location.pathname })
+        if (!this.props.userID) {
+            alert('Please login again! Session expired!')
+            this.logout()
+        } else {
+            if (this.props && this.props.state && this.props.state.location) {
+                this.setState({ routerLink: this.props.state.location.pathname })
+            }
         }
     }
 
