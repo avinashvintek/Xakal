@@ -21,6 +21,7 @@ import ManagementDashboard from './management-portal/dashboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAddressBook, faLayerGroup, faBookReader, faGraduationCap, faLaptopCode, faHourglassHalf, faGem, faUsers } from '@fortawesome/free-solid-svg-icons'
 import logo from '../images/xakal-logo.png';
+import AttendanceMaintain from './staff-portal/attendance-maintain';
 
 class NavBar extends Component {
     constructor(props) {
@@ -184,6 +185,13 @@ class NavBar extends Component {
                                 <span>Attendance</span>
                             </Link>
                         </li>
+                        <li className="nav-item">
+                            <Link to={{ pathname: `${this.state.routerLink}/attendance-maintain`, userID: this.props.userID }} className="nav-link">
+                                <FontAwesomeIcon className="fa-sm" icon={faHourglassHalf} />
+                                <i className="fas fa-fw fa-tachometer-alt"></i>
+                                <span>Apply Leave</span>
+                            </Link>
+                        </li>
                         {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/payment`, userID: this.props.userID }} className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faGem} />
@@ -226,6 +234,7 @@ class NavBar extends Component {
                                 <Route path="/students-portal/staff-profile" component={StaffDashboard} />
                                 <Route path="/students-portal/manangement-profile" component={ManagementDashboard} />
                                 <Route path="/students-portal/hod-profile" component={StaffDashboard} />
+                                <Route path="/students-portal/attendance-maintain" component={AttendanceMaintain} />
 
                                 {/* staff portal links */}
                                 <Route path="/staff-portal/class-notes" component={classNotes} />
@@ -241,6 +250,7 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/staff-profile" component={StaffDashboard} />
                                 <Route path="/staff-portal/manangement-profile" component={ManagementDashboard} />
                                 <Route path="/staff-portal/hod-profile" component={StaffDashboard} />
+                                <Route path="/staff-portal/attendance-maintain" component={AttendanceMaintain} />
                                 <Route exact path="/" component={Login} />
                             </Switch>
                         </div>

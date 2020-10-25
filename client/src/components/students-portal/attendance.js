@@ -4,6 +4,7 @@ import '../../minified-css/material-min.css';
 import '../../styles/dropdowns.css';
 import '../../styles/theme-style.css';
 import axios from 'axios';
+import moment from 'moment';
 
 class Attendance extends Component {
     constructor(props) {
@@ -73,6 +74,13 @@ class Attendance extends Component {
         }
     }
 
+    actionHover(event) {
+        var element = event.target.className;
+        if (element === 'column100 column4 ') {
+            this.setState({ column2: 'hov-column-head-ver5' })
+        }
+    }
+
     /**
      * Adds the hover class when userID is hovered
      */
@@ -90,7 +98,8 @@ class Attendance extends Component {
         this.setState({
             column1: '',
             column2: '',
-            column3: ''
+            column3: '',
+            column4: ''
         })
     }
 
@@ -198,18 +207,44 @@ class Attendance extends Component {
             });
     }
 
+    /**
+    * Removes the selected row
+    * @param index selected row index
+    */
+    removeClick(singleData, i) {
+        if (moment(new Date(singleData.fromDate)).isBefore(moment(new Date()))) {
+            alert('Cannot cancel this leave. Please contact admin.')
+        } else {
+            if (window.confirm('Are you sure to cancel this leave?')) {
+                let absenceList = [...this.state.absenceList];
+                absenceList.splice(i, 1);
+                this.setState({ absenceList });
+                axios.put(`/xakal/attendance/cancelLeave/${singleData._id}`)
+                    .then((response) => {
+                        // this.setState({ studentDetails: response.data });
+                    });
+            }
+        }
+    }
+
 
     /**
      * Displays the list of notes based on the API response
      */
     displayTable() {
+        let counter = 0;
         return this.state.absenceList.map((singleData, index) => {
+            const fromDate = moment(new Date(singleData.fromDate)).format('MM/DD/YYYY');
+            const toDate = moment(new Date(singleData.toDate)).format('MM/DD/YYYY');
             return (
                 <tr className="row100">
-                    <td className="column100 column1" data-column="column1">{++index}</td>
-                    <td className={"column100 column2 "} onMouseEnter={this.userHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
-                    <td className={"column100 column2 "} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.leaveDate}</td>
-                    <td className={"column100 column3 "} onMouseEnter={this.reasonHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.reason}</td>
+                    <td className="column100 column1" key={counter++} data-column="column1">{++index}</td>
+                    <td className={"column100 column2 "} key={counter++} onMouseEnter={this.userHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
+                    <td className={"column100 column2 "} key={counter++} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{fromDate} - {toDate}</td>
+                    <td className={"column100 column3 "} key={counter++} onMouseEnter={this.reasonHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.reason}</td>
+                    <td className={"column100 column4 "} key={counter++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>
+                        <button type="button" onClick={i => this.removeClick(singleData, index -= 4)} className="btn btn-danger m-t-4">Cancel Leave</button>
+                    </td>
                 </tr>
             )
         })
@@ -322,8 +357,9 @@ class Attendance extends Component {
                                         <tr className="row100 head">
                                             <th className="column100 column1" data-column="column1"></th>
                                             <th className={"column100 column2 " + this.state.column1} onMouseEnter={this.userHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Student ID</th>
-                                            <th className={"column100 column2 " + this.state.column1} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Date of Absence</th>
-                                            <th className={"column100 column3 " + this.state.column2} onMouseEnter={this.reasonHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Reason</th>
+                                            <th className={"column100 column3 " + this.state.column2} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Date of Absence</th>
+                                            <th className={"column100 column4 " + this.state.column3} onMouseEnter={this.reasonHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Reason</th>
+                                            <th className={"column100 column5 " + this.state.column4} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>

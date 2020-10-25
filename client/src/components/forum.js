@@ -128,7 +128,7 @@ class Forum extends Component {
                 return (<li className="m-t-20" key={index}>
                     <div className="post-box panel">
                         <span
-                            class="text-muted text-xs"><i
+                            class="text-muted time-size"><i
                                 class="fa fa-clock-o"
                                 aria-hidden="true"></i>
                             {this.timeConverter(singleDetail.postedTime)}</span>
@@ -419,7 +419,7 @@ class Forum extends Component {
                         <div className="col-md-12">
                             <div className="profile-content">
                                 <div className="row">
-                                    <div className="col-md-6">
+                                    <div className="col-md-7">
                                         <div className="card border">
                                             <div className="header">
                                                 <header>White Board</header>

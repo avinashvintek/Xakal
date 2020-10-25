@@ -4,7 +4,10 @@ var StaffLeave = mongoose.model('StaffLeave', {
     month: {
         type: String
     },
-    leaveDate: {
+    fromDate: {
+        type: String
+    },
+    toDate: {
         type: String
     },
     reason: {
@@ -15,6 +18,12 @@ var StaffLeave = mongoose.model('StaffLeave', {
     },
     year: {
         type: Number
+    },
+    uploadedDate: {
+        type: String
+    },
+    isCancelled: {
+        type: Boolean
     }
 });
 module.exports = {

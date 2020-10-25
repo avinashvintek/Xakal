@@ -4,7 +4,10 @@ var StudentLeave = mongoose.model('StudentLeave', {
     semester: {
         type: String
     },
-    leaveDate: {
+    fromDate: {
+        type: String
+    },
+    toDate: {
         type: String
     },
     reason: {
@@ -12,6 +15,12 @@ var StudentLeave = mongoose.model('StudentLeave', {
     },
     userID: {
         type: String
+    },
+    uploadedDate: {
+        type: String
+    },
+    isCancelled: {
+        type: Boolean
     }
 });
 module.exports = {

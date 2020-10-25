@@ -171,7 +171,7 @@
  }
  .scrollable-menu {
     height: auto!important;
-    max-height: 200px!important;;
+    max-height: 150px!important;;
     overflow-x: hidden!important;;
 }
 .display-border {
