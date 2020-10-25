@@ -20,6 +20,8 @@ router.post('/studentleave', (req, res) => {
         reason: req.body.reason,
         userID: req.body.userID,
         isCancelled: false,
+        type: req.body.type,
+        uploadedBy: req.body.uploadedBy,
     });
     prdt.save((err, docs) => {
         if (!err) {

@@ -28,6 +28,7 @@ import Dashboard from './students-portal/dashboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAddressBook, faBookReader, faLaptopCode, faHourglassHalf, faReceipt, faDiagnoses, faJournalWhills, faSchool, faScroll, faUsers } from '@fortawesome/free-solid-svg-icons'
 import logo from '../images/xakal-logo.png';
+import AttendanceMaintain from './staff-portal/attendance-maintain';
 
 class ManagementNavBar extends Component {
     constructor(props) {
@@ -416,12 +417,20 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                             <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/attendance-maintain`, userID: this.props.userID }} className="nav-link">
+                                    {/* <FontAwesomeIcon className="fa-sm" icon={faHourglassHalf} /> */}
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Apply Leave</span>
+                                </Link>
+                            </li>
+                            {/* <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/staff-attendance`, userID: this.props.userID }} className="nav-link collapsed">
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
                                     <span>Staff Attendance</span>
                                 </Link>
-                            </li>
+                            </li> */}
                         </div> : <div></div>}
 
                         <li className="nav-item">
@@ -463,8 +472,9 @@ class ManagementNavBar extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <button class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</button>
-                            <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userRole.charAt(0).toUpperCase() + this.props.userID.userDetails.userRole.slice(1)} Dashboard</p>
-                            <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userID}</p>
+                            {this.props && this.props.userID && this.props.userID.userDetails ? <>
+                                <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userRole.charAt(0).toUpperCase() + this.props.userID.userDetails.userRole.slice(1)} Dashboard</p>
+                                <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userID}</p></> : <></>}
 
                             <Switch>
                                 {/* management portal links */}
@@ -494,6 +504,7 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/staff-profile" component={StaffDashboard} />
                                 <Route path="/management-portal/manangement-profile" component={ManagementDashboard} />
                                 <Route path="/management-portal/hod-profile" component={StaffDashboard} />
+                                <Route path="/management-portal/attendance-maintain" component={AttendanceMaintain} />
 
                                 {/* hod portal links */}
                                 <Route path="/hod-portal/view-student-details" component={StudentDetailsMaintain} />
@@ -523,7 +534,7 @@ class ManagementNavBar extends Component {
                                 <Route path="/hod-portal/staff-profile" component={StaffDashboard} />
                                 <Route path="/hod-portal/manangement-profile" component={ManagementDashboard} />
                                 <Route path="/hod-portal/hod-profile" component={StaffDashboard} />
-
+                                <Route path="/hod-portal/attendance-maintain" component={AttendanceMaintain} />
                             </Switch>
                         </div>
                     </div>

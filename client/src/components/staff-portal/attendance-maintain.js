@@ -14,12 +14,14 @@ class AttendanceMaintain extends Component {
             searchAllowed: false,
             absenceList: [],
             selectedMonth: '',
-            selectedYear: '',
+            selectedType: '',
             background: '',
             isFocussed: '',
             onFocus: false,
             userID: '',
-            isStudentPortal: false,
+            isHODPortal: false,
+            isManagementPortal: false,
+            selectedStudentName: '',
             fromDate: moment(new Date()).format('YYYY-MM-DD'),
             toDate: moment(new Date()).format('YYYY-MM-DD')
         };
@@ -44,9 +46,81 @@ class AttendanceMaintain extends Component {
      */
     getPortal() {
         const pathArray = this.props.location.pathname.split('/');
-        if (pathArray.includes('students-portal')) {
-            this.setState({ isStudentPortal: true, });
+        if (pathArray.includes('hod-portal')) {
+            this.setState({ isHODPortal: true, });
+            this.fetchStaffDetails();
+        } else if (pathArray.includes('management-portal')) {
+            this.setState({ isManagementPortal: true, });
+            this.fetchDepartmentDetails();
         }
+    }
+
+    /**
+     * Fetches all department
+     */
+    fetchDepartmentDetails() {
+        axios.get(`/xakal/departmentdetail`)
+            .then((response) => {
+                this.setState({ departmentDetails: response.data });
+            });
+    }
+
+
+    /**
+    * Triggers when department dropdown is focused
+    */
+    onDeptDropDownFocus() {
+        this.setState({ isDepartmentFocussed: 'is-focused', onDepartmentFocus: true, backgroundDepartment: 'is-shown' });
+        if (this.state.hasSemesterValue) {
+            this.setState({ onFocus: false, background: 'is-hidden', isFocussed: 'is-focused' });
+        } else {
+            this.setState({ onFocus: false, background: 'is-hidden', isFocussed: 'is-hidden' });
+        }
+    }
+
+    /**
+     * Triggers when the department is changed and stores the values in state
+     * @param event form values 
+     */
+    handleDepartmentChange(event) {
+        this.setState({ selectedDepartment: event.target.id, onDepartmentFocus: false, backgroundDepartment: 'is-hidden', background: 'is-hidden', hasDepartmentValue: true });
+        this.fetchStudentDetailsByDept(event.target.id);
+    }
+
+    /**
+     * Displays the list of department based on the API response
+     */
+    displayDepartment() {
+        if (this.state && this.state.departmentDetails && this.state.departmentDetails.length) {
+            return this.state.departmentDetails.map((singleDepartment, index) => {
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleDepartment.name} name={singleDepartment.name} onClick={this.handleDepartmentChange.bind(this)}>{singleDepartment.name}</button></li>)
+            });
+        }
+    }
+
+    /**
+    * Gets the selected staff detail
+    */
+    fetchStaffDetails() {
+        const userID = this.props.location.userID || this.props.location.state;
+        if (userID) {
+            axios.get(`/xakal/staffdetail/${userID.userID}`)
+                .then((response) => {
+                    this.setState({ staffDetails: response.data });
+                    this.fetchStudentDetailsByDept(response.data.departmentName)
+                });
+        }
+    }
+
+    /**
+    * Fetches all students for selected department
+    */
+    fetchStudentDetailsByDept(departmentName) {
+        this.setState({ studentDetails: [] })
+        axios.get(`/xakal/studentdetail/department/${departmentName}`)
+            .then((response) => {
+                this.setState({ studentDetails: response.data });
+            });
     }
 
     /**
@@ -162,24 +236,14 @@ class AttendanceMaintain extends Component {
     }
 
     submitLeave() {
-        if (this.state.isStudentPortal) {
-            if (this.state.selectedSemester === '' || this.state.description === '') {
-                alert('Please fill all the details')
-            } else if (moment(new Date(this.state.fromDate)).isAfter(moment(new Date(this.state.toDate)))) {
-                alert('Select valid date range')
-            } else {
-                // insert the leave to db
-                this.applyStudentLeave();
-            }
+        const departmentCheck = this.state.isManagementPortal ? this.state.selectedDepartment === '' : false
+        if (departmentCheck || this.state.selectedSemester === '' || this.state.description === '' || this.state.selectedStudent === '' || this.state.selectedType === '') {
+            alert('Please fill all the details')
+        } else if (moment(new Date(this.state.fromDate)).isAfter(moment(new Date(this.state.toDate)))) {
+            alert('Select valid date range')
         } else {
-            if (this.state.selectedMonth === '' || this.state.selectedYear === '' || this.state.description === '') {
-                alert('Please fill all the details')
-            } else if (moment(new Date(this.state.fromDate)).isAfter(moment(new Date(this.state.toDate)))) {
-                alert('Select valid date range')
-            } else {
-                // insert the leave to db
-                this.applyStaffLeave();
-            }
+            // insert the leave to db
+            this.applyStudentLeave();
         }
     }
 
@@ -208,9 +272,11 @@ class AttendanceMaintain extends Component {
     applyStudentLeave() {
         let isUpdated = false;
         const params = {
-            userID: this.state.userID.toUpperCase(),
+            userID: this.state.selectedStudent.toUpperCase(),
             semester: this.state.selectedSemester.toLowerCase(),
             uploadedDate: new Date(Date.now()).toLocaleString(),
+            uploadedBy: this.state.userID.toUpperCase(),
+            type: this.state.selectedType,
             fromDate: new Date(this.state.fromDate).toLocaleString(),
             toDate: new Date(this.state.toDate).toLocaleString(),
             reason: this.state.description,
@@ -256,11 +322,11 @@ class AttendanceMaintain extends Component {
     /**
      * Sets the year selected
      */
-    onYearSelect(event) {
-        this.setState({ selectedYear: event.target.id, hasYearValue: true, onYearFocus: false, yearBackground: 'is-hidden' });
+    onTypeSelect(event) {
+        this.setState({ selectedType: event.target.id, hasYearValue: true, onYearFocus: false, yearBackground: 'is-hidden' });
     }
 
-    onYearFocus() {
+    onTypeFocus() {
         this.setState({ isYearFocussed: 'is-focused', onFocus: false, onYearFocus: true, yearBackground: 'is-shown', monthBackground: 'is-hidden' });
         this.monthFocus();
         this.descriptionFocus();
@@ -270,15 +336,38 @@ class AttendanceMaintain extends Component {
      * Gets the previous 5 years
      */
     getYear() {
-        const year = (new Date()).getFullYear();
-        const years = Array.from(new Array(3), (val, index) => -(index - year));
-        return years.map((year, index) => {
+        return ['OD', 'Leave'].map((year, index) => {
             return (
-                <li id={year} key={index++} className="mdl-menu__item animation" onClick={this.onYearSelect.bind(this)} >{year}</li>
+                <li id={year} key={index++} className="mdl-menu__item animation" onClick={this.onTypeSelect.bind(this)} >{year}</li>
             )
         })
     }
 
+    /**
+   * Triggers when student is focused
+   */
+    onStudentFocussed() {
+        this.setState({ isStudentFocussed: 'is-focused', onFocus: false, onStudentFocus: true, backgroundStudent: 'is-shown' });
+    }
+
+    /**
+     * Triggers when the student is changed and stores the values in state
+     * @param event form values 
+     */
+    handleStudentChange(event) {
+        this.setState({ selectedStudentName: event.target.name, selectedStudent: event.target.id, onStudentFocus: false, backgroundStudent: 'is-hidden' });
+    }
+
+    /**
+    * Displays the list of student based on the API response
+    */
+    displayStudent() {
+        if (this.state && this.state.studentDetails && this.state.studentDetails.length) {
+            return this.state.studentDetails.map((singleStudent, index) => {
+                return (<li className="mdl-menu__item animation" key={index}><button id={singleStudent.userID} name={singleStudent.name} onClick={this.handleStudentChange.bind(this)}>{singleStudent.name}</button></li>)
+            });
+        }
+    }
     render() {
         return (
             <div>
@@ -289,30 +378,76 @@ class AttendanceMaintain extends Component {
                     <div className="col-sm-12">
                         <div className="card-box">
                             <div className="card-body row">
-                                {this.state.isStudentPortal ?
-                                    <div className="col-lg-3 p-t-20">
+                                {/* {this.state.isStudentPortal ? */}
+                                {this.state.isManagementPortal ?
+                                    <div className="col-sm-1 p-t-20">
                                         <div
-                                            className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                            <input autoComplete="off" onKeyPress={(e) => e.preventDefault()} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
-                                                value={this.state.selectedSemester} />
-                                            <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
-                                            {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isDepartmentFocussed}>
+                                            <input name="selectedDepartment" onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onDeptDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id={`department`}
+                                                value={this.state.selectedDepartment} onChange={this.handleDepartmentChange.bind(this)} />
+                                            <label className={"mdl-textfield__label " + this.state.backgroundDepartment}>Department</label>
+                                            {this.state.onDepartmentFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
                                                 <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
                                                     <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
-                                                        <li className="mdl-menu__item animation" id="Semester 1" onClick={this.onDropDownSelect.bind(this)} >Semester 1</li>
-                                                        <li className="mdl-menu__item animation1" id="Semester 2" onClick={this.onDropDownSelect.bind(this)} >Semester 2</li>
-                                                        <li className="mdl-menu__item animation2" id="Semester 3" onClick={this.onDropDownSelect.bind(this)} >Semester 3</li>
-                                                        <li className="mdl-menu__item animation" id="Semester 4" onClick={this.onDropDownSelect.bind(this)} >Semester 4</li>
-                                                        <li className="mdl-menu__item animation1" id="Semester 5" onClick={this.onDropDownSelect.bind(this)} >Semester 5</li>
-                                                        <li className="mdl-menu__item animation2" id="Semester 6" onClick={this.onDropDownSelect.bind(this)} >Semester 6</li>
-                                                        <li className="mdl-menu__item animation" id="Semester 7" onClick={this.onDropDownSelect.bind(this)} >Semester 7</li>
-                                                        <li className="mdl-menu__item animation1" id="Semester 8" onClick={this.onDropDownSelect.bind(this)} >Semester 8</li>
+                                                        {this.displayDepartment()}
                                                     </ul>
                                                 </div>
                                             </div> : <p></p>}
                                         </div>
-                                    </div> :
-                                    <><div className="col-lg-2 p-t-20">
+                                    </div> : <p></p>}
+                                <div className="col-lg-1 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
+                                        <input autoComplete="off" onKeyPress={(e) => e.preventDefault()} onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                            value={this.state.selectedSemester} />
+                                        <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
+                                        {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    <li className="mdl-menu__item animation" id="Semester 1" onClick={this.onDropDownSelect.bind(this)} >Semester 1</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 2" onClick={this.onDropDownSelect.bind(this)} >Semester 2</li>
+                                                    <li className="mdl-menu__item animation2" id="Semester 3" onClick={this.onDropDownSelect.bind(this)} >Semester 3</li>
+                                                    <li className="mdl-menu__item animation" id="Semester 4" onClick={this.onDropDownSelect.bind(this)} >Semester 4</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 5" onClick={this.onDropDownSelect.bind(this)} >Semester 5</li>
+                                                    <li className="mdl-menu__item animation2" id="Semester 6" onClick={this.onDropDownSelect.bind(this)} >Semester 6</li>
+                                                    <li className="mdl-menu__item animation" id="Semester 7" onClick={this.onDropDownSelect.bind(this)} >Semester 7</li>
+                                                    <li className="mdl-menu__item animation1" id="Semester 8" onClick={this.onDropDownSelect.bind(this)} >Semester 8</li>
+                                                </ul>
+                                            </div>
+                                        </div> : <p></p>}
+                                    </div>
+                                </div>
+                                <div className="col-lg-2 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isStudentFocussed}>
+                                        <input onKeyPress={(e) => e.preventDefault()} onFocus={this.onStudentFocussed.bind(this)} autoComplete="off" className="mdl-textfield__input display-border" type="text" id="selectedStudent"
+                                            value={this.state.selectedStudentName} onChange={this.handleStudentChange.bind(this)} name="selectedStudent" />
+                                        <label className={"mdl-textfield__label " + this.state.backgroundStudent}>Student</label>
+                                        {this.state.onStudentFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    {this.displayStudent()}
+                                                </ul>
+                                            </div>
+                                        </div> : <p></p>}
+                                    </div>
+                                </div>
+                                <div className="col-lg-1 p-t-20">
+                                    <div
+                                        className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isYearFocussed}>
+                                        <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onTypeFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="year"
+                                            value={this.state.selectedType} />
+                                        <label className={"mdl-textfield__label " + this.state.yearBackground}>Type</label>
+                                        {this.state.onYearFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">
+                                            <div className="mdl-menu__outline mdl-menu--bottom-left dropdown-div">
+                                                <ul className="scrollable-menu mdl-menu mdl-menu--bottom-left mdl-js-menu ul-list">
+                                                    {this.getYear()}
+                                                </ul>
+                                            </div>
+                                        </div> : <p></p>}
+                                    </div>
+                                </div>
+                                {/* <><div className="col-lg-2 p-t-20">
                                         <div
                                             className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isMonthFocussed}>
                                             <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onMonthFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="month"
@@ -342,7 +477,7 @@ class AttendanceMaintain extends Component {
                                                 </div> : <p></p>}
                                             </div>
 
-                                        </div></>}
+                                        </div></>} */}
                                 <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width is-focused"}>
@@ -359,7 +494,7 @@ class AttendanceMaintain extends Component {
                                         <label htmlFor="toDate" className={"mdl-textfield__label is-hidden"}>Until date</label>
                                     </div>
                                 </div>
-                                <div className="col-lg-2 p-t-20">
+                                <div className="col-lg-1 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label " + this.state.isDescriptionFocussed}>
                                         <input autoComplete="off" onFocus={this.onDescriptionFocus.bind(this)} value={this.state.description} className="mdl-textfield__input display-border" type="text" id="description" onChange={this.onDescriptionChanged.bind(this)}
@@ -367,7 +502,7 @@ class AttendanceMaintain extends Component {
                                         <label className={"mdl-textfield__label " + this.state.backgroundDesc}>Description</label>
                                     </div>
                                 </div>
-                                <div className="col-sm-3 p-t-20">
+                                <div className="col-sm-1 p-t-20">
                                     <button type="button" onClick={this.submitLeave.bind(this)} className="btn btn-primary m-t-15 m-l-30">Submit</button>
                                 </div>
                             </div>

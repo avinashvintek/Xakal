@@ -74,9 +74,16 @@ class Attendance extends Component {
         }
     }
 
-    actionHover(event) {
+    typeHover(event) {
         var element = event.target.className;
         if (element === 'column100 column4 ') {
+            this.setState({ column2: 'hov-column-head-ver5' })
+        }
+    }
+
+    actionHover(event) {
+        var element = event.target.className;
+        if (element === 'column100 column5 ') {
             this.setState({ column2: 'hov-column-head-ver5' })
         }
     }
@@ -242,9 +249,10 @@ class Attendance extends Component {
                     <td className={"column100 column2 "} key={counter++} onMouseEnter={this.userHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.userID}</td>
                     <td className={"column100 column2 "} key={counter++} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{fromDate} - {toDate}</td>
                     <td className={"column100 column3 "} key={counter++} onMouseEnter={this.reasonHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.reason}</td>
-                    <td className={"column100 column4 "} key={counter++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>
+                    <td className={"column100 column4 "} key={counter++} onMouseEnter={this.typeHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>{singleData.type}</td>
+                    {this.state.isManagementPortal ? <td className={"column100 column5 "} key={counter++} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>
                         <button type="button" onClick={i => this.removeClick(singleData, index -= 4)} className="btn btn-danger m-t-4">Cancel Leave</button>
-                    </td>
+                    </td> : <></>}
                 </tr>
             )
         })
@@ -359,7 +367,9 @@ class Attendance extends Component {
                                             <th className={"column100 column2 " + this.state.column1} onMouseEnter={this.userHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Student ID</th>
                                             <th className={"column100 column3 " + this.state.column2} onMouseEnter={this.dateHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Date of Absence</th>
                                             <th className={"column100 column4 " + this.state.column3} onMouseEnter={this.reasonHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Reason</th>
-                                            <th className={"column100 column5 " + this.state.column4} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Action</th>
+                                            <th className={"column100 column5 " + this.state.column4} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Type</th>
+                                            {this.state.isManagementPortal ? <th className={"column100 column5 " + this.state.column4} onMouseEnter={this.actionHover.bind(this)} onMouseLeave={this.hoverOff.bind(this)}>Action</th>
+                                                : <></>}
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -21,7 +21,13 @@ var StudentLeave = mongoose.model('StudentLeave', {
     },
     isCancelled: {
         type: Boolean
-    }
+    },
+    uploadedBy: {
+        type: String
+    },
+    type: {
+        type: String
+    },
 });
 module.exports = {
     StudentLeave: StudentLeave
