@@ -286,7 +286,8 @@ class ClassNotes extends Component {
         formData.append('uploadedBy', this.state.userID.toUpperCase());
         formData.append('uploadedFile', files);
         formData.append('uploadedDate', new Date());
-        axios.post('/xakal/class-notes/upload', formData, {}).then(() => { })
+        formData.append('type', 'classNote');
+        axios.post('/xakal/class-notes/upload', formData).then(() => { })
         this.currentSite(formData);
     }
 
