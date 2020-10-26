@@ -338,10 +338,8 @@ class ClassNotes extends Component {
      */
     displayTable() {
         const type = this.props.location.pathname === "/students-portal/question-papers" ? "questionPaper" : "classNote";
-        const baseUrl = '../../../';
-        console.log('baseUl', baseUrl, process.env.NODE_ENV)
         return this.state.notesList.map((singleData, index) => {
-            var hrefValue = '../../../' + type + '/' + singleData.semester + '/' + singleData.course + '/' + singleData.uploadedFile;
+            var hrefValue = '/' + type + '/' + singleData.semester + '/' + singleData.course + '/' + singleData.uploadedFile;
             return (
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>
