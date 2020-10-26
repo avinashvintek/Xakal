@@ -341,7 +341,7 @@ class ClassNotes extends Component {
         const baseUrl = process.env.NODE_ENV === 'production' ? '/' : '../../../';
         console.log('baseUl', baseUrl, process.env.NODE_ENV)
         return this.state.notesList.map((singleData, index) => {
-            var hrefValue = baseUrl + type + '/' + singleData.semester + '/' + singleData.course + '/' + singleData.uploadedFile;
+            var hrefValue = '../../../' + type + '/' + singleData.semester + '/' + singleData.course + '/' + singleData.uploadedFile;
             return (
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>
