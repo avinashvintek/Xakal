@@ -286,7 +286,6 @@ class ClassNotes extends Component {
         formData.append('uploadedBy', this.state.userID.toUpperCase());
         formData.append('uploadedFile', files);
         formData.append('uploadedDate', new Date());
-        formData.append('type', 'classNote');
         axios.post('/xakal/class-notes/upload', formData).then(() => { })
         this.currentSite(formData);
     }
@@ -339,7 +338,7 @@ class ClassNotes extends Component {
      */
     displayTable() {
         const type = this.props.location.pathname === "/students-portal/question-papers" ? "questionPaper" : "classNote";
-        const baseUrl = process.env.NODE_ENV === 'production' ? '/' : '../../../';
+        const baseUrl = '../../../';
         console.log('baseUl', baseUrl, process.env.NODE_ENV)
         return this.state.notesList.map((singleData, index) => {
             var hrefValue = '../../../' + type + '/' + singleData.semester + '/' + singleData.course + '/' + singleData.uploadedFile;
