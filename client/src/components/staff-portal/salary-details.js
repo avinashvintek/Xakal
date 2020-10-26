@@ -29,6 +29,7 @@ class SalaryDetails extends Component {
     }
 
     componentDidMount() {
+        debugger;
         if (this.props && this.props.location && this.props.location.userID) {
             const userID = this.props.location.userID;
             this.setState({ userID: userID.userID });

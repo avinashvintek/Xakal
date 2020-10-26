@@ -18,7 +18,8 @@ class Login extends Component {
             studentRedirect: false,
             staffRedirect: false,
             managementRedirect: false,
-            hodRedirect: false
+            hodRedirect: false,
+            nonTeaching: false,
         }
     }
 
@@ -83,6 +84,8 @@ class Login extends Component {
                                 this.setState({ managementRedirect: true })
                             } else if (response.data.userRole === 'hod') {
                                 this.setState({ hodRedirect: true })
+                            } else if (response.data.userRole === 'non-teaching') {
+                                this.setState({ nonTeaching: true })
                             } else {
                                 alert('Invalid user')
                             }
@@ -110,6 +113,8 @@ class Login extends Component {
             return <Redirect to={{ pathname: "management-portal/dashboard", state: { userID: this.state.loginID, userDetails: this.state.userDetails } }} />
         } else if (this.state.hodRedirect) {
             return <Redirect to={{ pathname: "hod-portal/dashboard", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
+        }else if (this.state.nonTeaching) {
+            return <Redirect to={{ pathname: "non-teaching-portal/dashboard", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
         } else {
             return (
 

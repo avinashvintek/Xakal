@@ -29,6 +29,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAddressBook, faBookReader, faLaptopCode, faHourglassHalf, faReceipt, faDiagnoses, faJournalWhills, faSchool, faScroll, faUsers } from '@fortawesome/free-solid-svg-icons'
 import logo from '../images/xakal-logo.png';
 import AttendanceMaintain from './staff-portal/attendance-maintain';
+import WorkersDetailsMaintain from './non-teaching-portal/workers-details-maintain';
+import AddWorkersDetails from './non-teaching-portal/add-workers-details';
+import AddWorkersSalaryDetails from './non-teaching-portal/add-salary-details';
 
 class ManagementNavBar extends Component {
     constructor(props) {
@@ -42,6 +45,7 @@ class ManagementNavBar extends Component {
             accounts: false,
             attendance: false,
             assessment: false,
+            nonTeaching: false,
             routerLink: ''
         }
     }
@@ -104,6 +108,18 @@ class ManagementNavBar extends Component {
             this.setState({ professors: false })
         } else {
             this.setState({ professors: true })
+        }
+    }
+
+    /**
+     * Handles the sub menu of nonTeaching
+     */
+    nonTeaching() {
+        this.resetNavBarClick();
+        if (this.state.nonTeaching) {
+            this.setState({ nonTeaching: false })
+        } else {
+            this.setState({ nonTeaching: true })
         }
     }
 
@@ -194,7 +210,8 @@ class ManagementNavBar extends Component {
             departments: false,
             professors: false,
             showNotes: false,
-            showClassNotes: false
+            showClassNotes: false,
+            nonTeaching: false
         })
     }
 
@@ -345,6 +362,32 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                         </div> : <div></div>}
+
+                        <li className="nav-item">
+                            <button className="nav-link collapsed" onClick={this.nonTeaching.bind(this)}>
+                                <FontAwesomeIcon className="fa-sm" icon={faDiagnoses} />
+                                <i className="fas fa-fw fa-tachometer-alt"></i>
+                                <span>Workers&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                {this.state.nonTeaching ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                            </button>
+                        </li>
+                        {this.state.nonTeaching ? <div>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/non-teaching-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>All Non Teaching</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={{ pathname: `${this.state.routerLink}/add-non-teaching-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Add Non Teaching</span>
+                                </Link>
+                            </li>
+                        </div> : <div></div>}
                         <hr className="sidebar-divider d-none d-md-block" />
 
                         {this.state.routerLink === '/hod-portal' ? <div>
@@ -398,6 +441,13 @@ class ManagementNavBar extends Component {
                                         <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>Fees</span>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/add-workers-receipt`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <span>Workers</span>
                                     </Link>
                                 </li>
                             </div> : <div></div>}
@@ -510,6 +560,9 @@ class ManagementNavBar extends Component {
                                 <Route path="/management-portal/manangement-profile" component={ManagementDashboard} />
                                 <Route path="/management-portal/hod-profile" component={StaffDashboard} />
                                 <Route path="/management-portal/attendance-maintain" component={AttendanceMaintain} />
+                                <Route path="/management-portal/non-teaching-details" component={WorkersDetailsMaintain} />
+                                <Route path="/management-portal/add-non-teaching-details" component={AddWorkersDetails} />
+                                <Route path="/management-portal/add-workers-receipt" component={AddWorkersSalaryDetails} />
 
                                 {/* hod portal links */}
                                 <Route path="/hod-portal/view-student-details" component={StudentDetailsMaintain} />

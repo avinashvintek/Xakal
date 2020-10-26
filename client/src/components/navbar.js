@@ -21,6 +21,7 @@ import ManagementDashboard from './management-portal/dashboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAddressBook, faLayerGroup, faBookReader, faGraduationCap, faLaptopCode, faHourglassHalf, faGem, faUsers } from '@fortawesome/free-solid-svg-icons'
 import logo from '../images/xakal-logo.png';
+import NonTeachingDashboard from './non-teaching-portal/dashboard';
 
 class NavBar extends Component {
     constructor(props) {
@@ -48,6 +49,9 @@ class NavBar extends Component {
                     this.setState({ routerLink: '/students-portal' });
                 } else if (this.props.state.location.state.userRole === 'staff') {
                     this.setState({ routerLink: '/staff-portal' });
+                }
+                else if (this.props.state.location.state.userRole === 'non-teaching') {
+                    this.setState({ routerLink: '/non-teaching-portal' });
                 }
             }
         }
@@ -116,79 +120,80 @@ class NavBar extends Component {
                                 </Link>
                             </li> : <span></span>}
                         <hr className="sidebar-divider" />
-                        <li className="nav-item">
-                            <button className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
-                                <FontAwesomeIcon className="fa-sm" icon={faBookReader} />
-                                <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>College Notes</span>
-                                {this.state.showClassNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
-                                    <i className="fa fa-angle-right fa-lg notes-margin " aria-hidden="true"></i>}
-                            </button>
-                        </li>
-                        {this.state.showClassNotes ? <div>
+                        {this.state.routerLink === '/students-portal' || this.state.routerLink === '/staff-portal' ? <>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/class-notes`, userID: this.props.userID }} className="nav-link collapsed">
+                                <button className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
+                                    <FontAwesomeIcon className="fa-sm" icon={faBookReader} />
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <span>Class Notes</span>
-                                </Link>
+                                    <span>College Notes</span>
+                                    {this.state.showClassNotes ? <i className="fa fa-angle-down fa-lg notes-margin" aria-hidden="true"></i> :
+                                        <i className="fa fa-angle-right fa-lg notes-margin " aria-hidden="true"></i>}
+                                </button>
                             </li>
-                            {this.state.routerLink === '/students-portal' ? <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/xakal-notes`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <span>Xakal Notes</span>
-                                </Link>
-                            </li> : <p></p>}
-                            <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/question-papers`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <span>Question Papers</span>
-                                </Link>
-                            </li>
-                        </div> : <div></div>}
-                        <li className="nav-item">
-                            <button className="nav-link collapsed" onClick={this.onAssessmentsClick.bind(this)}>
-                                <FontAwesomeIcon className="fa-sm" icon={faLaptopCode} />
-                                <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>Assessments</span>
-                                {this.state.assessments ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
-                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </button>
-                        </li>
-                        {this.state.assessments ? <div>
-                            <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <span>Internals</span>
-                                </Link>
-                            </li>
-                            {this.state.routerLink === '/students-portal' ? <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <span>Semester</span>
-                                </Link>
-                            </li> :
+                            {this.state.showClassNotes ? <div>
                                 <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/class-notes`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <span>Class Notes</span>
+                                    </Link>
+                                </li>
+                                {this.state.routerLink === '/students-portal' ? <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/xakal-notes`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <span>Xakal Notes</span>
+                                    </Link>
+                                </li> : <p></p>}
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/question-papers`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <span>Question Papers</span>
+                                    </Link>
+                                </li>
+                            </div> : <div></div>}
+                            <li className="nav-item">
+                                <button className="nav-link collapsed" onClick={this.onAssessmentsClick.bind(this)}>
+                                    <FontAwesomeIcon className="fa-sm" icon={faLaptopCode} />
+                                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                                    <span>Assessments</span>
+                                    {this.state.assessments ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                        <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                                </button>
+                            </li>
+                            {this.state.assessments ? <div>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/internal-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <span>Internals</span>
+                                    </Link>
+                                </li>
+                                {this.state.routerLink === '/students-portal' ? <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
                                         <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <span>Semester</span>
                                     </Link>
-                                </li>}
-                        </div> : <div></div>}
-                        <hr className="sidebar-divider d-none d-md-block" />
-                        {this.state.routerLink === '/students-portal' ?
-                            <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/attendance`, userID: this.props.userID }} className="nav-link">
-                                    <FontAwesomeIcon className="fa-sm" icon={faHourglassHalf} />
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <span>Attendance</span>
-                                </Link>
-                            </li> : <></>}
+                                </li> :
+                                    <li className="nav-item">
+                                        <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                            <i className="fas fa-fw fa-tachometer-alt"></i>
+                                            <i className="fas fa-fw fa-tachometer-alt"></i>
+                                            <span>Semester</span>
+                                        </Link>
+                                    </li>}
+                            </div> : <div></div>}
+                            <hr className="sidebar-divider d-none d-md-block" />
+                            {this.state.routerLink === '/students-portal' ?
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/attendance`, userID: this.props.userID }} className="nav-link">
+                                        <FontAwesomeIcon className="fa-sm" icon={faHourglassHalf} />
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <span>Attendance</span>
+                                    </Link>
+                                </li> : <></>}</> : <></>}
                         {/* <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/attendance-maintain`, userID: this.props.userID }} className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faHourglassHalf} />
@@ -254,6 +259,10 @@ class NavBar extends Component {
                                 <Route path="/staff-portal/manangement-profile" component={ManagementDashboard} />
                                 <Route path="/staff-portal/hod-profile" component={StaffDashboard} />
                                 <Route exact path="/" component={Login} />
+
+                                {/* non-teaching staff portal links */}
+                                <Route path="/non-teaching-portal/dashboard" component={NonTeachingDashboard} />
+                                <Route path="/non-teaching-portal/salary" component={SalaryDetails} />
                             </Switch>
                         </div>
                     </div>
