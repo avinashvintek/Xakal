@@ -51,8 +51,13 @@ class ManagementNavBar extends Component {
             alert('Please login again! Session expired!')
             this.logout()
         } else {
-            if (this.props && this.props.state && this.props.state.location) {
-                this.setState({ routerLink: this.props.state.location.pathname })
+            if (this.props && this.props.state && this.props.state.location && this.props.state.location.state
+                && this.props.state.location.state.userDetails) {
+                if (this.props.state.location.state.userDetails.userRole === 'management') {
+                    this.setState({ routerLink: '/management-portal' });
+                } else if (this.props.state.location.state.userRole === 'hod') {
+                    this.setState({ routerLink: '/hod-portal' });
+                }
             }
         }
     }

@@ -95,7 +95,7 @@ class StaffDashboard extends Component {
      */
     checkFollower() {
         const userID = this.props.location && this.props.location.state;
-        if (userID) {
+        if (userID && userID.loginID) {
             axios.get(`/xakal/following/${userID.loginID.toUpperCase()}`)
                 .then((response) => {
                     let followingCount = response.data;

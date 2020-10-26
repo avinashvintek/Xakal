@@ -16,8 +16,8 @@ class ManagementDashboard extends Component {
     }
 
     componentDidMount() {
-        if (this.props && this.props.location && this.props.location.userID) {
-            this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.userID.userID })
+        if (this.props && this.props.location && this.props.location.state && this.props.location.state.userID) {
+            this.setState({ routerLink: this.props.location.pathname, userID: this.props.location.state.userID })
         }
         this.fetchCollegeDetails();
         this.fetchStudentDetails();
@@ -28,7 +28,7 @@ class ManagementDashboard extends Component {
      * Fetches all students
      */
     fetchStudentDetails() {
-        const userID = this.props.location.userID;
+        const userID = this.props.location.state.userID;
         if (userID) {
             axios.get(`/xakal/studentdetail`)
                 .then((response) => {
@@ -41,7 +41,7 @@ class ManagementDashboard extends Component {
      * Fetches all courses
      */
     fetchCourseDetails() {
-        const userID = this.props.location.userID;
+        const userID = this.props.location.state.userID;
         if (userID) {
             axios.get(`/xakal/departmentdetail`)
                 .then((response) => {
@@ -54,7 +54,7 @@ class ManagementDashboard extends Component {
      * Fetches college details
      */
     fetchCollegeDetails() {
-        const userID = this.props.location.userID;
+        const userID = this.props.location.state.userID;
         if (userID) {
             axios.get(`/xakal/collegedetail`)
                 .then((response) => {

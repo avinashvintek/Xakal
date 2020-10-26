@@ -97,7 +97,7 @@ router.post('/upload', (req, res) => {
         if (err) {
             res.json("File not uploaded")
         } else {
-            res.json = ("Inserted successfully")
+            res.json("Inserted successfully")
         }
     }
 })

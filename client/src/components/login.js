@@ -103,13 +103,13 @@ class Login extends Component {
 
     render() {
         if (this.state.studentRedirect) {
-            return <Redirect to={{ pathname: "students-portal", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
+            return <Redirect to={{ pathname: "students-portal/whiteboard", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
         } else if (this.state.staffRedirect) {
-            return <Redirect to={{ pathname: "staff-portal", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
+            return <Redirect to={{ pathname: "staff-portal/whiteboard", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
         } else if (this.state.managementRedirect) {
-            return <Redirect to={{ pathname: "management-portal", state: { userID: this.state.loginID, userDetails: this.state.userDetails } }} />
+            return <Redirect to={{ pathname: "management-portal/dashboard", state: { userID: this.state.loginID, userDetails: this.state.userDetails } }} />
         } else if (this.state.hodRedirect) {
-            return <Redirect to={{ pathname: "hod-portal", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
+            return <Redirect to={{ pathname: "hod-portal/dashboard", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
         } else {
             return (
 

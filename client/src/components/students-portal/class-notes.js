@@ -39,14 +39,30 @@ class ClassNotes extends Component {
         this.baseState = this.state;
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            this.onRouteChanged();
+        }
+    }
+
+    onRouteChanged() {
+        this.getTitle();
+    }
+
     componentDidMount() {
         this.getPortal();
+        this.getTitle();
+        debugger;
         if (this.props && this.props.location && this.props.location.userID) {
             const userID = this.props.location.userID;
             this.setState({ userID: userID.userID });
         }
         this.unlisten = this.props.history.listen((location, action) => {
             this.setState(this.baseState);
+            if (this.props && this.props.location && this.props.location.userID) {
+                const userID = this.props.location.userID;
+                this.setState({ userID: userID.userID });
+            }
             this.getPortal();
         });
     }
@@ -57,6 +73,19 @@ class ClassNotes extends Component {
             this.setState({ isStudentPortal: true, isStaffPortal: false })
         } else {
             this.setState({ isStaffPortal: true, isStudentPortal: false })
+        }
+    }
+
+    getTitle() {
+        if (this.props.location) {
+            const pathArray = this.props.location.pathname.split('/');
+            if (pathArray.includes('question-papers')) {
+                this.setState({ questionPaper: true, notes: false, xakalNotes: false });
+            } else if (pathArray.includes('class-notes')) {
+                this.setState({ questionPaper: false, notes: true, xakalNotes: false });
+            } else if (pathArray.includes('xakal-notes')) {
+                this.setState({ questionPaper: false, notes: false, xakalNotes: true });
+            }
         }
     }
 
@@ -257,7 +286,7 @@ class ClassNotes extends Component {
         formData.append('uploadedBy', this.state.userID.toUpperCase());
         formData.append('uploadedFile', files);
         formData.append('uploadedDate', new Date());
-        axios.post('/xakal/class-notes/upload', formData, {})
+        axios.post('/xakal/class-notes/upload', formData, {}).then(() => { })
         this.currentSite(formData);
     }
 
@@ -337,9 +366,18 @@ class ClassNotes extends Component {
     render() {
         return (
             <div>
-                <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Notes</h1>
-                </div>
+                {this.state.notes ?
+                    <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Notes</h1>
+                    </div> : <></>}
+                {this.state.questionPaper ?
+                    <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Question Paper</h1>
+                    </div> : <></>}
+                {this.state.xakalNotes ?
+                    <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 className="h3 mb-0 text-gray-800 m-t-20 m-l-20">Xakal Notes</h1>
+                    </div> : <></>}
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="card-box">
@@ -347,7 +385,7 @@ class ClassNotes extends Component {
                                 <div className="col-lg-2 p-t-20">
                                     <div
                                         className={"mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height select-width " + this.state.isFocussed}>
-                                        <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="sample2"
+                                        <input onKeyPress={(e) => e.preventDefault()} autoComplete="off" onFocus={this.onDropDownFocus.bind(this)} className="mdl-textfield__input display-border" type="text" id="Semester"
                                             value={this.state.selectedSemester} />
                                         <label className={"mdl-textfield__label " + this.state.background}>Semester</label>
                                         {this.state.onFocus ? <div className="mdl-menu__container is-upgraded dropdown-list is-visible">

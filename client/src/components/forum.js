@@ -15,9 +15,9 @@ class Forum extends Component {
     }
 
     componentDidMount() {
-        if (this.props && this.props.location && this.props.location.userID) {
-            const userID = this.props.location.userID;
-            this.setState({ userID: userID.userID, userRole: userID.userRole, loggedInUser: userID.userDetails, routerLink: this.props.location.pathname });
+        if (this.props && this.props.location && this.props.location.state && this.props.location.state.userID) {
+            const userID = this.props.location.state;
+            this.setState({ location: userID, userID: userID.userID, userRole: userID.userRole, loggedInUser: userID.userDetails, routerLink: this.props.location.pathname });
             this.fetchWallPostDetails();
         }
         this.unlisten = this.props.history.listen((location, action) => {
@@ -31,14 +31,15 @@ class Forum extends Component {
     }
 
     fetchUserDetails() {
-        if (this.props && this.props.location && this.props.location.userID) {
-            if (this.props.location.userID.userRole === 'student') {
-                axios.get(`/xakal/studentdetail/${this.props.location.userID.userID}`)
+        if (this.props && this.props.location && this.props.location.state && this.props.location.state.userID) {
+            const userID = this.props.location.state;
+            if (userID.userRole === 'student') {
+                axios.get(`/xakal/studentdetail/${userID.userID}`)
                     .then((response) => {
                         this.setState({ userDetails: response.data });
                     });
             } else {
-                axios.get(`/xakal/staffdetail/${this.props.location.userID.userID}`)
+                axios.get(`/xakal/staffdetail/${userID.userID}`)
                     .then((response) => {
                         this.setState({ userDetails: response.data });
                     });
@@ -120,7 +121,7 @@ class Forum extends Component {
                 if (singleDetail.isVisible !== 'isVisible') {
                     singleDetail.isVisible = 'isHidden';
                 }
-                if (this.props.location && this.props.location.userID && singleDetail.likedUsers.includes(this.props.location.userID.userID.toUpperCase())) {
+                if (this.state.location && this.state.location.userID && this.state.location.userID && singleDetail.likedUsers.includes(this.state.location.userID.toUpperCase())) {
                     singleDetail.isAlreadyLiked = "btn-primary"
                 } else {
                     singleDetail.isAlreadyLiked = "btn-default"

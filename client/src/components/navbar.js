@@ -43,8 +43,12 @@ class NavBar extends Component {
             alert('Please login again! Session expired!')
             this.logout()
         } else {
-            if (this.props && this.props.state && this.props.state.location) {
-                this.setState({ routerLink: this.props.state.location.pathname });
+            if (this.props && this.props.state && this.props.state.location && this.props.state.location.state) {
+                if (this.props.state.location.state.userRole === 'student') {
+                    this.setState({ routerLink: '/students-portal' });
+                } else if (this.props.state.location.state.userRole === 'staff') {
+                    this.setState({ routerLink: '/staff-portal' });
+                }
             }
         }
     }
@@ -90,14 +94,14 @@ class NavBar extends Component {
                         </button>
                         <hr className="sidebar-divider my-0" />
                         <li className="nav-item">
-                            <Link to={{ pathname: `${this.state.routerLink}/dashboard`, userID: this.props.userID }} className="nav-link">
+                            <Link to={{ pathname: `${this.state.routerLink}/dashboard`, state: this.props.userID, userID: this.props.userID }} className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faAddressBook} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Dashboard</span>
                             </Link>
                         </li>
                         {this.state.routerLink === '/students-portal' || this.state.routerLink === '/staff-portal' ? <li className="nav-item">
-                            <Link to={{ pathname: `${this.state.routerLink}/whiteboard`, userID: this.props.userID }} className="nav-link">
+                            <Link to={{ pathname: `${this.state.routerLink}/whiteboard`, state: this.props.userID }} className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faLayerGroup} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>White Board</span>
