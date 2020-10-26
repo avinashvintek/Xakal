@@ -40,13 +40,13 @@ router.post('/upload', (req, res) => {
     } else if (!fs.existsSync(semesterDirectory)) {
         fs.mkdirSync(semesterDirectory);
     }
-    files.mv(semesterDirectory + '/' + files.name), function (err) {
+    files.mv(semesterDirectory + '/' + files.name, function (err) {
         if (err) {
             res.json("File not uploaded")
         } else {
             res.json = ("Inserted successfully")
         }
-    }
+    })
 })
 
 module.exports = router;
