@@ -80,9 +80,10 @@ router.post('/classnote', function (req, res) {
 
 router.post('/upload', (req, res) => {
     var files = req.files.uploadedFile;
-    const typeDirectory = 'client/public/' + req.body.type;
-    const semesterDirectory = 'client/public/' + req.body.type + '/' + req.body.semester;
-    const courseDirectory = 'client/public/' + req.body.type + '/' + req.body.semester + '/' + req.body.course;
+    const baseUrl = process.env.NODE_ENV === 'production' ? '/' : 'client/public/';
+    const typeDirectory = baseUrl + req.body.type;
+    const semesterDirectory = baseUrl + req.body.type + '/' + req.body.semester;
+    const courseDirectory = baseUrl + req.body.type + '/' + req.body.semester + '/' + req.body.course;
     if (!fs.existsSync(typeDirectory)) {
         fs.mkdirSync(typeDirectory);
         fs.mkdirSync(semesterDirectory);

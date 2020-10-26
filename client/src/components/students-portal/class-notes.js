@@ -337,9 +337,10 @@ class ClassNotes extends Component {
      * Displays the list of notes based on the API response
      */
     displayTable() {
-        const type = this.props.location.pathname === "/students-portal/question-papers" ? "questionPaper" : "classNote"
+        const type = this.props.location.pathname === "/students-portal/question-papers" ? "questionPaper" : "classNote";
+        const baseUrl = process.env.NODE_ENV === 'production' ? '/' : '../../../';
         return this.state.notesList.map((singleData, index) => {
-            var hrefValue = `../../../` + type + '/' + singleData.semester + '/' + singleData.course + '/' + singleData.uploadedFile;
+            var hrefValue = baseUrl + type + '/' + singleData.semester + '/' + singleData.course + '/' + singleData.uploadedFile;
             return (
                 <tr className="row100">
                     <td className="column100 column1" data-column="column1">{++index}</td>
