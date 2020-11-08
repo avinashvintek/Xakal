@@ -54,7 +54,8 @@ class Forum extends Component {
         this.fetchUserDetails();
         axios.get(`/xakal/forumdetail`)
             .then((response) => {
-                this.setState({ forumDetails: response.data });
+                const sortedDetails = response.data.reverse();
+                this.setState({ forumDetails: sortedDetails });
             });
     }
 
@@ -64,7 +65,8 @@ class Forum extends Component {
     fetchComments(selectedPost) {
         axios.get(`/xakal/comments/get/${selectedPost.postID}`)
             .then((response) => {
-                this.setState({ commentsList: response.data });
+                const sortedDetails = response.data.reverse();
+                this.setState({ commentsList: sortedDetails });
             });
     }
 

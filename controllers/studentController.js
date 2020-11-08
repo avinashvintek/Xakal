@@ -11,8 +11,8 @@ router.get('/:userID', (req, res) => {
 });
 
 router.get('/department/:departmentID', (req, res) => {
-    let departmentID = req.params.departmentID.toUpperCase();
-    StudentDetails.find({ branch: departmentID }, { _id: 0, }).then((eachOne) => {
+    let departmentID = req.params.departmentID;
+    StudentDetails.find({ branch: departmentID }, {}).then((eachOne) => {
         res.json(eachOne)
     })
 });
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 
 router.get('/yearwise/:year/:departmentID', (req, res) => {
     let admissionYear = req.params.year;
-    let departmentID = req.params.departmentID.toUpperCase();
+    let departmentID = req.params.departmentID;
     StudentDetails.find({ admissionYear: admissionYear, branch: departmentID }, {}).then((eachOne) => {
         res.json(eachOne)
     })

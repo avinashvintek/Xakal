@@ -362,32 +362,33 @@ class ManagementNavBar extends Component {
                                 </Link>
                             </li>
                         </div> : <div></div>}
-
-                        <li className="nav-item">
-                            <button className="nav-link collapsed" onClick={this.nonTeaching.bind(this)}>
-                                <FontAwesomeIcon className="fa-sm" icon={faDiagnoses} />
-                                <i className="fas fa-fw fa-tachometer-alt"></i>
-                                <span>Workers&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                {this.state.nonTeaching ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
-                                    <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
-                            </button>
-                        </li>
-                        {this.state.nonTeaching ? <div>
+                        {this.state.routerLink === '/management-portal' ? <div>
                             <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/non-teaching-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                <button className="nav-link collapsed" onClick={this.nonTeaching.bind(this)}>
+                                    <FontAwesomeIcon className="fa-sm" icon={faDiagnoses} />
                                     <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <span>All Non Teaching</span>
-                                </Link>
+                                    <span>Workers&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    {this.state.nonTeaching ? <i className="fa fa-angle-down fa-lg assessment-margin" aria-hidden="true"></i> :
+                                        <i className="fa fa-angle-right fa-lg assessment-margin" aria-hidden="true"></i>}
+                                </button>
                             </li>
-                            <li className="nav-item">
-                                <Link to={{ pathname: `${this.state.routerLink}/add-non-teaching-details`, userID: this.props.userID }} className="nav-link collapsed">
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                                    <span>Add Non Teaching</span>
-                                </Link>
-                            </li>
-                        </div> : <div></div>}
+                            {this.state.nonTeaching ? <div>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/non-teaching-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <span>All Non Teaching</span>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to={{ pathname: `${this.state.routerLink}/add-non-teaching-details`, userID: this.props.userID }} className="nav-link collapsed">
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                                        <span>Add Non Teaching</span>
+                                    </Link>
+                                </li>
+                            </div> : <div></div>}
+                        </div> : <></>}
                         <hr className="sidebar-divider d-none d-md-block" />
 
                         {this.state.routerLink === '/hod-portal' ? <div>
@@ -526,7 +527,7 @@ class ManagementNavBar extends Component {
                     </ul>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
-                            <button class="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i class="fa fa-power-off m-r-15"></i>Logout</button>
+                            <button className="btn btn-sm btn-primary shadow-sm logout m-t-20 m-r-20" onClick={this.logout.bind(this)}> <i className="fa fa-power-off m-r-15"></i>Logout</button>
                             {this.props && this.props.userID && this.props.userID.userDetails ? <>
                                 <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userRole.charAt(0).toUpperCase() + this.props.userID.userDetails.userRole.slice(1)} Dashboard</p>
                                 <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userID}</p></> : <></>}

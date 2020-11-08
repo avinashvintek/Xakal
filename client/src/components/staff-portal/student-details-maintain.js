@@ -93,7 +93,7 @@ class StudentDetailsMaintain extends Component {
                     <td className={"left"} key={index++}>{singleData.parentName}</td>
                     <td className={"left"} key={index++}>{singleData.admissionDate}</td>
                     <td className={"left"} key={index++}>{singleData.bloodGroup}</td>
-                    <td>  <button type="button" onClick={i => this.removeClick(singleData, index -= 10)} className="btn btn-danger m-t-4 m-l-30">X</button>
+                    <td>  <button type="button" onClick={i => this.removeClick(singleData, index -= 11)} className="btn btn-danger m-t-4 m-l-30">X</button>
                     </td>
                 </tr>
             )
