@@ -9,6 +9,7 @@ import StaffPortal from './components/staff-portal';
 import ManagementPortal from './components/management-portal';
 import HODPortal from './components/hod-portal';
 import NonTeachingPortal from './components/non-teaching-portal';
+import XakalAdminPortal from './components/xakal-admin-portal';
 const routing = (
     <Router>
         <div>
@@ -18,6 +19,7 @@ const routing = (
             <Route path="/management-portal" component={ManagementPortal} />
             <Route path="/hod-portal" component={HODPortal} />
             <Route path="/non-teaching-portal" component={NonTeachingPortal} />
+            <Route path="/xakal-admin" component={XakalAdminPortal} />
             {/* <Route path="/students-portal/class-notes" component={ClassNotes} /> */}
         </div>
     </Router>

@@ -33,7 +33,26 @@ var StudentDetails = mongoose.model('StudentDetails', {
     },
     admissionYear: {
         type: Number
-    }
+    },
+    updatedBy: {
+        type: String
+    },
+    updatedDate: {
+        type: String
+    },
+    gender: {
+        type: String
+    },
+    motherTongue: {
+        type: String
+    },
+    address: {
+        type: String
+    },
+    dob: {
+        type: String
+    },
+
 });
 
 module.exports = {

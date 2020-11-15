@@ -18,7 +18,13 @@ var User = mongoose.model('User', {
     },
     registerNr: {
         type: Number | null
-    }
+    },
+    updatedBy: {
+        type: String
+    },
+    updatedDate: {
+        type: String
+    },
 });
 module.exports = {
     User: User

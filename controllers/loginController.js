@@ -28,24 +28,24 @@ router.get('/user/:userID', (req, res) => {
     // })
 });
 
-// router.post('/', (req, res) => {
-//     var prdt = new Product({
-//         availableNetwork: req.body.availableNetwork,
-//         productId: req.body.productId,
-//         vendorName: req.body.vendorName,
-//         connectsTo: req.body.connectsTo,
-//         parameter: req.body.parameter,
-//         name: req.body.name,
-//     });
-//     prdt.save((err, docs) => {
-//         if (!err) {
-//             res.send(docs);
-//         } else {
-//             console.log('error in controller')
-//         }
-//     });
+router.post('/adduser', (req, res) => {
+    var prdt = new User({
+        userID: req.body.userID,
+        userRole: req.body.userRole,
+        password: req.body.password,
+        collegeCode: req.body.collegeCode,
+        collegeName: req.body.collegeName,
+        registerNr: req.body.registerNr,
+    });
+    prdt.save((err, docs) => {
+        if (!err) {
+            res.send(docs);
+        } else {
+            console.log('error in controller')
+        }
+    });
 
-// });
+});
 
 // router.put('/:id', (req, res) => {
 //     console.log(req.params)

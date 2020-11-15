@@ -73,8 +73,12 @@ router.post('/', (req, res) => {
         emergencyContact: req.body.emergencyContact,
         parentName: req.body.parentName,
         admissionDate: req.body.admissionDate,
-        userID: '13IT001',
-        admissionYear: req.body.admissionYear
+        userID: req.body.userID.toUpperCase(),
+        admissionYear: req.body.admissionYear,
+        gender: req.body.gender,
+        motherTongue: req.body.motherTongue,
+        address: req.body.address,
+        dob: req.body.dob
     });
     prdt.save((err, docs) => {
         if (!err) {

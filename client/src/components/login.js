@@ -20,6 +20,7 @@ class Login extends Component {
             managementRedirect: false,
             hodRedirect: false,
             nonTeaching: false,
+            xakalAdmin: false
         }
     }
 
@@ -86,6 +87,8 @@ class Login extends Component {
                                 this.setState({ hodRedirect: true })
                             } else if (response.data.userRole === 'non-teaching') {
                                 this.setState({ nonTeaching: true })
+                            } else if (response.data.userRole === 'xakal-admin') {
+                                this.setState({ xakalAdmin: true })
                             } else {
                                 alert('Invalid user')
                             }
@@ -113,8 +116,10 @@ class Login extends Component {
             return <Redirect to={{ pathname: "management-portal/dashboard", state: { userID: this.state.loginID, userDetails: this.state.userDetails } }} />
         } else if (this.state.hodRedirect) {
             return <Redirect to={{ pathname: "hod-portal/dashboard", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
-        }else if (this.state.nonTeaching) {
+        } else if (this.state.nonTeaching) {
             return <Redirect to={{ pathname: "non-teaching-portal/dashboard", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
+        } else if (this.state.xakalAdmin) {
+            return <Redirect to={{ pathname: "xakal-admin", state: { userID: this.state.loginID, userRole: this.state.userRole, userDetails: this.state.userDetails } }} />
         } else {
             return (
 

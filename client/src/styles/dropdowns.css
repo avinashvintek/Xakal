@@ -183,3 +183,11 @@
 .is-shown:after {
     visibility: visible!important;
 }
+
+.bg-color-white{
+    background-color: white;
+}
+
+body {
+    background-color: white;
+}
