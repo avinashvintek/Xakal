@@ -1,5 +1,5 @@
 STEP 1:
-Navigate to xakal/services folder and run the below commands
+Navigate to root folder and run the below commands
 
 1. npm install express body-parser cors mongoose
 
@@ -30,7 +30,7 @@ STEP 6:
 Download postman to test backend data
 
 STEP 7:
-Navigate to xakal (FE path) and install axios.
+Navigate to xakal/client (FE path) and install axios.
 1. npm i axios
 
 
