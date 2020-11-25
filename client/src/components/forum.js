@@ -131,8 +131,8 @@ class Forum extends Component {
                 return (<li className="m-t-20" key={index}>
                     <div className="post-box panel">
                         <span
-                            class="text-muted time-size"><i
-                                class="fa fa-clock-o"
+                            className="text-muted time-size"><i
+                                className="fa fa-clock-o"
                                 aria-hidden="true"></i>
                             {this.timeConverter(singleDetail.postedTime)}</span>
                         <div className="p-l-15 p-b-15">

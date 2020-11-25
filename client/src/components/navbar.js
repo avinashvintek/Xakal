@@ -19,9 +19,11 @@ import EditInternalDetails from './staff-portal/assessments/edit-internal-detail
 import Forum from './forum';
 import ManagementDashboard from './management-portal/dashboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAddressBook, faLayerGroup, faBookReader, faGraduationCap, faLaptopCode, faHourglassHalf, faGem, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faSearch,faAddressBook, faLayerGroup, faBookReader, faGraduationCap, faLaptopCode, faHourglassHalf, faGem, faUsers } from '@fortawesome/free-solid-svg-icons'
 import logo from '../images/xakal-logo.png';
 import NonTeachingDashboard from './non-teaching-portal/dashboard';
+import SearchBar from './searchBar'
+import axios from 'axios'
 
 class NavBar extends Component {
     constructor(props) {
@@ -29,9 +31,12 @@ class NavBar extends Component {
         this.state = {
             showClassNotes: false,
             assessments: false,
-            routerLink: ''
+            routerLink: '',
+            searchedUser: '',
+            searchedError:''
         }
         this.baseState = this.state;
+        this.onSearchSubmit = this.onSearchSubmit.bind(this)
     }
 
     logout() {
@@ -59,6 +64,23 @@ class NavBar extends Component {
 
     componentWillUnmount() {
         // this.unlisten();
+    }
+
+    onSearchSubmit(query){
+        if(!query){
+            this.setState({searchedError:'Please Enter userID'});
+            return;
+        }
+        axios.get(`http://127.0.0.1:4000/xakal//user/${query}`)
+        .then(res=>{
+            if(res.data){
+                 this.setState({ searchedUser: res.data.userID,searchedError:''});
+            }else{
+                throw new Error('User Not Found!!')
+            }
+        })
+        .catch(err=>this.setState({searchedError:'User Not Found',searchedUser:''}))
+
     }
 
     /**
@@ -228,6 +250,16 @@ class NavBar extends Component {
                             {this.props && this.props.userID && this.props.userID.userDetails ?
                                 <><p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userRole.charAt(0).toUpperCase() + this.props.userID.userDetails.userRole.slice(1)} Dashboard</p>
                                     <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userID}</p>
+                                    <div className="logout m-t-30 m-r-40" >
+                                        <div className='d-flex align-items-center'>
+                                             <SearchBar onSearchSubmit={this.onSearchSubmit}/>
+                                            <FontAwesomeIcon className="fa-lg ml-2" icon={faSearch} />  
+                                        </div>
+                                       
+                                        {this.state.searchedUser && this.state.searchedUser}
+                                        {this.state.searchedError && this.state.searchedError}
+                                    </div>
+                                    
                                 </> : <></>}<Switch>
                                 {/* student portal links */}
                                 <Route path="/students-portal/class-notes" component={classNotes} />
