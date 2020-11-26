@@ -45,19 +45,18 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props);
         if (!this.props.userID) {
             alert('Please login again! Session expired!')
             this.logout()
         } else {
             if (this.props && this.props.state && this.props.state.location && this.props.state.location.state) {
                 if (this.props.state.location.state.userRole === 'student') {
-                    this.setState({ routerLink: '/students-portal' });
+                    this.setState({ routerLink: '/students-portal',userRole:'student' });
                 } else if (this.props.state.location.state.userRole === 'staff') {
-                    this.setState({ routerLink: '/staff-portal' });
+                    this.setState({ routerLink: '/staff-portal',userRole:'staff' });
                 }
                 else if (this.props.state.location.state.userRole === 'non-teaching') {
-                    this.setState({ routerLink: '/non-teaching-portal' });
+                    this.setState({ routerLink: '/non-teaching-portal',userRole:'non-teaching' });
                 }
             }
         }
@@ -78,17 +77,17 @@ class NavBar extends Component {
             if(data.userRole==='student'){
                 const res = await axios.get(`http://127.0.0.1:4000/xakal/studentdetail/${data.userID}`)
                 this.setState({ searchedUser: res.data,searchedError:''});
-                this.setState({ routerLink: '/students-portal' });
+                this.setState({ userRole:'student' });
+
             }else if(data.userRole === 'hod'){
                 const res = await axios.get(`http://127.0.0.1:4000/xakal/staffdetail/${data.userID}`)
                 this.setState({ searchedUser: res.data,searchedError:''});
-                this.setState({ routerLink: '/staff-portal' });
+                this.setState({userRole:'staff' });
             }
         }catch(err){
             this.setState({searchedError:'User Not Found',searchedUser:''})
         }
     }
-
     /**
      * Handles the sub menu of college notes
      */
@@ -132,14 +131,14 @@ class NavBar extends Component {
                                 <span>Dashboard</span>
                             </Link>
                         </li>
-                        {this.state.routerLink === '/students-portal' || this.state.routerLink === '/staff-portal' ? <li className="nav-item">
+                        {this.state.userRole === 'student' || this.state.userRole === 'staff' ? <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/whiteboard`, state: this.props.userID }} className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faLayerGroup} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>White Board</span>
                             </Link>
                         </li> : <span></span>}
-                        {this.state.routerLink === '/staff-portal' ?
+                        {this.state.userRole === 'staff' ?
                             <li className="nav-item">
                                 <Link to={{ pathname: `${this.state.routerLink}/view-student-details`, userID: this.props.userID }} className="nav-link">
                                     <FontAwesomeIcon className="fa-sm" icon={faUsers} />
@@ -148,7 +147,7 @@ class NavBar extends Component {
                                 </Link>
                             </li> : <span></span>}
                         <hr className="sidebar-divider" />
-                        {this.state.routerLink === '/students-portal' || this.state.routerLink === '/staff-portal' ? <>
+                        {this.state.userRole === 'student' || this.state.userRole === 'staff' ? <>
                             <li className="nav-item">
                                 <button className="nav-link" onClick={this.onClassNotesClick.bind(this)}>
                                     <FontAwesomeIcon className="fa-sm" icon={faBookReader} />
@@ -166,7 +165,7 @@ class NavBar extends Component {
                                         <span>Class Notes</span>
                                     </Link>
                                 </li>
-                                {this.state.routerLink === '/students-portal' ? <li className="nav-item">
+                                {this.state.userRole === 'student' ? <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/xakal-notes`, userID: this.props.userID }} className="nav-link collapsed">
                                         <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -198,7 +197,7 @@ class NavBar extends Component {
                                         <span>Internals</span>
                                     </Link>
                                 </li>
-                                {this.state.routerLink === '/students-portal' ? <li className="nav-item">
+                                {this.state.userRole === 'student' ? <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/semester-details`, userID: this.props.userID }} className="nav-link collapsed">
                                         <i className="fas fa-fw fa-tachometer-alt"></i>
                                         <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -214,7 +213,7 @@ class NavBar extends Component {
                                     </li>}
                             </div> : <div></div>}
                             <hr className="sidebar-divider d-none d-md-block" />
-                            {this.state.routerLink === '/students-portal' ?
+                            {this.state.userRole === 'student' ?
                                 <li className="nav-item">
                                     <Link to={{ pathname: `${this.state.routerLink}/attendance`, userID: this.props.userID }} className="nav-link">
                                         <FontAwesomeIcon className="fa-sm" icon={faHourglassHalf} />
@@ -229,7 +228,7 @@ class NavBar extends Component {
                                 <span>Apply Leave</span>
                             </Link>
                         </li> */}
-                        {this.state.routerLink === '/students-portal' ? <li className="nav-item">
+                        {this.state.userRole === 'student' ? <li className="nav-item">
                             <Link to={{ pathname: `${this.state.routerLink}/payment`, userID: this.props.userID }} className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faGem} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -242,7 +241,7 @@ class NavBar extends Component {
                                     <span>Salary</span>
                                 </Link>
                             </li>}
-                        {this.state.routerLink === '/students-portal' ? <li className="nav-item">
+                        {this.state.userRole === 'student' ? <li className="nav-item">
                             <Link to="" className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faGraduationCap} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
@@ -256,21 +255,24 @@ class NavBar extends Component {
                             {this.props && this.props.userID && this.props.userID.userDetails ?
                                 <><p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userRole.charAt(0).toUpperCase() + this.props.userID.userDetails.userRole.slice(1)} Dashboard</p>
                                     <p className="logout m-t-30 m-r-40">{this.props.userID.userDetails.userID}</p>
-                                    <div className="logout m-t-30 m-r-40" >
+                                    
+                                    <div className="logout m-t-30 m-r-40 search_wrap" >
                                         <div className='d-flex align-items-center'>
                                              <SearchBar onSearchSubmit={this.onSearchSubmit}/>
                                             <FontAwesomeIcon className="fa-lg ml-2" icon={faSearch} />  
                                         </div>
-                                        <Link to={{ pathname: `${this.state.routerLink}/student-profile`, state: this.state.searchedUser }} className="nav-link">
+                                        
+                                        {/* this.setState({ routerLink: '/students-portal/student-profile',userRole:'student' }); */}
+                                        <Link to={{ pathname: `${this.state.routerLink}/${this.state.userRole==='student'?'student-profile':'staff-profile'}`, state: this.state.searchedUser }} className="nav-link">
                                 
-                                        {this.state.searchedUser.name &&  <div className='sugg-pnl'>{this.state.searchedUser.userID}</div> }
+                                        {this.state.searchedUser.name &&  <div className='sugg-pnl' >{this.state.searchedUser.name}</div> }
                                         </Link>
-                                        {this.state.searchedError && <div className='sugg-pnl'>{this.state.searchedError}</div>}
+                                        {this.state.searchedError && <div className='sugg-pnl'  >{this.state.searchedError}</div>}
                                     </div>
                                     
                                 </> : <></>}<Switch>
                                 {/* student portal links */}
-                                <Route path="/students-portal/class-notes" component={classNotes} />
+                                <Route path="student/class-notes" component={classNotes} />
                                 <Route path="/students-portal/xakal-notes" component={classNotes} />
                                 <Route path="/students-portal/question-papers" component={classNotes} />
                                 <Route path="/students-portal/dashboard" component={Dashboard} />

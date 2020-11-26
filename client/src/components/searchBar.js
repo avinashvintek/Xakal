@@ -15,7 +15,7 @@ class SearchBar extends Component{
 
     handleSubmit = (e)=>{
         e.preventDefault();
-        this.props.onSearchSubmit(this.state.query)
+        // this.props.onSearchSubmit(this.state.query)
     }
 
     render(){
@@ -26,6 +26,7 @@ class SearchBar extends Component{
                         debounceTimeout={500}
                         placeholder='Search User By ID'
                         className="add-border search-input"
+                        value={this.state.query}
                         onChange={this.handleInputChange} />
                 
                 {/* <input className="add-border search-input" type="text" placeholder='Search User By ID' onChange={this.handleInputChange} /> */}
