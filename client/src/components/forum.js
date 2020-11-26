@@ -10,7 +10,7 @@ class Forum extends Component {
             forumDetails: [],
             commentsList: []
         }
-        console.log(props)
+        // console.log(props)
         this.baseState = this.state;
     }
 

@@ -45,6 +45,7 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props);
         if (!this.props.userID) {
             alert('Please login again! Session expired!')
             this.logout()
@@ -66,21 +67,26 @@ class NavBar extends Component {
         // this.unlisten();
     }
 
-    onSearchSubmit(query){
+   async onSearchSubmit(query){
+        
         if(!query){
-            this.setState({searchedError:'Please Enter userID'});
+            this.setState({searchedError:'',searchedUser:''});
             return;
         }
-        axios.get(`http://127.0.0.1:4000/xakal//user/${query}`)
-        .then(res=>{
-            if(res.data){
-                 this.setState({ searchedUser: res.data.userID,searchedError:''});
-            }else{
-                throw new Error('User Not Found!!')
+        try{
+            const {data} = await axios.get(`http://127.0.0.1:4000/xakal/user/${query}`)
+            if(data.userRole==='student'){
+                const res = await axios.get(`http://127.0.0.1:4000/xakal/studentdetail/${data.userID}`)
+                this.setState({ searchedUser: res.data,searchedError:''});
+                this.setState({ routerLink: '/students-portal' });
+            }else if(data.userRole === 'hod'){
+                const res = await axios.get(`http://127.0.0.1:4000/xakal/staffdetail/${data.userID}`)
+                this.setState({ searchedUser: res.data,searchedError:''});
+                this.setState({ routerLink: '/staff-portal' });
             }
-        })
-        .catch(err=>this.setState({searchedError:'User Not Found',searchedUser:''}))
-
+        }catch(err){
+            this.setState({searchedError:'User Not Found',searchedUser:''})
+        }
     }
 
     /**
@@ -237,7 +243,7 @@ class NavBar extends Component {
                                 </Link>
                             </li>}
                         {this.state.routerLink === '/students-portal' ? <li className="nav-item">
-                            <Link className="nav-link">
+                            <Link to="" className="nav-link">
                                 <FontAwesomeIcon className="fa-sm" icon={faGraduationCap} />
                                 <i className="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Placement</span>
@@ -255,9 +261,11 @@ class NavBar extends Component {
                                              <SearchBar onSearchSubmit={this.onSearchSubmit}/>
                                             <FontAwesomeIcon className="fa-lg ml-2" icon={faSearch} />  
                                         </div>
-                                       
-                                        {this.state.searchedUser && this.state.searchedUser}
-                                        {this.state.searchedError && this.state.searchedError}
+                                        <Link to={{ pathname: `${this.state.routerLink}/student-profile`, state: this.state.searchedUser }} className="nav-link">
+                                
+                                        {this.state.searchedUser.name &&  <div className='sugg-pnl'>{this.state.searchedUser.userID}</div> }
+                                        </Link>
+                                        {this.state.searchedError && <div className='sugg-pnl'>{this.state.searchedError}</div>}
                                     </div>
                                     
                                 </> : <></>}<Switch>
